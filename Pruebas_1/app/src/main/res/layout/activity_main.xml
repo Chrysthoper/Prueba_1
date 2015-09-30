@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnTransacionSalida"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$ 0.00"
+            android:id="@+id/btnTransacionEntrada"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/holo_green_light"
+            android:textColor="@android:color/white"
+            android:layout_toRightOf="@+id/view"
+            android:textSize="30dp"
+            android:layout_weight="1"
+            android:height="70dp"
+            android:paddingLeft="30dp" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$ 0.00"
+            android:id="@+id/btnTransacionSalida"
+            android:layout_alignParentLeft="true"
+            android:layout_toEndOf="@+id/btnTransacionEntrada"
+            android:layout_toLeftOf="@+id/view"
+            android:background="@android:color/holo_red_light"
+            android:textColor="@android:color/white"
+            android:textSize="30dp"
+            android:layout_weight="1"
+            android:height="70dp"
+            android:paddingRight="30dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:background="@mipmap/circle_date_2"
+            android:id="@+id/lyFechaPrincipal">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="25"
+                android:id="@+id/tvFechaPrincipalDia"
+                android:layout_weight="1"
+                android:gravity="bottom|center"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="SEP"
+                android:id="@+id/tvFechaPrincipalMes"
+                android:layout_weight="1"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
