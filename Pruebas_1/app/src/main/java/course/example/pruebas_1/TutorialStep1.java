@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.codepond.wizardroid.WizardStep;
+import org.codepond.wizardroid.persistence.ContextVariable;
 
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
@@ -15,8 +16,14 @@ import java.util.regex.Pattern;
 
 public class TutorialStep1 extends WizardStep {
 
+    @ContextVariable
+    private String textoKeyPad;
+    @ContextVariable
+    private double numeroKeyPad;
+
+
     TextView tvCostoTransaccion;
-    String textoNumPad = "";
+
     //Wire the layout to the step
     public TutorialStep1() {
     }
@@ -28,6 +35,8 @@ public class TutorialStep1 extends WizardStep {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.step1_tutorial, container, false);
         tvCostoTransaccion = (TextView) v.findViewById(R.id.tvCostoTransaccion);
+        if(!textoKeyPad.equals(""))
+            IngresaCosto(textoKeyPad);
         Button btn1 = (Button)v.findViewById(R.id.btn1);
         Button btn2 = (Button)v.findViewById(R.id.btn2);
         Button btn3 = (Button)v.findViewById(R.id.btn3);
@@ -63,29 +72,32 @@ public class TutorialStep1 extends WizardStep {
             String texto = b.getText().toString();
             if(!texto.equals("DEL"))
             {
-                String auxNumPad = textoNumPad + texto;
-                String textoCosto = tvCostoTransaccion.getText() + texto;
-
-                Pattern patron = Pattern.compile("^([1-9][0-9]{0,9})?(\\.[0-9]{0,2})?$");
-                Matcher matcher = patron.matcher(auxNumPad);
-                if(matcher.matches())
-                {
-                    textoNumPad = auxNumPad;
-
-                    if(textoNumPad.startsWith("."))
-                        tvCostoTransaccion.setText("$ 0" + textoNumPad);
-                    else
-                    {
-                        DecimalFormat formatter = new DecimalFormat("#,###.00");;
-                        tvCostoTransaccion.setText("$ " + formatter.format(Double.parseDouble(textoNumPad)));
-                    }
-                }
+                //String textoCosto = tvCostoTransaccion.getText() + texto;
+                IngresaCosto(textoKeyPad + texto);
             }
             else
             {
-                textoNumPad = "";
+                textoKeyPad = "";
                 tvCostoTransaccion.setText("");
             }
         }
     };
+
+    public void IngresaCosto(String costo)
+    {
+        Pattern patron = Pattern.compile("^([1-9][0-9]{0,9})?(\\.[0-9]{0,2})?$");
+        Matcher matcher = patron.matcher(costo);
+        if(matcher.matches())
+        {
+            textoKeyPad = costo;
+
+            if(textoKeyPad.startsWith("."))
+                tvCostoTransaccion.setText("$ 0" + textoKeyPad);
+            else
+            {
+                DecimalFormat formatter = new DecimalFormat("#,###.00");
+                tvCostoTransaccion.setText("$ " + formatter.format(Double.parseDouble(textoKeyPad)));
+            }
+        }
+    }
 }

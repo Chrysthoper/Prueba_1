@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 import java.text.DateFormatSymbols;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -25,6 +29,9 @@ public class MainActivity extends ActionBarActivity {
     LinearLayout lyFechaPrincipal;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes;
     DatePickerDialog DialogoFechaPrincipal;
+    ListView lvTransaccionesPrincipal;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> ListaTareas = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,10 @@ public class MainActivity extends ActionBarActivity {
         tvFechaPrincipalDia.setText(Integer.toString(dia));
         tvFechaPrincipalMes = (TextView)findViewById(R.id.tvFechaPrincipalMes);
         tvFechaPrincipalMes.setText(getMonthForInt(mes).substring(0, 3).toUpperCase());
+
+        lvTransaccionesPrincipal = (ListView)findViewById(R.id.lvTransaccionesPrincipal);
+        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, ListaTareas);
+        lvTransaccionesPrincipal.setAdapter(adapter);
 
         Calendar newCalendar = Calendar.getInstance();
         DialogoFechaPrincipal = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -99,18 +110,38 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             String msj = "";
+            Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
             switch(v.getId()) {
                 case R.id.btnTransacionEntrada:
-                    msj = "Presionaste para hacer una entrada";
-                    Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("OP", R.id.btnTransacionEntrada);
+                    startActivityForResult(intent, 1);
                     break;
                 case R.id.btnTransacionSalida:
-                    msj = "Presionaste para hacer una salida";
+                    intent.putExtra("OP", R.id.btnTransacionSalida);
+                    startActivityForResult(intent, 1);
                     break;
             }
-            Toast.makeText(MainActivity.this,msj,Toast.LENGTH_SHORT).show();
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1)
+        {
+            if(resultCode == 1)
+            {
+                double numero = data.getDoubleExtra("numero", 0);
+                DecimalFormat formatter = new DecimalFormat("#,##0.00");
+
+                ListaTareas.add("$ " + formatter.format(numero));
+                adapter.notifyDataSetChanged();
+
+                Toast.makeText(MainActivity.this, "Se agrego la transaccion de $ " + numero, Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(MainActivity.this, "No se generó ninguna transaccion", Toast.LENGTH_SHORT).show();
+        }
+    }//onActivityResult
 
 }
