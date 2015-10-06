@@ -6,8 +6,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Holo.Light" >
-        <activity android:name=".MainActivity" >
+        android:theme="@style/Theme.AppCompat.Light">
+        <activity
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -15,7 +16,6 @@
         </activity>
         <activity
             android:name=".TutorialActivity"
-            android:theme="@style/CustomDialogTheme"
             android:label="@string/title_activity_tutorial" >
         </activity>
     </application>

@@ -4,12 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.codepond.wizardroid.WizardStep;
 
+import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class TutorialStep1 extends WizardStep {
 
+    TextView tvCostoTransaccion;
+    String textoNumPad = "";
     //Wire the layout to the step
     public TutorialStep1() {
     }
@@ -18,11 +25,67 @@ public class TutorialStep1 extends WizardStep {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.step_tutorial, container, false);
-        TextView tv = (TextView) v.findViewById(R.id.textView);
-        tv.setText("This is an example of Step 1 in the wizard. Press the Next " +
-                "button to proceed to the next step. Hit the back button to go back to the calling activity.");
-
+        super.onCreate(savedInstanceState);
+        View v = inflater.inflate(R.layout.step1_tutorial, container, false);
+        tvCostoTransaccion = (TextView) v.findViewById(R.id.tvCostoTransaccion);
+        Button btn1 = (Button)v.findViewById(R.id.btn1);
+        Button btn2 = (Button)v.findViewById(R.id.btn2);
+        Button btn3 = (Button)v.findViewById(R.id.btn3);
+        Button btn4 = (Button)v.findViewById(R.id.btn4);
+        Button btn5 = (Button)v.findViewById(R.id.btn5);
+        Button btn6 = (Button)v.findViewById(R.id.btn6);
+        Button btn7 = (Button)v.findViewById(R.id.btn7);
+        Button btn8 = (Button)v.findViewById(R.id.btn8);
+        Button btn9 = (Button)v.findViewById(R.id.btn9);
+        Button btnZero = (Button)v.findViewById(R.id.btnZero);
+        Button btnDel = (Button)v.findViewById(R.id.btnDel);
+        Button btnPunto = (Button)v.findViewById(R.id.btnPunto);
+        btn1.setOnClickListener(clickEvent);
+        btn2.setOnClickListener(clickEvent);
+        btn3.setOnClickListener(clickEvent);
+        btn4.setOnClickListener(clickEvent);
+        btn5.setOnClickListener(clickEvent);
+        btn6.setOnClickListener(clickEvent);
+        btn7.setOnClickListener(clickEvent);
+        btn8.setOnClickListener(clickEvent);
+        btn9.setOnClickListener(clickEvent);
+        btnZero.setOnClickListener(clickEvent);
+        btnDel.setOnClickListener(clickEvent);
+        btnPunto.setOnClickListener(clickEvent);
         return v;
     }
+
+    View.OnClickListener clickEvent = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View v) {
+            Button b = (Button)v;
+            String texto = b.getText().toString();
+            if(!texto.equals("DEL"))
+            {
+                String auxNumPad = textoNumPad + texto;
+                String textoCosto = tvCostoTransaccion.getText() + texto;
+
+                Pattern patron = Pattern.compile("^([1-9][0-9]{0,9})?(\\.[0-9]{0,2})?$");
+                Matcher matcher = patron.matcher(auxNumPad);
+                if(matcher.matches())
+                {
+                    textoNumPad = auxNumPad;
+
+                    if(textoNumPad.startsWith("."))
+                        tvCostoTransaccion.setText("$ 0" + textoNumPad);
+                    else
+                    {
+                        DecimalFormat formatter = new DecimalFormat("#,###.00");;
+                        tvCostoTransaccion.setText("$ " + formatter.format(Double.parseDouble(textoNumPad)));
+                    }
+                }
+            }
+            else
+            {
+                textoNumPad = "";
+                tvCostoTransaccion.setText("");
+            }
+        }
+    };
 }
