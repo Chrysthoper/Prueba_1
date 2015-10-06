@@ -140,8 +140,8 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(MainActivity.this, "Se agrego la transaccion de $ " + numero, Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(MainActivity.this, "No se generó ninguna transaccion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
         }
-    }//onActivityResult
+    }
 
 }

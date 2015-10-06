@@ -34,8 +34,6 @@ public class TutorialWizard extends BasicWizardLayout {
         setNextButtonLabel("Advance");
         setBackButtonLabel("Return");
         setFinishButtonLabel("Finalize"); */
-
-
         return new WizardFlow.Builder()
                 .addStep(TutorialStep1.class)           //Add your steps in the order you want them
                 .addStep(TutorialStep2.class)           //to appear and eventually call create()
