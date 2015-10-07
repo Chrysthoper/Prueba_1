@@ -39,8 +39,39 @@ public class CategoriaAdapter extends BaseAdapter {
             // set image based on selected text
             ImageView imageView = (ImageView) gridView
                     .findViewById(R.id.grid_item_image);
-
-            Categoria cat = categorias[position];
+            switch(categorias[position].id)
+            {
+                case 1:
+                    imageView.setImageResource(R.mipmap.agua);
+                    break;
+                case 2:
+                    imageView.setImageResource(R.mipmap.electricidad);
+                    break;
+                case 3:
+                    imageView.setImageResource(R.mipmap.gas);
+                    break;
+                case 4:
+                    imageView.setImageResource(R.mipmap.gasolina);
+                    break;
+                case 5:
+                    imageView.setImageResource(R.mipmap.comida);
+                    break;
+                case 6:
+                    imageView.setImageResource(R.mipmap.ropa);
+                    break;
+                case 7:
+                    imageView.setImageResource(R.mipmap.chucherias);
+                    break;
+                case 8:
+                    imageView.setImageResource(R.mipmap.pareja);
+                    break;
+                case 9:
+                    imageView.setImageResource(R.mipmap.camion);
+                    break;
+                default:
+                    imageView.setImageResource(R.mipmap.casa);
+                    break;
+            }
 
         } else {
             gridView = (View) convertView;

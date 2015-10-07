@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import org.codepond.wizardroid.WizardStep;
 
@@ -33,7 +32,7 @@ public class TutorialStep2 extends WizardStep {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.step_tutorial, container, false);
+        View v = inflater.inflate(R.layout.step2_tutorial, container, false);
         gridView = (GridView)v.findViewById(R.id.gridView1);
         gridView.setAdapter(new CategoriaAdapter(v.getContext(), categorias));
         return v;
