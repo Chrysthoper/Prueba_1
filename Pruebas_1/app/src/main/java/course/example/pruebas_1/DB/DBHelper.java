@@ -28,7 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        Categorias = new TD_Categorias(context);
+        Categorias = new TD_Categorias(this);
     }
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_CATEGORIAS);
@@ -50,7 +50,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }
-
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }

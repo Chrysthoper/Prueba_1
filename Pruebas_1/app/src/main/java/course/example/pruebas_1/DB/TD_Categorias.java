@@ -15,26 +15,20 @@ import course.example.pruebas_1.Transaccion;
  */
 public class TD_Categorias
 {
-    private Context context;
-    public TD_Categorias(Context context)
+    private DBHelper dbHelper;
+    public TD_Categorias(DBHelper dbHelper)
     {
-        this.context = context;
+        this.dbHelper = dbHelper;
     }
 
-    public ArrayList<Categoria> Obten()
-    {
-        DBHelper dbHelper = new DBHelper(context);
+    public ArrayList<Categoria> Obten(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
         String[] projection = {
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_ID,
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_2,
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_3
         };
-        // How you want the results sorted in the resulting Cursor
         String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
-
         Cursor c = db.query(
                 DatabaseSchema.TD_Categorias.TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
@@ -48,8 +42,7 @@ public class TD_Categorias
         return lista;
     }
 
-    private ArrayList<Categoria> GetObject(Cursor c)
-    {
+    private ArrayList<Categoria> GetObject(Cursor c){
         ArrayList<Categoria> lista = new ArrayList<Categoria>();
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {

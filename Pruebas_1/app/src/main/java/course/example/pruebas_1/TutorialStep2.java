@@ -12,6 +12,7 @@ import android.widget.Toast;
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
 
+import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.DB.TD_Categorias;
 
 public class TutorialStep2 extends WizardStep {
@@ -32,7 +33,7 @@ public class TutorialStep2 extends WizardStep {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.step2_tutorial, container, false);
-        td_categorias = new TD_Categorias(getActivity().getApplicationContext());
+        td_categorias = new DBHelper(getActivity().getApplicationContext()).Categorias;
         gridView = (GridView)v.findViewById(R.id.gridView1);
         gridView.setAdapter(new CategoriaAdapter(v.getContext(), td_categorias.Obten(), trans.numeroCategoria));
         gridView.setOnItemClickListener(click_grid);
