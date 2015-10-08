@@ -1,6 +1,7 @@
 package course.example.pruebas_1;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ import org.codepond.wizardroid.persistence.ContextVariable;
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
-    private Transaccion trans = new Transaccion("",-1);
+    private Transaccion trans = new Transaccion("",-1,-1);
 
     /**
      * Note that initially BasicWizardLayout inherits from {@link android.support.v4.app.Fragment} and therefore you must have an empty constructor
@@ -38,6 +39,24 @@ public class TutorialWizard extends BasicWizardLayout {
                 //.addStep(TutorialStep3.class)           //to appear and eventually call create()
                 .create();                              //to create the wizard flow.
     }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        int op = getArguments().getInt("OP", 0);
+        View frag = (View)view.findViewById(R.id.step_container);
+        switch(op)
+        {
+            case R.id.btnTransacionEntrada:
+                trans.tipoTransaccion = 1;
+                frag.setBackgroundColor(Color.parseColor("#ff99cc00"));
+                break;
+            case R.id.btnTransacionSalida:
+                trans.tipoTransaccion = 0;
+                frag.setBackgroundColor(Color.parseColor("#ffff4444"));
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void onWizardComplete() {
@@ -45,7 +64,7 @@ public class TutorialWizard extends BasicWizardLayout {
         Intent returnIntent = new Intent();
         if(!trans.textoKeyPad.equals(".") && !trans.textoKeyPad.equals(""))
         {
-            returnIntent.putExtra("numero", Double.parseDouble(trans.textoKeyPad));
+            returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);
         }
         else

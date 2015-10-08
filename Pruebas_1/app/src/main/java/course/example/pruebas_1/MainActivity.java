@@ -30,8 +30,8 @@ public class MainActivity extends ActionBarActivity {
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes;
     DatePickerDialog DialogoFechaPrincipal;
     ListView lvTransaccionesPrincipal;
-    ArrayAdapter<String> adapter;
-    ArrayList<String> ListaTareas = new ArrayList<String>();
+    TransaccionAdapter adapter;
+    ArrayList<Transaccion> ListaTransacciones = new ArrayList<Transaccion>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
         tvFechaPrincipalMes.setText(getMonthForInt(mes).substring(0, 3).toUpperCase());
 
         lvTransaccionesPrincipal = (ListView)findViewById(R.id.lvTransaccionesPrincipal);
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, ListaTareas);
+        adapter = new TransaccionAdapter(getApplicationContext(), ListaTransacciones);
         lvTransaccionesPrincipal.setAdapter(adapter);
 
         Calendar newCalendar = Calendar.getInstance();
@@ -131,13 +131,10 @@ public class MainActivity extends ActionBarActivity {
         {
             if(resultCode == 1)
             {
-                double numero = data.getDoubleExtra("numero", 0);
-                DecimalFormat formatter = new DecimalFormat("#,##0.00");
-
-                ListaTareas.add("$ " + formatter.format(numero));
+                Transaccion trans = (Transaccion)data.getSerializableExtra("trans");
+                ListaTransacciones.add(0,trans);
                 adapter.notifyDataSetChanged();
-
-                Toast.makeText(MainActivity.this, "Se agrego la transaccion de $ " + numero, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Se agrego la transaccion de $ " + Util.PriceFormat(Double.parseDouble(trans.textoKeyPad)), Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();

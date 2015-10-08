@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,18 +25,14 @@ public class TutorialActivity extends FragmentActivity {
         setContentView(R.layout.activity_tutorial);
         Intent intent = getIntent();
         int op = intent.getIntExtra("OP", 0);
-        View frag = (View)findViewById(R.id.step_container);
-        switch(op)
-        {
-            case R.id.btnTransacionEntrada:
-                frag.setBackgroundColor(Color.parseColor("#ff99cc00"));
-                break;
-            case R.id.btnTransacionSalida:
-                frag.setBackgroundColor(Color.parseColor("#ffff4444"));
-                break;
-            default:
-                break;
-        }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        TutorialWizard fragment = new TutorialWizard();
+        Bundle args = new Bundle();
+        args.putInt("OP", op);
+        fragment.setArguments(args);
+        ft.add(R.id.tutorial_wizard_fragment, fragment);
+        ft.commit();
+
     }
 
 }
