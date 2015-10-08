@@ -12,10 +12,14 @@ import android.widget.Toast;
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
 
+import course.example.pruebas_1.DB.TD_Categorias;
+
 public class TutorialStep2 extends WizardStep {
 
     @ContextVariable
     private Transaccion trans;
+
+    TD_Categorias td_categorias;
     GridView gridView;
 
     //You must have an empty constructor for every step
@@ -28,8 +32,9 @@ public class TutorialStep2 extends WizardStep {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.step2_tutorial, container, false);
+        td_categorias = new TD_Categorias(getActivity().getApplicationContext());
         gridView = (GridView)v.findViewById(R.id.gridView1);
-        gridView.setAdapter(new CategoriaAdapter(v.getContext(), Util.categorias, trans.numeroCategoria));
+        gridView.setAdapter(new CategoriaAdapter(v.getContext(), td_categorias.Obten(), trans.numeroCategoria));
         gridView.setOnItemClickListener(click_grid);
         return v;
     }

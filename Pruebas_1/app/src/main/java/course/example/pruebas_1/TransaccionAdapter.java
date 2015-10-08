@@ -11,14 +11,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import course.example.pruebas_1.DB.DBHelper;
+
 public class TransaccionAdapter extends BaseAdapter {
     private Context context;
     private final ArrayList<Transaccion> transacciones;
     private int seleccion;
+    private DBHelper dbHelper;
+    private final ArrayList<Categoria> Categorias;
 
     public TransaccionAdapter(Context context, ArrayList<Transaccion> transacciones) {
         this.context = context;
         this.transacciones = transacciones;
+        dbHelper = new DBHelper(context);
+        Categorias = dbHelper.Categorias.Obten();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -33,7 +39,7 @@ public class TransaccionAdapter extends BaseAdapter {
             TextView textView = (TextView) gridView.findViewById(R.id.tvCostoAdapter);
             textView.setText(Util.PriceFormat(Double.parseDouble(trans.textoKeyPad)));
             ImageView imageView = (ImageView) gridView.findViewById(R.id.ivCategoriaAdapter);
-            imageView.setImageResource(Util.categorias[trans.numeroCategoria].resource);
+            imageView.setImageResource(Categorias.get(trans.numeroCategoria).resource);
             View vTipoTransaccion = (View) gridView.findViewById(R.id.vTipoTransaccionAdapter);
             switch(trans.tipoTransaccion)
             {

@@ -1,7 +1,9 @@
 package course.example.pruebas_1;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +24,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import course.example.pruebas_1.DB.DBHelper;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -37,6 +41,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+
         btnTransaccionEntrada = (Button)findViewById(R.id.btnTransacionEntrada);
         btnTransaccionEntrada.setOnClickListener(btnTransacciones);
         btnTransaccionSalida = (Button)findViewById(R.id.btnTransacionSalida);

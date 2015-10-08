@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
  */
 public class Util
 {
+    /*
     public static Categoria[] categorias = new Categoria[]{
             new Categoria(1,"Agua",R.mipmap.agua),
             new Categoria(2,"Electricidad",R.mipmap.electricidad),
@@ -18,6 +19,7 @@ public class Util
             new Categoria(8,"Novia",R.mipmap.pareja),
             new Categoria(9,"Camiones",R.mipmap.camion)
     };
+    */
 
     public static String PriceFormat(Double costo)
     {

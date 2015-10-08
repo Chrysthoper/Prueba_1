@@ -8,6 +8,9 @@ public class Categoria
     public int id;
     public String nombre;
     public int resource;
+
+    public Categoria(){}
+
     public Categoria(int id, String nombre, int resource)
     {
         this.id = id;

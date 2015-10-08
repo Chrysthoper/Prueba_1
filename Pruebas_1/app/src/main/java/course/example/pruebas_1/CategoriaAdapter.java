@@ -11,12 +11,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class CategoriaAdapter extends BaseAdapter {
     private Context context;
-    private final Categoria[] categorias;
+    private final ArrayList<Categoria> categorias;
     private int seleccion;
 
-    public CategoriaAdapter(Context context, Categoria[] categorias, int seleccion) {
+    public CategoriaAdapter(Context context, ArrayList<Categoria> categorias, int seleccion) {
         this.context = context;
         this.categorias = categorias;
         this.seleccion = seleccion;
@@ -33,9 +35,9 @@ public class CategoriaAdapter extends BaseAdapter {
             if(seleccion == position)
                 gridView.setBackgroundColor(Color.parseColor("#FFAA2300"));
             TextView textView = (TextView) gridView.findViewById(R.id.grid_item_label);
-            textView.setText(categorias[position].nombre);
+            textView.setText(categorias.get(position).nombre);
             ImageView imageView = (ImageView) gridView.findViewById(R.id.grid_item_image);
-            imageView.setImageResource(categorias[position].resource);
+            imageView.setImageResource(categorias.get(position).resource);
         } else {
             gridView = (View) convertView;
         }
@@ -45,7 +47,7 @@ public class CategoriaAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return categorias.length;
+        return categorias.size();
     }
 
     @Override
