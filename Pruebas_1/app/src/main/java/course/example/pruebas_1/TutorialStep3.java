@@ -15,16 +15,18 @@ import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TutorialStep1 extends WizardStep {
+public class TutorialStep3 extends WizardStep {
 
     @ContextVariable
-    private Transaccion trans;
+    private String textoKeyPad2;
+    @ContextVariable
+    private int numeroCategoria;
 
 
     TextView tvCostoTransaccion;
 
     //Wire the layout to the step
-    public TutorialStep1() {
+    public TutorialStep3() {
     }
 
     //Set your layout here
@@ -34,8 +36,8 @@ public class TutorialStep1 extends WizardStep {
         //super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.step1_tutorial, container, false);
         tvCostoTransaccion = (TextView) v.findViewById(R.id.tvCostoTransaccion);
-        if(!trans.textoKeyPad.equals(""))
-            IngresaCosto(trans.textoKeyPad);
+        if(!textoKeyPad2.equals(""))
+            IngresaCosto(textoKeyPad2);
         Button btn1 = (Button)v.findViewById(R.id.btn1);
         Button btn2 = (Button)v.findViewById(R.id.btn2);
         Button btn3 = (Button)v.findViewById(R.id.btn3);
@@ -72,15 +74,32 @@ public class TutorialStep1 extends WizardStep {
             if(!texto.equals("DEL"))
             {
                 //String textoCosto = tvCostoTransaccion.getText() + texto;
-                IngresaCosto(trans.textoKeyPad + texto);
+                IngresaCosto(textoKeyPad2 + texto);
             }
             else
             {
-                trans.textoKeyPad = "";
+                textoKeyPad2 = "";
                 tvCostoTransaccion.setText("");
             }
         }
     };
+
+    @Override
+    public void onExit(int exitCode) {
+        switch (exitCode) {
+            case WizardStep.EXIT_NEXT:
+                bindDataFields();
+                break;
+            case WizardStep.EXIT_PREVIOUS:
+                break;
+        }
+    }
+
+    private void bindDataFields() {
+        //The values of these fields will be automatically stored in the wizard context
+        //and will be populated in the next steps only if the same field names are used.
+        Toast.makeText(getActivity(), "La categoria seleccionada es:" + numeroCategoria, Toast.LENGTH_SHORT).show();
+    }
 
     public void IngresaCosto(String costo)
     {
@@ -88,14 +107,14 @@ public class TutorialStep1 extends WizardStep {
         Matcher matcher = patron.matcher(costo);
         if(matcher.matches())
         {
-            trans.textoKeyPad = costo;
+            textoKeyPad2 = costo;
 
-            if(trans.textoKeyPad.startsWith("."))
-                tvCostoTransaccion.setText("$ 0" + trans.textoKeyPad);
+            if(textoKeyPad2.startsWith("."))
+                tvCostoTransaccion.setText("$ 0" + textoKeyPad2);
             else
             {
                 DecimalFormat formatter = new DecimalFormat("#,###.00");
-                tvCostoTransaccion.setText("$ " + formatter.format(Double.parseDouble(trans.textoKeyPad)));
+                tvCostoTransaccion.setText("$ " + formatter.format(Double.parseDouble(textoKeyPad2)));
             }
         }
     }

@@ -20,7 +20,7 @@ public class TutorialActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//Quita el Titulo a la ventana
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_tutorial);
         Intent intent = getIntent();
         int op = intent.getIntExtra("OP", 0);
@@ -36,8 +36,6 @@ public class TutorialActivity extends FragmentActivity {
             default:
                 break;
         }
-
-
     }
 
 }

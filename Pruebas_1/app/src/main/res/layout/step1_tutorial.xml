@@ -6,36 +6,22 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_columnSpan="3"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
-        android:id="@+id/linearLayout2">
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/tvCostoTransaccion"
-            android:layout_columnSpan="2"
             android:hint="$ 0.00"
             android:gravity="center_vertical|center_horizontal"
             android:textSize="40dp"
             android:layout_weight="2"
             android:singleLine="true"
             android:textColor="@android:color/white" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/linearLayout2"
-        android:gravity="center">
 
         <LinearLayout
             android:orientation="horizontal"
