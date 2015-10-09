@@ -16,6 +16,7 @@ import course.example.pruebas_1.Transaccion;
 public class TD_Categorias
 {
     private DBHelper dbHelper;
+
     public TD_Categorias(DBHelper dbHelper)
     {
         this.dbHelper = dbHelper;

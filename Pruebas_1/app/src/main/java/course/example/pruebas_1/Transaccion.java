@@ -7,12 +7,24 @@ import java.io.Serializable;
  */
 public class Transaccion implements Serializable
 {
+    public int id;
     public String textoKeyPad;
     public int numeroCategoria;
     public int tipoTransaccion;
-    public Transaccion(String textoKeyPad, int numeroCategoria, int tipoTransaccion)
+    public double costo;
+
+    public Transaccion(){}
+
+    public Transaccion(String textoKeyPad, int tipoTransaccion, int numeroCategoria)
     {
         this.textoKeyPad = textoKeyPad;
+        this.numeroCategoria = numeroCategoria;
+        this.tipoTransaccion = tipoTransaccion;
+    }
+    public Transaccion(int id, double costo, int tipoTransaccion, int numeroCategoria)
+    {
+        this.id = id;
+        this.costo = costo;
         this.numeroCategoria = numeroCategoria;
         this.tipoTransaccion = tipoTransaccion;
     }

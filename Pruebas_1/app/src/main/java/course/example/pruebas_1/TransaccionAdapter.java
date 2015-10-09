@@ -15,16 +15,16 @@ import course.example.pruebas_1.DB.DBHelper;
 
 public class TransaccionAdapter extends BaseAdapter {
     private Context context;
-    private final ArrayList<Transaccion> transacciones;
+    private final ArrayList<Transaccion> Transacciones;
     private int seleccion;
     private DBHelper dbHelper;
     private final ArrayList<Categoria> Categorias;
 
-    public TransaccionAdapter(Context context, ArrayList<Transaccion> transacciones) {
+    public TransaccionAdapter(Context context) {
         this.context = context;
-        this.transacciones = transacciones;
         dbHelper = new DBHelper(context);
-        Categorias = dbHelper.Categorias.Obten();
+        this.Categorias = dbHelper.Categorias.Obten();
+        this.Transacciones = dbHelper.Transacciones.Obten();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -35,9 +35,9 @@ public class TransaccionAdapter extends BaseAdapter {
         {
             gridView = new View(context);
             gridView = inflater.inflate(R.layout.transaccion_adapter, null);
-            Transaccion trans = transacciones.get(position);
+            Transaccion trans = Transacciones.get(position);
             TextView textView = (TextView) gridView.findViewById(R.id.tvCostoAdapter);
-            textView.setText(Util.PriceFormat(Double.parseDouble(trans.textoKeyPad)));
+            textView.setText(Util.PriceFormat(trans.costo));
             ImageView imageView = (ImageView) gridView.findViewById(R.id.ivCategoriaAdapter);
             imageView.setImageResource(Categorias.get(trans.numeroCategoria).resource);
             View vTipoTransaccion = (View) gridView.findViewById(R.id.vTipoTransaccionAdapter);
@@ -61,7 +61,7 @@ public class TransaccionAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return transacciones.size();
+        return Transacciones.size();
     }
 
     @Override

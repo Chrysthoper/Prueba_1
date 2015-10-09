@@ -13,6 +13,8 @@ import org.codepond.wizardroid.WizardFragment;
 import org.codepond.wizardroid.layouts.BasicWizardLayout;
 import org.codepond.wizardroid.persistence.ContextVariable;
 
+import course.example.pruebas_1.DB.DBHelper;
+
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
@@ -64,6 +66,9 @@ public class TutorialWizard extends BasicWizardLayout {
         Intent returnIntent = new Intent();
         if(!trans.textoKeyPad.equals(".") && !trans.textoKeyPad.equals(""))
         {
+            DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
+            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.tipoTransaccion,trans.numeroCategoria);
+            dbHelper.Transacciones.Inserta(transaccion);
             returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);
         }

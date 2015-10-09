@@ -12,7 +12,8 @@ public final class DatabaseSchema {
         public static final String TABLE_NAME = "TD_Transacciones";
         public static final String COLUMN_NAME_ID = "ID";
         public static final String COLUMN_NAME_2 = "COSTO";
-        public static final String COLUMN_NAME_3 = "CATEGORIA_ID";
+        public static final String COLUMN_NAME_3 = "TIPO_TRANSACCION";
+        public static final String COLUMN_NAME_4 = "CATEGORIA_ID";
     }
 
     /* Inner class that defines the table contents */
