@@ -15,11 +15,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TutorialActivity"
+            android:name=".Transacciones.TutorialActivity"
             android:label="@string/title_activity_tutorial" >
         </activity>
         <activity
-            android:name=".VentanaCategorias"
+            android:name=".Categorias.VentanaCategorias"
             android:label="@string/title_activity_ventana_categorias" >
         </activity>
     </application>

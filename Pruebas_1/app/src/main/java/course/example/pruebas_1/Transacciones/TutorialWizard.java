@@ -1,19 +1,17 @@
-package course.example.pruebas_1;
+package course.example.pruebas_1.Transacciones;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 
 import org.codepond.wizardroid.WizardFlow;
-import org.codepond.wizardroid.WizardFragment;
 import org.codepond.wizardroid.layouts.BasicWizardLayout;
 import org.codepond.wizardroid.persistence.ContextVariable;
 
 import course.example.pruebas_1.DB.DBHelper;
+import course.example.pruebas_1.Negocio.Transaccion;
+import course.example.pruebas_1.R;
 
 public class TutorialWizard extends BasicWizardLayout {
 

@@ -14,8 +14,7 @@
         <ImageView
             android:id="@+id/ivGridColor"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/forma_circulo1">
+            android:layout_height="60dp">
         </ImageView>
     </LinearLayout>
 

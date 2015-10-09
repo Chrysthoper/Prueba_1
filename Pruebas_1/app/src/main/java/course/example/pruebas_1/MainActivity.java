@@ -1,15 +1,12 @@
 package course.example.pruebas_1;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
@@ -17,14 +14,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormatSymbols;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
+import course.example.pruebas_1.Adapters.TransaccionAdapter;
+import course.example.pruebas_1.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
+import course.example.pruebas_1.Negocio.Transaccion;
+import course.example.pruebas_1.Transacciones.TutorialActivity;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -144,8 +141,9 @@ public class MainActivity extends ActionBarActivity {
             {
                 Transaccion trans = (Transaccion)data.getSerializableExtra("trans");
                 adapter = new TransaccionAdapter(getApplicationContext());
+                lvTransaccionesPrincipal.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this, "Se agrego la transaccion de $ " + Util.PriceFormat(Double.parseDouble(trans.textoKeyPad)), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Se agrego la transaccion de " + Util.PriceFormat(Double.parseDouble(trans.textoKeyPad)), Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();

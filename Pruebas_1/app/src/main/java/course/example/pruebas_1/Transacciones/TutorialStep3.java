@@ -1,4 +1,4 @@
-package course.example.pruebas_1;
+package course.example.pruebas_1.Transacciones;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,8 @@ import org.codepond.wizardroid.persistence.ContextVariable;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import course.example.pruebas_1.R;
 
 public class TutorialStep3 extends WizardStep {
 

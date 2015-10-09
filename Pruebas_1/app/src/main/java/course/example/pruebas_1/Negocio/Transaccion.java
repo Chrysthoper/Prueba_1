@@ -1,4 +1,4 @@
-package course.example.pruebas_1;
+package course.example.pruebas_1.Negocio;
 
 import java.io.Serializable;
 

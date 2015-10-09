@@ -1,15 +1,12 @@
 package course.example.pruebas_1.DB;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import course.example.pruebas_1.Categoria;
-import course.example.pruebas_1.Transaccion;
+import course.example.pruebas_1.Negocio.Transaccion;
 
 /**
  * Created by Chrys-Emcor on 08/10/2015.

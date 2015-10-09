@@ -22,5 +22,7 @@ public final class DatabaseSchema {
         public static final String COLUMN_NAME_ID = "ID";
         public static final String COLUMN_NAME_2 = "NOMBRE";
         public static final String COLUMN_NAME_3 = "RECURSO_ID";
+        public static final String COLUMN_NAME_4 = "FORMACIRCULO_ID";
+        public static final String COLUMN_NAME_5 = "COLOR_ID";
     }
 }

@@ -7,20 +7,13 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:gravity="center_horizontal" >
+        android:gravity="center_vertical|center_horizontal" >
 
         <view
             android:layout_width="15dp"
             android:layout_height="match_parent"
             class="View"
             android:id="@+id/vTipoTransaccionAdapter" />
-
-        <ImageView
-            android:id="@+id/ivCategoriaAdapter"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher"
-            android:layout_weight="5" />
 
         <TextView
             android:id="@+id/tvCostoAdapter"
@@ -29,7 +22,17 @@
             android:text="@+id/label"
             android:textSize="30dp"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textColor="@android:color/black" />
+
+        <ImageView
+            android:id="@+id/ivCategoriaAdapter"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/ic_launcher"
+            android:background="@drawable/forma_circulo1"
+            android:padding="5dp" />
+
     </LinearLayout>
 
 </LinearLayout>
