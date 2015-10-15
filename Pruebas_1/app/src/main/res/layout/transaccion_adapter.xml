@@ -6,6 +6,24 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@+id/linearLayout"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/lyTransAdapterDia"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="$ 0.00"
+            android:id="@+id/tvTransAdapterDia"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="90dp"
         android:gravity="center_vertical|center_horizontal" >
 
@@ -23,7 +41,7 @@
             android:textSize="30dp"
             android:gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/white" />
 
         <ImageView
             android:id="@+id/ivCategoriaAdapter"

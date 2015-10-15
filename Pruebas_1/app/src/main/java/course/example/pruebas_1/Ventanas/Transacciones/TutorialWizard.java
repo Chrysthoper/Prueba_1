@@ -1,4 +1,4 @@
-package course.example.pruebas_1.Transacciones;
+package course.example.pruebas_1.Ventanas.Transacciones;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +9,8 @@ import org.codepond.wizardroid.WizardFlow;
 import org.codepond.wizardroid.layouts.BasicWizardLayout;
 import org.codepond.wizardroid.persistence.ContextVariable;
 
+import java.util.Date;
+
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
@@ -16,7 +18,7 @@ import course.example.pruebas_1.R;
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
-    private Transaccion trans = new Transaccion("",-1,-1);
+    private Transaccion trans = new Transaccion("",-1,-1,"");
 
     /**
      * Note that initially BasicWizardLayout inherits from {@link android.support.v4.app.Fragment} and therefore you must have an empty constructor
@@ -42,6 +44,8 @@ public class TutorialWizard extends BasicWizardLayout {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         int op = getArguments().getInt("OP", 0);
+        String fecha = getArguments().getString("FECHA");
+        trans.fecha_alta = fecha;
         View frag = (View)view.findViewById(R.id.step_container);
         switch(op)
         {
@@ -62,19 +66,24 @@ public class TutorialWizard extends BasicWizardLayout {
     public void onWizardComplete() {
         super.onWizardComplete();   //Make sure to first call the super method before anything else
         Intent returnIntent = new Intent();
-        if(!trans.textoKeyPad.equals(".") && !trans.textoKeyPad.equals(""))
+        if(Validate())
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.tipoTransaccion,trans.numeroCategoria);
+            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.tipoTransaccion,trans.numeroCategoria,trans.fecha_alta);
             dbHelper.Transacciones.Inserta(transaccion);
             returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);
+            getActivity().finish();     //Terminate the wizard
         }
+    }
+
+    public boolean Validate(){
+        if(trans.textoKeyPad.equals(".") && trans.textoKeyPad.equals(""))
+            return false;
+        else if(trans.numeroCategoria == -1)
+            return false;
         else
-        {
-            getActivity().setResult(0, returnIntent);
-        }
-        getActivity().finish();     //Terminate the wizard
+            return true;
     }
 
 }

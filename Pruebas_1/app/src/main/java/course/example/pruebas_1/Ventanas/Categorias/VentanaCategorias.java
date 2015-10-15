@@ -1,4 +1,4 @@
-package course.example.pruebas_1.Categorias;
+package course.example.pruebas_1.Ventanas.Categorias;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -76,25 +76,6 @@ public class VentanaCategorias extends ActionBarActivity {
 
         ivCategoriaDummy = (ImageView)findViewById(R.id.ivCategoriaDummy);
         etNombreCategoria = (EditText)findViewById(R.id.etNombreCategoria);
-
-        Button btnCrearCategoria = (Button)findViewById(R.id.btnCrearCategoria);
-        btnCrearCategoria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Validate())
-                {
-                    Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),imagenes[indexImagen],colores[indexColor],coloresHex[indexColor]);
-                    DBHelper dbHelper = new DBHelper(getApplicationContext());
-                    if(dbHelper.Categorias.Inserta(categoria))
-                    {
-                        Toast.makeText(VentanaCategorias.this, "Se agrego la categoria de " + categoria.nombre, Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }
-                else
-                    Toast.makeText(VentanaCategorias.this, "No se puede crear la categoria ya que falta informacion", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public boolean Validate()
@@ -142,8 +123,19 @@ public class VentanaCategorias extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.btnCrearCategoria) {
+            if(Validate())
+            {
+                Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),imagenes[indexImagen],colores[indexColor],coloresHex[indexColor]);
+                DBHelper dbHelper = new DBHelper(getApplicationContext());
+                if(dbHelper.Categorias.Inserta(categoria))
+                {
+                    Toast.makeText(VentanaCategorias.this, "Se agrego la categoria de " + categoria.nombre, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+            else
+                Toast.makeText(VentanaCategorias.this, "No se puede crear la categoria ya que falta informacion", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }

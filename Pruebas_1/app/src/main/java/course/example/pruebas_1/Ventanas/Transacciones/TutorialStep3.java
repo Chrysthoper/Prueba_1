@@ -1,4 +1,4 @@
-package course.example.pruebas_1.Transacciones;
+package course.example.pruebas_1.Ventanas.Transacciones;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package course.example.pruebas_1.Transacciones;
+package course.example.pruebas_1.Ventanas.Transacciones;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -84,8 +84,7 @@ public class TutorialStep1 extends WizardStep {
         }
     };
 
-    public void IngresaCosto(String costo)
-    {
+    public void IngresaCosto(String costo){
         Pattern patron = Pattern.compile("^([1-9][0-9]{0,9})?(\\.[0-9]{0,2})?$");
         Matcher matcher = patron.matcher(costo);
         if(matcher.matches())
@@ -101,4 +100,5 @@ public class TutorialStep1 extends WizardStep {
             }
         }
     }
+
 }

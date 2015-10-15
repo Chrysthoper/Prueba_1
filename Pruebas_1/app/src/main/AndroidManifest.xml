@@ -6,21 +6,20 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light" >
-        <activity android:name=".MainActivity" >
+        android:theme="@style/Theme.AppCompat" >
+        <activity android:name=".MainActivity" android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Transacciones.TutorialActivity"
-            android:label="@string/title_activity_tutorial" >
+        <activity android:name=".Ventanas.Transacciones.TutorialActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="Crear Transaccion">
         </activity>
-        <activity
-            android:name=".Categorias.VentanaCategorias"
-            android:label="@string/title_activity_ventana_categorias" >
+        <activity android:name=".Ventanas.Categorias.VentanaCategorias"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="Categorias" >
         </activity>
     </application>
 

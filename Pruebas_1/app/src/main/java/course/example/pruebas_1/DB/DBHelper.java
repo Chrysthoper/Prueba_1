@@ -13,12 +13,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public TD_Transacciones Transacciones;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 15;
     public static final String DATABASE_NAME = "MiChochinito.db";
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
     private static final String DOUBLE_TYPE = " DOUBLE";
+    private static final String DATETIME_TYPE = " DATETIME";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_CATEGORIAS =
             "CREATE TABLE " + DatabaseSchema.TD_Categorias.TABLE_NAME +
@@ -35,7 +36,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_2 + DOUBLE_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_3 + INTEGER_TYPE + COMMA_SEP +
-                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + INTEGER_TYPE +
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + INTEGER_TYPE + COMMA_SEP +
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + DATETIME_TYPE +
                     " )";
     private static final String SQL_DELETE_CATEGORIAS = "DROP TABLE IF EXISTS " + DatabaseSchema.TD_Categorias.TABLE_NAME;
     private static final String SQL_DELETE_TRANSACCIONES = "DROP TABLE IF EXISTS " + DatabaseSchema.TD_Transacciones.TABLE_NAME;

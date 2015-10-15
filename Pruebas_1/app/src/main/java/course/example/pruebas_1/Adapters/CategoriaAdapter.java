@@ -31,7 +31,7 @@ public class CategoriaAdapter extends BaseAdapter {
         MyViewHolder holder;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.categoria_adapter2, null, false);
+            row = inflater.inflate(R.layout.categoria_adapter, null, false);
 
             holder = new MyViewHolder();
             holder.tvNombreCategoria = (TextView) row.findViewById(R.id.tvGridCategoriaAdapter);

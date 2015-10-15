@@ -1,6 +1,7 @@
 package course.example.pruebas_1.Negocio;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Chrys-Emcor on 07/10/2015.
@@ -12,25 +13,24 @@ public class Transaccion implements Serializable
     public int numeroCategoria;
     public int tipoTransaccion;
     public double costo;
+    public String fecha_alta;
 
     public Transaccion(){}
 
-    public Transaccion(String textoKeyPad, int tipoTransaccion, int numeroCategoria)
+    //Dummy
+    public Transaccion(String textoKeyPad, int tipoTransaccion, int numeroCategoria, String fecha_alta)
     {
         this.textoKeyPad = textoKeyPad;
         this.numeroCategoria = numeroCategoria;
         this.tipoTransaccion = tipoTransaccion;
+        this.fecha_alta = fecha_alta;
     }
-    public Transaccion(int id, double costo, int tipoTransaccion, int numeroCategoria)
+    public Transaccion(int id, double costo, int tipoTransaccion, int numeroCategoria, String fecha_alta)
     {
         this.id = id;
         this.costo = costo;
         this.numeroCategoria = numeroCategoria;
         this.tipoTransaccion = tipoTransaccion;
-    }
-    @Override
-    public String toString()
-    {
-        return tipoTransaccion + " - " + numeroCategoria + " - " + textoKeyPad;
+        this.fecha_alta = fecha_alta;
     }
 }

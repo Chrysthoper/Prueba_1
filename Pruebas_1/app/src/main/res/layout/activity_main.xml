@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -13,16 +14,16 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ 0.00"
             android:id="@+id/btnTransacionEntrada"
             android:layout_alignParentRight="true"
             android:background="@android:color/holo_green_light"
             android:textColor="@android:color/white"
             android:layout_toRightOf="@+id/view"
-            android:textSize="30dp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:height="70dp"
-            android:paddingLeft="30dp" />
+            android:paddingLeft="30dp"
+            android:text="$ 0.00" />
 
         <View
             android:id="@+id/view"
@@ -40,10 +41,11 @@
             android:layout_toLeftOf="@+id/view"
             android:background="@android:color/holo_red_light"
             android:textColor="@android:color/white"
-            android:textSize="30dp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:height="70dp"
-            android:paddingRight="30dp" />
+            android:paddingRight="30dp"
+            android:clickable="true" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -74,11 +76,27 @@
 
     </RelativeLayout>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvTransaccionesPrincipal"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
         android:layout_below="@+id/linearLayout"
-        android:layout_alignParentStart="true" />
+        android:gravity="center_vertical|center_horizontal">
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="$ 0.00"
+            android:id="@+id/tvBalancePrinncipal"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lvTransaccionesPrincipal"
+        android:layout_alignParentStart="false"
+        android:layout_weight="1" />
+
+</LinearLayout>

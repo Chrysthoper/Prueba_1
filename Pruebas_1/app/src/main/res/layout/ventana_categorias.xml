@@ -4,51 +4,18 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:id="@+id/ivCategoriaDummy" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:text="Crear"
-                android:id="@+id/btnCrearCategoria" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nombre"
             android:id="@+id/textView3"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:gravity="center_horizontal" />
 
         <EditText
             android:layout_width="match_parent"
@@ -61,51 +28,71 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent"
+        android:layout_weight="2">
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="4">
+            android:layout_weight="1"
+            android:gravity="center_horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Colores"
                 android:id="@+id/textView"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:gravity="center_horizontal" />
 
             <GridView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/gvColores"
                 android:columnWidth="70dp"
-                android:numColumns="auto_fit" />
+                android:numColumns="1"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="4">
+            android:layout_weight="1">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Imagen"
                 android:id="@+id/textView2"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:gravity="center_horizontal" />
 
             <GridView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/gvImagenes"
-                android:numColumns="auto_fit"
-                android:columnWidth="70dp" />
+                android:numColumns="1"
+                android:columnWidth="70dp"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:weightSum="1"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:id="@+id/ivCategoriaDummy" />
+
     </LinearLayout>
 
 </LinearLayout>
