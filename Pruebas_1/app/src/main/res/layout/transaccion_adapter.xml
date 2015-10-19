@@ -10,7 +10,8 @@
         android:layout_below="@+id/linearLayout"
         android:gravity="center_vertical|center_horizontal"
         android:id="@+id/lyTransAdapterDia"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:background="@android:color/black">
 
         <TextView
             android:layout_width="match_parent"
@@ -24,24 +25,11 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:gravity="center_vertical|center_horizontal" >
-
-        <view
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            class="View"
-            android:id="@+id/vTipoTransaccionAdapter" />
-
-        <TextView
-            android:id="@+id/tvCostoAdapter"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@+id/label"
-            android:textSize="30dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="1"
-            android:textColor="@android:color/white" />
+        android:layout_height="70dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_margin="5dp"
+        android:background="@drawable/grid_border"
+        android:id="@+id/lyTransAdapter1">
 
         <ImageView
             android:id="@+id/ivCategoriaAdapter"
@@ -50,6 +38,131 @@
             android:src="@mipmap/ic_launcher"
             android:background="@drawable/forma_circulo1"
             android:padding="5dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/tvDescripcionAdapter"
+                android:textSize="15dp"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:textColor="@android:color/black"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:id="@+id/tvCostoAdapter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="$ 00000.00"
+                android:textSize="15dp"
+                android:gravity="left|center_vertical"
+                android:layout_weight="2"
+                android:textColor="@android:color/black"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_margin="5dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/lyTransAdapter2"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="70dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnEliminarTrans"
+                    android:background="@mipmap/eliminar"
+                    android:padding="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button2"
+                    android:background="@mipmap/editar" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="70dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <ImageView
+                    android:id="@+id/ivTransDetalleCategoria"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:background="@drawable/forma_circulo1"
+                    android:padding="5dp" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Medium Text"
+                        android:id="@+id/tvTransDetalleDesc"
+                        android:textSize="15dp"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:textColor="@android:color/black"
+                        android:layout_margin="5dp" />
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/btnTransDetalleCerrar"
+                        android:background="@mipmap/cerrar" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

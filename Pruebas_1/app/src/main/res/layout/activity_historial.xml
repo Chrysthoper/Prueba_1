@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@+id/linearLayout"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="$ 0.00"
+            android:id="@+id/tvBalanceHistorial"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lvTransaccionesHistorial"
+        android:layout_alignParentStart="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

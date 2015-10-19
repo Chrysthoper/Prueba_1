@@ -47,7 +47,7 @@ public class CategoriaAdapter extends BaseAdapter {
         }
         holder.tvNombreCategoria.setText(categorias.get(position).nombre);
         holder.ivImagenCategoria.setImageResource(categorias.get(position).resource);
-        holder.lyColorCategoria.setBackgroundResource(categorias.get(position).color);
+        holder.lyColorCategoria.setBackgroundResource(categorias.get(position).formaCirculo);
 
         return row;
     }

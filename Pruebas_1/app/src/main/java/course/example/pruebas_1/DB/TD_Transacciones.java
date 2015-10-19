@@ -32,7 +32,9 @@ public class TD_Transacciones
                 DatabaseSchema.TD_Transacciones.COLUMN_NAME_2,
                 DatabaseSchema.TD_Transacciones.COLUMN_NAME_3,
                 DatabaseSchema.TD_Transacciones.COLUMN_NAME_4,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_5
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_5,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_6,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_7
         };
         // How you want the results sorted in the resulting Cursor
         String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
@@ -40,7 +42,7 @@ public class TD_Transacciones
         Cursor c = db.rawQuery("SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
                         " WHERE " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + " > Datetime('" + fechaIni.substring(0,10) + "')" +
                         " AND " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + " < Datetime('" + fechaFin.substring(0,10) + "')" +
-                        " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_5, null);
+                        " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + " DESC", null);
 
         ArrayList<Transaccion> lista = GetObject(c);
         return lista;
@@ -56,6 +58,8 @@ public class TD_Transacciones
         values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_3, trans.tipoTransaccion);
         values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4, trans.numeroCategoria);
         values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5, trans.fecha_alta);
+        values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6, trans.nota);
+        values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7, trans.descripcion);
 
         long newRowId;
         newRowId = db.insert(
@@ -107,6 +111,8 @@ public class TD_Transacciones
                 transaccion.tipoTransaccion = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_3));
                 transaccion.numeroCategoria = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4));
                 transaccion.fecha_alta = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5)).substring(0,10);
+                transaccion.nota = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6));
+                transaccion.descripcion = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7));
                 lista.add(transaccion);
             } while(c.moveToNext());
         }

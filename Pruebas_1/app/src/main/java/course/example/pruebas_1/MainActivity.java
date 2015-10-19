@@ -1,6 +1,8 @@
 package course.example.pruebas_1;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
@@ -17,18 +19,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import course.example.pruebas_1.Adapters.TransaccionAdapter;
+import course.example.pruebas_1.Interfaces.IAdaptersCaller;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
+import course.example.pruebas_1.Ventanas.Historial.VentanaHistorial;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements IAdaptersCaller {
 
     Button btnTransaccionSalida,btnTransaccionEntrada;
     LinearLayout lyFechaPrincipal;
@@ -81,20 +84,29 @@ public class MainActivity extends ActionBarActivity {
 
         lvTransaccionesPrincipal = (ListView)findViewById(R.id.lvTransaccionesPrincipal);
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        adapter = new TransaccionAdapter(getApplicationContext(),listaTransacciones, false);
+        adapter = new TransaccionAdapter(MainActivity.this,listaTransacciones, false);
+        adapter.setCallback(this);
         lvTransaccionesPrincipal.setAdapter(adapter);
         lvTransaccionesPrincipal.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Transaccion trans = listaTransacciones.get(i);
-                if(dbHelper.Transacciones.Elimina(trans.id))
-                {
-                    ActualizaVentana();
-                    Toast.makeText(MainActivity.this, "Se elimino la transaccion", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                else
-                    return false;
+            final Transaccion trans = listaTransacciones.get(i);
+            new AlertDialog.Builder(MainActivity.this)
+                .setMessage("¿Seguro que desea borrar la transacción?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if(dbHelper.Transacciones.Elimina(trans.id))
+                        {
+                            ActualizaVentana();
+                            Toast.makeText(MainActivity.this, "Se elimino la transaccion", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+                return true;
             }
         });
 
@@ -122,6 +134,7 @@ public class MainActivity extends ActionBarActivity {
 
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
         adapter = new TransaccionAdapter(getApplicationContext(),listaTransacciones, false);
+        adapter.setCallback(this);
         lvTransaccionesPrincipal.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         btnTransaccionEntrada.setText(Util.PriceFormat(SumEntradas));
@@ -159,9 +172,15 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         else if(id == R.id.categorias_settings)
-        {
             startActivity(new Intent(getApplicationContext(), VentanaCategorias.class));
+        else if(id == R.id.historial_settings)
+        {
+            Intent i = new Intent(getApplicationContext(), VentanaHistorial.class);
+            i.putExtra("FECHA_INICIAL", "2015-10-01");
+            i.putExtra("FECHA_FINAL", "2015-11-30");
+            startActivity(i);
         }
+
         return super.onOptionsItemSelected(item);
     }
 

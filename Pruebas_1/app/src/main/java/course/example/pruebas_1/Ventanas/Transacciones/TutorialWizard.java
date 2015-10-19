@@ -18,7 +18,7 @@ import course.example.pruebas_1.R;
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
-    private Transaccion trans = new Transaccion("",-1,-1,"");
+    private Transaccion trans = new Transaccion("",-1,-1,"","","");
 
     /**
      * Note that initially BasicWizardLayout inherits from {@link android.support.v4.app.Fragment} and therefore you must have an empty constructor
@@ -38,7 +38,7 @@ public class TutorialWizard extends BasicWizardLayout {
         return new WizardFlow.Builder()
                 .addStep(TutorialStep1.class)           //Add your steps in the order you want them
                 .addStep(TutorialStep2.class)           //to appear and eventually call create()
-                //.addStep(TutorialStep3.class)           //to appear and eventually call create()
+                .addStep(TutorialStep3.class)           //to appear and eventually call create()
                 .create();                              //to create the wizard flow.
     }
     @Override
@@ -69,7 +69,7 @@ public class TutorialWizard extends BasicWizardLayout {
         if(Validate())
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.tipoTransaccion,trans.numeroCategoria,trans.fecha_alta);
+            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.tipoTransaccion,trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion);
             dbHelper.Transacciones.Inserta(transaccion);
             returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);

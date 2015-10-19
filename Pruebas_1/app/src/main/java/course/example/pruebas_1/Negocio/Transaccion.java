@@ -13,24 +13,26 @@ public class Transaccion implements Serializable
     public int numeroCategoria;
     public int tipoTransaccion;
     public double costo;
-    public String fecha_alta;
+    public String fecha_alta,nota,descripcion;
 
     public Transaccion(){}
 
     //Dummy
-    public Transaccion(String textoKeyPad, int tipoTransaccion, int numeroCategoria, String fecha_alta)
+    public Transaccion(String textoKeyPad, int tipoTransaccion, int numeroCategoria, String fecha_alta, String nota, String descripcion)
     {
         this.textoKeyPad = textoKeyPad;
         this.numeroCategoria = numeroCategoria;
         this.tipoTransaccion = tipoTransaccion;
         this.fecha_alta = fecha_alta;
     }
-    public Transaccion(int id, double costo, int tipoTransaccion, int numeroCategoria, String fecha_alta)
+    public Transaccion(int id, double costo, int tipoTransaccion, int numeroCategoria, String fecha_alta, String nota, String descripcion)
     {
         this.id = id;
         this.costo = costo;
         this.numeroCategoria = numeroCategoria;
         this.tipoTransaccion = tipoTransaccion;
         this.fecha_alta = fecha_alta;
+        this.nota = nota;
+        this.descripcion = descripcion;
     }
 }

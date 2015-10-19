@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import org.codepond.wizardroid.WizardStep;
@@ -23,7 +24,7 @@ public class TutorialStep2 extends WizardStep {
     private Transaccion trans;
 
     TD_Categorias td_categorias;
-    ListView lvCategoriasPaso2;
+    GridView lvCategoriasPaso2;
 
     //You must have an empty constructor for every step
     public TutorialStep2() {
@@ -36,7 +37,7 @@ public class TutorialStep2 extends WizardStep {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.step2_tutorial, container, false);
         td_categorias = new DBHelper(getActivity().getApplicationContext()).Categorias;
-        lvCategoriasPaso2 = (ListView)v.findViewById(R.id.lvCategoriasPaso2);
+        lvCategoriasPaso2 = (GridView)v.findViewById(R.id.lvCategoriasPaso2);
         lvCategoriasPaso2.setAdapter(new CategoriaAdapter(v.getContext(), td_categorias.Obten(), trans.numeroCategoria));
         lvCategoriasPaso2.setOnItemClickListener(click_grid);
         return v;
