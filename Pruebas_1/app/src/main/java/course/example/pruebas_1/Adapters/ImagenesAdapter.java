@@ -37,6 +37,7 @@ public class ImagenesAdapter extends BaseAdapter {
             holder = (MyViewHolder) row.getTag();
         }
         holder.ivHolderImagen.setImageResource(imagenes[position]);
+        holder.ivHolderImagen.setBackgroundResource(R.drawable.forma_circulonegro);
         return row;
     }
 

@@ -43,8 +43,30 @@ public class TD_Categorias
         return lista;
     }
 
-    public Boolean Inserta(Categoria cat)
-    {
+    public Categoria Obten(int ID){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_ID,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_2,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_3,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_4,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_5
+        };
+        String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
+        Cursor c = db.query(
+                DatabaseSchema.TD_Categorias.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_ID + "=?",                                // The columns for the WHERE clause
+                new String[] { String.valueOf(ID) },// The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        Categoria lista = GetObjectCategoria(c);
+        return lista;
+    }
+
+    public Boolean Inserta(Categoria cat) {
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -63,6 +85,14 @@ public class TD_Categorias
         return (newRowId != 0) ? true : false;
     }
 
+    public Boolean Elimina(int categoria_id){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        return db.delete(
+                DatabaseSchema.TD_Categorias.TABLE_NAME,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_ID + "=" + categoria_id,
+                null) > 0;
+    }
+
     private ArrayList<Categoria> GetObject(Cursor c){
         ArrayList<Categoria> lista = new ArrayList<Categoria>();
         //Nos aseguramos de que existe al menos un registro
@@ -79,5 +109,21 @@ public class TD_Categorias
             } while(c.moveToNext());
         }
         return lista;
+    }
+
+    private Categoria GetObjectCategoria(Cursor c) {
+        Categoria categoria = new Categoria();
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya mas registros
+            do {
+                categoria.id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_ID));
+                categoria.nombre = c.getString(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_2));
+                categoria.resource = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_3));
+                categoria.formaCirculo = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_4));
+                categoria.color = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_5));
+            } while(c.moveToNext());
+        }
+        return categoria;
     }
 }

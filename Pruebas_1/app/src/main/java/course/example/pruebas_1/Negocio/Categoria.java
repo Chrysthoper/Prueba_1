@@ -1,9 +1,11 @@
 package course.example.pruebas_1.Negocio;
 
+import java.io.Serializable;
+
 /**
  * Created by Chrys-Emcor on 06/10/2015.
  */
-public class Categoria
+public class Categoria implements Serializable
 {
     public int id;
     public String nombre;

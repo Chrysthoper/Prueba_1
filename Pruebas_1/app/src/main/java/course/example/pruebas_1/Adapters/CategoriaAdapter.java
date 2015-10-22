@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.R;
+import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 
 public class CategoriaAdapter extends BaseAdapter {
     private Context context;
@@ -31,14 +32,18 @@ public class CategoriaAdapter extends BaseAdapter {
         MyViewHolder holder;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.categoria_adapter2, null, false);
+            row = inflater.inflate(R.layout.categoria_adapter, null, false);
 
             holder = new MyViewHolder();
             holder.tvNombreCategoria = (TextView) row.findViewById(R.id.tvGridCategoriaAdapter);
+            holder.tvIDCategoriaAdapter = (TextView) row.findViewById(R.id.tvIDCategoriaAdapter);
             holder.ivImagenCategoria = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
             holder.lyColorCategoria = (LinearLayout) row.findViewById(R.id.lyGridCategoriaAdapter);
 
-            if(seleccion == position)
+            if (context instanceof VentanaCategorias)
+                holder.tvNombreCategoria.setTextColor(Color.BLACK);
+
+            if(seleccion == categorias.get(position).id)
                 row.setBackgroundColor(Color.parseColor("#FFAA2300"));
 
             row.setTag(holder);
@@ -46,9 +51,9 @@ public class CategoriaAdapter extends BaseAdapter {
             holder = (MyViewHolder) row.getTag();
         }
         holder.tvNombreCategoria.setText(categorias.get(position).nombre);
+        holder.tvIDCategoriaAdapter.setText(String.valueOf(categorias.get(position).id));
         holder.ivImagenCategoria.setImageResource(categorias.get(position).resource);
-        holder.lyColorCategoria.setBackgroundResource(categorias.get(position).color);
-
+        holder.lyColorCategoria.setBackgroundResource(categorias.get(position).formaCirculo);
         return row;
     }
 
@@ -68,7 +73,7 @@ public class CategoriaAdapter extends BaseAdapter {
     }
 
     private static class MyViewHolder {
-        public TextView tvNombreCategoria;
+        public TextView tvNombreCategoria,tvIDCategoriaAdapter;
         public ImageView ivImagenCategoria;
         public LinearLayout lyColorCategoria;
     }
