@@ -17,12 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import course.example.pruebas_1.Adapters.TransaccionAdapter;
+import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
+import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Interfaces.IAdaptersCaller;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
@@ -42,6 +47,17 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCaller {
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
     Calendar c;
+
+    /**
+     * The pager widget, which handles animation and allows swiping horizontally
+     * to access previous and next pages.
+     */
+    ViewPager pager = null;
+
+    /**
+     * The pager adapter, which provides the pages to the view pager widget.
+     */
+    TransaccionesFragmentPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +98,18 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCaller {
         tvFechaPrincipalMes = (TextView)findViewById(R.id.tvFechaPrincipalMes);
         tvFechaPrincipalMes.setText(getMonthForInt(mes).substring(0, 3).toUpperCase());
 
-        lvTransaccionesPrincipal = (ListView)findViewById(R.id.lvTransaccionesPrincipal);
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
+
+        /*
+        this.pager = (ViewPager) this.findViewById(R.id.pager);
+
+        // Create an adapter with the fragments we show on the ViewPager
+        TransaccionesFragmentPagerAdapter adapter = new TransaccionesFragmentPagerAdapter(
+                getSupportFragmentManager());
+        adapter.addFragment(TransaccionesPagerAdapter1.newInstance(listaTransacciones));
+        this.pager.setAdapter(adapter);
+        */
+        lvTransaccionesPrincipal = (ListView)findViewById(R.id.lvTransaccionesPrincipal);
         adapter = new TransaccionAdapter(MainActivity.this,listaTransacciones, false);
         adapter.setCallback(this);
         lvTransaccionesPrincipal.setAdapter(adapter);
@@ -122,6 +148,17 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCaller {
         },c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
     }
 
+    @Override
+    public void onBackPressed() {
+
+        // Return to previous page when we press back button
+        if (this.pager.getCurrentItem() == 0)
+            super.onBackPressed();
+        else
+            this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
+
+    }
+
     public void ActualizaVentana(){
         Calendar cFin = Calendar.getInstance();
         cFin.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -132,13 +169,14 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCaller {
         double SumEntradas = dbHelper.Transacciones.SumatoriaEntradas(fechaIni,fechaFin);
         double SumSalidas = dbHelper.Transacciones.SumatoriaSalidas(fechaIni,fechaFin);
 
+        btnTransaccionEntrada.setText(Util.PriceFormat(SumEntradas));
+        btnTransaccionSalida.setText(Util.PriceFormat(SumSalidas));
+
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        adapter = new TransaccionAdapter(getApplicationContext(),listaTransacciones, false);
+        adapter = new TransaccionAdapter(MainActivity.this,listaTransacciones, false);
         adapter.setCallback(this);
         lvTransaccionesPrincipal.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        btnTransaccionEntrada.setText(Util.PriceFormat(SumEntradas));
-        btnTransaccionSalida.setText(Util.PriceFormat(SumSalidas));
 
         tvBalancePrincipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
         if((SumEntradas - SumSalidas) < 0)
@@ -178,7 +216,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCaller {
             Intent i = new Intent(getApplicationContext(), VentanaHistorial.class);
             i.putExtra("FECHA_INICIAL", "2015-10-01");
             i.putExtra("FECHA_FINAL", "2015-11-30");
-            startActivity(i);
+            startActivityForResult(i,2);
         }
 
         return super.onOptionsItemSelected(item);
@@ -214,12 +252,10 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCaller {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        ActualizaVentana();
         if (requestCode == 1)
         {
-            if(resultCode == 1)
-                ActualizaVentana();
-            else
+            if(resultCode != 1)
                 Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
         }
     }

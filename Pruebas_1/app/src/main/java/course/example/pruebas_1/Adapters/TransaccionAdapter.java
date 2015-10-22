@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import course.example.pruebas_1.Interfaces.IAdaptersCaller;
 import course.example.pruebas_1.Negocio.Categoria;
@@ -34,8 +35,9 @@ public class TransaccionAdapter extends BaseAdapter {
     private int seleccion;
     private DBHelper dbHelper;
     private final ArrayList<Categoria> Categorias;
-    private String fecha = "";
+    private String fecha = "2500-01-01";
     private boolean ConFechas;
+    private ArrayList<Integer> TransaccionConBaner;
 
     public TransaccionAdapter(Context context, ArrayList<Transaccion> Transacciones, boolean ConFechas) {
         this.context = context;
@@ -43,34 +45,28 @@ public class TransaccionAdapter extends BaseAdapter {
         this.Categorias = dbHelper.Categorias.Obten();
         this.Transacciones = Transacciones;
         this.ConFechas = ConFechas;
+        TransaccionConBaner = new ArrayList<Integer>();
     }
 
     public View getView(final int position, final View convertView, ViewGroup parent) {
 
-        final AlertDialog.Builder dialog;
         View row = convertView;
         final MyViewHolder holder;
         final Transaccion trans = Transacciones.get(position);
 
-        if (row == null)
-        {
+        if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.transaccion_adapter, null, false);
-            dialog = new AlertDialog.Builder(row.getContext());
             holder = new MyViewHolder();
-            if(ConFechas && !fecha.equals(trans.fecha_alta))
-            {
-                fecha = trans.fecha_alta;
-                holder.lyTransAdapterDia = (LinearLayout)row.findViewById(R.id.lyTransAdapterDia);
-                holder.lyTransAdapterDia.setVisibility(View.VISIBLE);
-                holder.tvTransAdapterDia = (TextView)row.findViewById(R.id.tvTransAdapterDia);
-                holder.tvTransAdapterDia.setText(fecha);
 
-            }
+            holder.lyTransAdapterDia = (LinearLayout) row.findViewById(R.id.lyTransAdapterDia);
+            holder.lyTransAdapterDia.setVisibility(View.GONE);
+
             holder.tvCostoAdapter = (TextView) row.findViewById(R.id.tvCostoAdapter);
             holder.ivCategoriaAdapter = (ImageView) row.findViewById(R.id.ivCategoriaAdapter);
-            holder.tvDescripcionAdapter = (TextView)row.findViewById(R.id.tvDescripcionAdapter);
-            holder.lyTransAdapter1 = (LinearLayout)row.findViewById(R.id.lyTransAdapter1);
+            holder.tvDescripcionAdapter = (TextView) row.findViewById(R.id.tvDescripcionAdapter);
+            holder.lyTransAdapter1 = (LinearLayout) row.findViewById(R.id.lyTransAdapter1);
+            /*
             holder.lyTransAdapter1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -78,44 +74,55 @@ public class TransaccionAdapter extends BaseAdapter {
                     holder.lyTransAdapter2.setVisibility(View.VISIBLE);
                 }
             });
-            holder.lyTransAdapter2 = (LinearLayout)row.findViewById(R.id.lyTransAdapter2);
-            holder.btnEliminarTrans = (Button)row.findViewById(R.id.btnEliminarTrans);
-            holder.btnEliminarTrans.setOnClickListener(new View.OnClickListener() {
+            */
+            holder.lyTransAdapter1.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(final View view) {
-
-                    if (dbHelper.Transacciones.Elimina(trans.id)) {
-                        Transacciones.remove(position);
-                        notifyDataSetChanged();
-                        caller.ActualizaVentana();
-                        holder.lyTransAdapter2.setVisibility(View.GONE);
-                        holder.lyTransAdapter1.setVisibility(View.VISIBLE);
-                        Toast.makeText(context, "Se elimino la transaccion", Toast.LENGTH_SHORT).show();
-                    }
+                public boolean onLongClick(View view) {
+                    new AlertDialog.Builder(context)
+                            .setMessage("�Seguro que desea borrar la transacci�n?")
+                            .setCancelable(false)
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    if (dbHelper.Transacciones.Elimina(trans.id)) {
+                                        Transacciones.remove(position);
+                                        notifyDataSetChanged();
+                                        caller.ActualizaVentana();
+                                        Toast.makeText(context, "Se elimino la transaccion", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                    return true;
                 }
             });
-            holder.btnTransDetalleCerrar = (Button)row.findViewById(R.id.btnTransDetalleCerrar);
-            holder.btnTransDetalleCerrar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    holder.lyTransAdapter2.setVisibility(View.GONE);
-                    holder.lyTransAdapter1.setVisibility(View.VISIBLE);
-                }
-            });
-            holder.tvTransDetalleDesc = (TextView) row.findViewById(R.id.tvTransDetalleDesc);
-            holder.ivTransDetalleCategoria = (ImageView) row.findViewById(R.id.ivTransDetalleCategoria);
+            holder.tvNotaAdapter = (TextView) row.findViewById(R.id.tvNotaAdapter);
             row.setTag(holder);
         } else {
             holder = (MyViewHolder) row.getTag();
         }
+
+        if (ConFechas &&
+                (!fecha.equals(trans.fecha_alta) && Util.FormatToFecha(fecha).after(Util.FormatToFecha(trans.fecha_alta))) ||
+                TransaccionConBaner.contains(trans.id)) {
+            TransaccionConBaner.add(trans.id);
+            fecha = trans.fecha_alta;
+            holder.lyTransAdapterDia = (LinearLayout) row.findViewById(R.id.lyTransAdapterDia);
+            holder.lyTransAdapterDia.setVisibility(View.VISIBLE);
+            holder.tvTransAdapterDia = (TextView) row.findViewById(R.id.tvTransAdapterDia);
+            holder.tvTransAdapterDia.setText(fecha);
+        }
+        else
+        {
+            holder.lyTransAdapterDia = (LinearLayout)row.findViewById(R.id.lyTransAdapterDia);
+            holder.lyTransAdapterDia.setVisibility(View.GONE);
+        }
+
         holder.tvCostoAdapter.setText(Util.PriceFormat(trans.costo));
         holder.tvDescripcionAdapter.setText(trans.descripcion);
+        holder.tvNotaAdapter.setText(trans.nota);
         holder.ivCategoriaAdapter.setImageResource(Categorias.get(trans.numeroCategoria).resource);
         holder.ivCategoriaAdapter.setBackgroundResource(Categorias.get(trans.numeroCategoria).formaCirculo);
-
-        holder.tvTransDetalleDesc.setText(trans.descripcion);
-        holder.ivTransDetalleCategoria.setImageResource(Categorias.get(trans.numeroCategoria).resource);
-        holder.ivTransDetalleCategoria.setBackgroundResource(Categorias.get(trans.numeroCategoria).formaCirculo);
 
         switch(trans.tipoTransaccion)
         {
@@ -151,11 +158,10 @@ public class TransaccionAdapter extends BaseAdapter {
     }
 
     private static class MyViewHolder {
-        public TextView tvCostoAdapter,tvDescripcionAdapter,tvTransDetalleDesc;
-        public ImageView ivCategoriaAdapter,ivTransDetalleCategoria;
-        public LinearLayout lyTransAdapterDia,lyTransAdapter1,lyTransAdapter2;
+        public TextView tvCostoAdapter,tvDescripcionAdapter,tvNotaAdapter;
+        public ImageView ivCategoriaAdapter;
+        public LinearLayout lyTransAdapterDia,lyTransAdapter1;
         public TextView tvTransAdapterDia;
-        public Button btnEliminarTrans, btnTransDetalleCerrar;
     }
 
 }

@@ -25,6 +25,8 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
     TransaccionAdapter adapter;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
+    String fecha_inicial;
+    String fecha_final;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,8 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         dbHelper = new DBHelper(getApplicationContext());
 
         Intent intent = getIntent();
-        String fecha_inicial = intent.getStringExtra("FECHA_INICIAL");
-        String fecha_final = intent.getStringExtra("FECHA_FINAL");
+        fecha_inicial = intent.getStringExtra("FECHA_INICIAL");
+        fecha_final = intent.getStringExtra("FECHA_FINAL");
 
         double SumEntradas = dbHelper.Transacciones.SumatoriaEntradas(fecha_inicial,fecha_final);
         double SumSalidas = dbHelper.Transacciones.SumatoriaSalidas(fecha_inicial,fecha_final);
@@ -79,6 +81,20 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
 
     @Override
     public void ActualizaVentana() {
+        double SumEntradas = dbHelper.Transacciones.SumatoriaEntradas(fecha_inicial,fecha_final);
+        double SumSalidas = dbHelper.Transacciones.SumatoriaSalidas(fecha_inicial,fecha_final);
 
+        tvBalanceHistorial = (TextView)findViewById(R.id.tvBalanceHistorial);
+        tvBalanceHistorial.setText(Util.PriceFormat(SumEntradas - SumSalidas));
+        if((SumEntradas - SumSalidas) < 0)
+            tvBalanceHistorial.setTextColor(Color.parseColor("#ffff4444"));
+        else
+            tvBalanceHistorial.setTextColor(Color.parseColor("#ff99cc00"));
+
+        lvTransaccionesHistorial = (ListView)findViewById(R.id.lvTransaccionesHistorial);
+        listaTransacciones = dbHelper.Transacciones.Obten(fecha_inicial,fecha_final);
+        adapter = new TransaccionAdapter(VentanaHistorial.this,listaTransacciones, true);
+        adapter.setCallback(this);
+        lvTransaccionesHistorial.setAdapter(adapter);
     }
 }
