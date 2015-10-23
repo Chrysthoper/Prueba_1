@@ -40,8 +40,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     LinearLayout lyFechaPrincipal;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrincipal;
     DatePickerDialog DialogoFechaPrincipal;
-    ListView lvTransaccionesPrincipal;
-    TransaccionAdapter adapter;
+    //ListView lvTransaccionesPrincipal;
+    //TransaccionAdapter adapter;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
     ArrayList<Categoria> listaCategorias;
@@ -49,11 +49,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     private TransaccionesPagerAdapter2 pagerAdapter2;
     private TransaccionesFragmentPagerAdapter adapterFrag;
     Calendar c;
-
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally
-     * to access previous and next pages.
-     */
     ViewPager pager = null;
 
     @Override
@@ -96,9 +91,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         tvFechaPrincipalMes.setText(getMonthForInt(mes).substring(0, 3).toUpperCase());
 
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni,fechaFin);
+        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
         this.pager = (ViewPager) this.findViewById(R.id.pager);
-        // Create an adapter with the fragments we show on the ViewPager
         adapterFrag = new TransaccionesFragmentPagerAdapter(
                 getSupportFragmentManager());
         pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones, false);
@@ -107,34 +101,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         adapterFrag.addFragment(pagerAdapter1);
         adapterFrag.addFragment(pagerAdapter2);
         this.pager.setAdapter(adapterFrag);
-        /*
-        lvTransaccionesPrincipal = (ListView)findViewById(R.id.lvTransaccionesPrincipal);
-        adapter = new TransaccionAdapter(MainActivity.this,listaTransacciones, false);
-        adapter.setCallback(this);
-        lvTransaccionesPrincipal.setAdapter(adapter);
-        lvTransaccionesPrincipal.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            final Transaccion trans = listaTransacciones.get(i);
-            new AlertDialog.Builder(MainActivity.this)
-                .setMessage("¿Seguro que desea borrar la transacción?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
 
-                        if(dbHelper.Transacciones.Elimina(trans.id))
-                        {
-                            ActualizaVentana();
-                            Toast.makeText(MainActivity.this, "Se elimino la transaccion", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
-                return true;
-            }
-        });
-        */
         DialogoFechaPrincipal = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

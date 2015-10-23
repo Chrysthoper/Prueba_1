@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.shapes.Shape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,20 +56,25 @@ public class CategoriasGroupAdapter extends BaseAdapter {
             row = inflater.inflate(R.layout.categorias_group_adapter, null, false);
             holder = new MyViewHolder();
 
-            holder.tvCostoAdapter = (TextView) row.findViewById(R.id.tvCostoAdapter);
-            holder.tvDescripcionAdapter = (TextView) row.findViewById(R.id.tvDescripcionAdapter);
-            holder.ivCategoriaAdapter = (ImageView) row.findViewById(R.id.ivCategoriaAdapter);
+            holder.tvCostoAdapterGroup = (TextView) row.findViewById(R.id.tvCostoAdapterGroup);
+            holder.tvDescripcionAdapterGroup = (TextView) row.findViewById(R.id.tvDescripcionAdapterGroup);
+            holder.ivCategoriaAdapterGroup = (ImageView) row.findViewById(R.id.ivCategoriaAdapterGroup);
+            holder.lyTransAdapterGroup1 = row.findViewById(R.id.lyTransAdapterGroup1);
 
             row.setTag(holder);
         } else {
             holder = (MyViewHolder) row.getTag();
         }
 
-        holder.tvCostoAdapter.setText(Util.PriceFormat(categoria.total));
-        holder.tvDescripcionAdapter.setText(categoria.nombre);
-        holder.ivCategoriaAdapter.setImageResource(categoria.resource);
-        holder.ivCategoriaAdapter.setBackgroundResource(categoria.formaCirculo);
+        LayerDrawable bgDrawable = (LayerDrawable)holder.lyTransAdapterGroup1.getBackground();
+        GradientDrawable shape_item_color = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_itemgrid_color);
+        int color = context.getResources().getColor(categoria.color);
+        shape_item_color.setColor(color);
 
+        holder.tvCostoAdapterGroup.setText(Util.PriceFormat(categoria.total));
+        holder.tvDescripcionAdapterGroup.setText(categoria.nombre);
+        holder.ivCategoriaAdapterGroup.setImageResource(categoria.resource);
+        holder.ivCategoriaAdapterGroup.setBackgroundResource(categoria.formaCirculo);
         return row;
     }
 
@@ -90,8 +98,9 @@ public class CategoriasGroupAdapter extends BaseAdapter {
     }
 
     private static class MyViewHolder {
-        public TextView tvCostoAdapter,tvDescripcionAdapter;
-        public ImageView ivCategoriaAdapter;
+        public TextView tvCostoAdapterGroup,tvDescripcionAdapterGroup;
+        public ImageView ivCategoriaAdapterGroup;
+        public View lyTransAdapterGroup1;
     }
 
 }
