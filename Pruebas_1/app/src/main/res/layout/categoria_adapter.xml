@@ -37,9 +37,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@+id/label"
-            android:textSize="8dp"
+            android:textSize="9dp"
             android:gravity="center_vertical|center_horizontal"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,12 +11,12 @@ import java.util.ArrayList;
 
 import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.DB.DBHelper;
-import course.example.pruebas_1.Interfaces.IAdaptersCaller;
+import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Util;
 
-public class VentanaHistorial extends ActionBarActivity implements IAdaptersCaller {
+public class VentanaHistorial extends ActionBarActivity implements IAdaptersCallerGrid {
 
     TextView tvBalanceHistorial;
     ListView lvTransaccionesHistorial;
@@ -56,31 +54,8 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         lvTransaccionesHistorial.setAdapter(adapter);
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_historial, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void ActualizaVentana() {
+    public void ActualizaGrid(ArrayList<Transaccion> listaTransacciones) {
         double SumEntradas = dbHelper.Transacciones.SumatoriaEntradas(fecha_inicial,fecha_final);
         double SumSalidas = dbHelper.Transacciones.SumatoriaSalidas(fecha_inicial,fecha_final);
 
@@ -97,4 +72,6 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         adapter.setCallback(this);
         lvTransaccionesHistorial.setAdapter(adapter);
     }
+
+
 }

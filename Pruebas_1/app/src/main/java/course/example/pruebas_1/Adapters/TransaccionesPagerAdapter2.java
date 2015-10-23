@@ -9,41 +9,41 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
+import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentada;
+import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 
-public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCallerGrid {
+public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCallerGridCategoriasGroup {
 
-    private IAdaptersCallerVentada caller;
     /**
      * Key to insert the background color into the mapping of a Bundle.
      */
-    private static final ArrayList<Transaccion> TRANSACCIONES = null;
+    private static final ArrayList<Categoria> CATEGORIAS = null;
 
-    private ListView lvTransaccionesPrincipal;
-    private ArrayList<Transaccion> transacciones;
-    private TransaccionAdapter adapter;
 
-    public static TransaccionesPagerAdapter1 newInstance(ArrayList<Transaccion> listaTransacciones) {
+    private ArrayList<Categoria> categorias;
+    private CategoriasGroupAdapter adapter;
+    ListView lvTransaccionesPrincipal;
+
+    public static TransaccionesPagerAdapter2 newInstance(ArrayList<Categoria> listaCategorias) {
 
         // Instantiate a new fragment
-        TransaccionesPagerAdapter1 fragment = new TransaccionesPagerAdapter1();
+        TransaccionesPagerAdapter2 fragment = new TransaccionesPagerAdapter2();
         // Save the parameters
         Bundle bundle = new Bundle();
-        bundle.putSerializable("TRANSACCIONES", listaTransacciones);
+        bundle.putSerializable("CATEGORIAS", listaCategorias);
         fragment.setArguments(bundle);
         fragment.setRetainInstance(true);
-
         return fragment;
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Load parameters when the initial creation of the fragment is done
-        this.transacciones = (getArguments() != null) ? (ArrayList<Transaccion>)getArguments().getSerializable("TRANSACCIONES") : null;
+        this.categorias = (getArguments() != null) ? (ArrayList<Categoria>)getArguments().getSerializable("CATEGORIAS") : null;
     }
 
     @Override
@@ -54,25 +54,21 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
 
         // Show the current page index in the view
         lvTransaccionesPrincipal = (ListView) rootView.findViewById(R.id.lvTransaccionesPrincipal);
-        this.adapter = new TransaccionAdapter(getActivity(),this.transacciones, false);
+        this.adapter = new CategoriasGroupAdapter(getActivity(),this.categorias);
         adapter.setCallback(this);
         lvTransaccionesPrincipal.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         return rootView;
+
     }
 
     @Override
-    public void ActualizaGrid(ArrayList<Transaccion> listaTransacciones) {
-        this.transacciones = listaTransacciones;
-        this.adapter = new TransaccionAdapter(getActivity(),this.transacciones, false);
+    public void ActualizaGrid(ArrayList<Categoria> listaCategorias) {
+        this.categorias = listaCategorias;
+        this.adapter = new CategoriasGroupAdapter(getActivity(),this.categorias);
         lvTransaccionesPrincipal.setAdapter(adapter);
         adapter.setCallback(this);
         adapter.notifyDataSetChanged();
-        caller.ActualizaVentana();
-    }
-
-    public void setCallback(IAdaptersCallerVentada caller){
-        this.caller = caller;
     }
 }

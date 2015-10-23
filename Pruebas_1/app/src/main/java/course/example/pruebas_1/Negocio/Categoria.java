@@ -12,6 +12,7 @@ public class Categoria implements Serializable
     public int resource;
     public int color;
     public int formaCirculo;
+    public double total;
 
     public Categoria(){}
 
@@ -22,5 +23,15 @@ public class Categoria implements Serializable
         this.resource = resource;
         this.color = color;
         this.formaCirculo = formaCirculo;
+    }
+
+    public Categoria(int id, String nombre, int resource, int formaCirculo, int color, double total)
+    {
+        this.id = id;
+        this.nombre = nombre;
+        this.resource = resource;
+        this.color = color;
+        this.formaCirculo = formaCirculo;
+        this.total = total;
     }
 }

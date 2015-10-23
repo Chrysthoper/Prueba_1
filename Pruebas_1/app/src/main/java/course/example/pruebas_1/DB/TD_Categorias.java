@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 import course.example.pruebas_1.Negocio.Categoria;
+import course.example.pruebas_1.Negocio.Transaccion;
 
 /**
  * Created by Chrys-Emcor on 08/10/2015.
@@ -39,7 +40,7 @@ public class TD_Categorias
                 null,                                     // don't filter by row groups
                 sortOrder                                 // The sort order
         );
-        ArrayList<Categoria> lista = GetObject(c);
+        ArrayList<Categoria> lista = GetObject(c,false);
         return lista;
     }
 
@@ -52,7 +53,7 @@ public class TD_Categorias
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_4,
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_5
         };
-        String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
+        String sortOrder = DatabaseSchema.TD_Categorias.COLUMN_NAME_ID + " DESC";
         Cursor c = db.query(
                 DatabaseSchema.TD_Categorias.TABLE_NAME,  // The table to query
                 projection,                               // The columns to return
@@ -93,7 +94,32 @@ public class TD_Categorias
                 null) > 0;
     }
 
-    private ArrayList<Categoria> GetObject(Cursor c){
+    public ArrayList<Categoria> ObtenTotalCategorias(String fechaIni, String fechaFin) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_ID +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_2 +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_3 +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_4 +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_5 +
+                        ", SUM(trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_2 + ") TOTAL" +
+                        " FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME + " trans" +
+                        " INNER JOIN " + DatabaseSchema.TD_Categorias.TABLE_NAME + " cat" +
+                        " ON trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " = cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_ID +
+                        " WHERE trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + " > Datetime('" + fechaIni.substring(0, 10) + "')" +
+                        " AND trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + " < Datetime('" + fechaFin.substring(0, 10) + "')" +
+                        " GROUP BY cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_ID +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_2 +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_3 +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_4 +
+                        ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_5 +
+                " ORDER BY cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_ID + " DESC", null);
+
+        ArrayList<Categoria> lista = GetObject(c,true);
+        return lista;
+    }
+
+    private ArrayList<Categoria> GetObject(Cursor c, boolean sum){
         ArrayList<Categoria> lista = new ArrayList<Categoria>();
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
@@ -105,6 +131,8 @@ public class TD_Categorias
                 categoria.resource = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_3));
                 categoria.formaCirculo = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_4));
                 categoria.color = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_5));
+                if(sum)
+                    categoria.total = c.getInt(c.getColumnIndex("TOTAL"));
                 lista.add(categoria);
             } while(c.moveToNext());
         }
@@ -126,4 +154,5 @@ public class TD_Categorias
         }
         return categoria;
     }
+
 }
