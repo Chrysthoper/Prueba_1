@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import org.codepond.wizardroid.WizardFlow;
 import org.codepond.wizardroid.layouts.BasicWizardLayout;
@@ -43,30 +44,51 @@ public class TutorialWizard extends BasicWizardLayout {
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        int op = getArguments().getInt("OP", 0);
-        String fecha = getArguments().getString("FECHA");
-        trans.fecha_alta = fecha;
         View frag = (View)view.findViewById(R.id.step_container);
+        String fecha;
+        int op = 0;
+        if (savedInstanceState != null) {
+            // Restore last state
+            fecha = savedInstanceState.getString("FECHA");
+            op = savedInstanceState.getInt("OP");
+            trans.fecha_alta = fecha;
+            trans.tipoTransaccion = op;
+        } else {
+            fecha = getArguments().getString("FECHA");
+            op = getArguments().getInt("OP", 0);
+            trans.fecha_alta = fecha;
+            trans.tipoTransaccion = op;
+        }
+
         switch(op)
         {
-            case R.id.btnTransacionEntrada:
+            case R.id.btnTransacionEntrada:case 1:
                 trans.tipoTransaccion = 1;
                 frag.setBackgroundColor(Color.parseColor("#ff99cc00"));
                 break;
-            case R.id.btnTransacionSalida:
+            case R.id.btnTransacionSalida:case 0:
                 trans.tipoTransaccion = 0;
                 frag.setBackgroundColor(Color.parseColor("#ffff4444"));
                 break;
             default:
                 break;
         }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("FECHA", trans.fecha_alta);
+        outState.putInt("OP", trans.tipoTransaccion);
     }
 
     @Override
     public void onWizardComplete() {
-        super.onWizardComplete();   //Make sure to first call the super method before anything else
+        super.onWizardComplete();
         Intent returnIntent = new Intent();
-        if(Validate())
+        String error = Validate();
+        if(error.equals(""))
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
             Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.tipoTransaccion,trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion);
@@ -75,15 +97,19 @@ public class TutorialWizard extends BasicWizardLayout {
             getActivity().setResult(1, returnIntent);
             getActivity().finish();     //Terminate the wizard
         }
+        else
+        {
+            Toast.makeText(getActivity().getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public boolean Validate(){
-        if(trans.textoKeyPad.equals(".") && trans.textoKeyPad.equals(""))
-            return false;
+    public String Validate(){
+        if(trans.textoKeyPad.equals(".") || trans.textoKeyPad.equals(""))
+            return "No se ha ingresado un total";
         else if(trans.numeroCategoria == -1)
-            return false;
+            return "No se ha seleccionado una categoria";
         else
-            return true;
+            return "";
     }
 
 }

@@ -2,6 +2,7 @@ package course.example.pruebas_1;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -24,8 +25,7 @@ import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerVentada;
+import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
@@ -34,7 +34,7 @@ import course.example.pruebas_1.Ventanas.Historial.VentanaHistorial;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 
-public class MainActivity extends ActionBarActivity implements IAdaptersCallerVentada {
+public class MainActivity extends ActionBarActivity implements IAdaptersCallerVentana {
 
     Button btnTransaccionSalida,btnTransaccionEntrada;
     LinearLayout lyFechaPrincipal;
@@ -101,7 +101,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         // Create an adapter with the fragments we show on the ViewPager
         adapterFrag = new TransaccionesFragmentPagerAdapter(
                 getSupportFragmentManager());
-        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones);
+        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones, false);
         pagerAdapter1.setCallback(this);
         pagerAdapter2 = TransaccionesPagerAdapter2.newInstance(listaCategorias);
         adapterFrag.addFragment(pagerAdapter1);
@@ -273,12 +273,21 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ActualizaVentana();
-        ActualizaAdapter();
+
         if (requestCode == 1)
         {
             if(resultCode != 1)
                 Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
+            else
+            {
+                ActualizaVentana();
+                ActualizaAdapter();
+            }
+        }
+        if (requestCode == 2)
+        {
+            ActualizaVentana();
+            ActualizaAdapter();
         }
     }
 }

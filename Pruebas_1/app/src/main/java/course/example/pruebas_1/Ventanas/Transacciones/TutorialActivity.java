@@ -16,17 +16,25 @@ public class TutorialActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_tutorial);
-        Intent intent = getIntent();
-        int op = intent.getIntExtra("OP", 0);
-        String fecha = intent.getStringExtra("FECHA");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        TutorialWizard fragment = new TutorialWizard();
-        Bundle args = new Bundle();
-        args.putInt("OP", op);
-        args.putString("FECHA", fecha);
-        fragment.setArguments(args);
-        ft.add(R.id.tutorial_wizard_fragment, fragment);
-        ft.commit();
+
+        if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            int op = intent.getIntExtra("OP", 0);
+            String fecha = intent.getStringExtra("FECHA");
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            TutorialWizard fragment = new TutorialWizard();
+            Bundle args = new Bundle();
+            args.putInt("OP", op);
+            args.putString("FECHA", fecha);
+            fragment.setArguments(args);
+            //ft.add(R.id.tutorial_wizard_fragment, fragment);
+            ft.replace(R.id.tutorial_wizard_fragment, fragment, "your_fragment_tag");
+            ft.commit();
+        } else {
+            TutorialWizard test = (TutorialWizard) getSupportFragmentManager().findFragmentByTag("your_fragment_tag");
+        }
+
+
     }
 
 }

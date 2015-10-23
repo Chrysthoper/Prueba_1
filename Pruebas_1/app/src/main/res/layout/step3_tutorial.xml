@@ -26,9 +26,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/etDescripcion"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:textColor="@android:color/white"
-            android:hint="Descripción Breve" />
+            android:hint="Descripción Breve"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:maxLength="25"
+            android:gravity="center_horizontal" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,11 +58,14 @@
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/etNotas"
-            android:background="@android:color/transparent"
             android:gravity="top"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:textColor="@android:color/white"
-            android:hint="Nota sobre detalles" />
+            android:hint="Nota sobre detalles"
+            android:maxLines="6"
+            android:lines="6"
+            android:ellipsize="end"
+            android:singleLine="false" />
     </LinearLayout>
 
 </LinearLayout>
