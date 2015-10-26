@@ -8,11 +8,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerVentada;
 import course.example.pruebas_1.Negocio.Categoria;
-import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 
 public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCallerGridCategoriasGroup {

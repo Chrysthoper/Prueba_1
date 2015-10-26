@@ -2,6 +2,7 @@ package course.example.pruebas_1;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerVentada;
+import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
@@ -33,14 +34,14 @@ import course.example.pruebas_1.Ventanas.Historial.VentanaHistorial;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 
-public class MainActivity extends ActionBarActivity implements IAdaptersCallerVentada {
+public class MainActivity extends ActionBarActivity implements IAdaptersCallerVentana {
 
     Button btnTransaccionSalida,btnTransaccionEntrada;
     LinearLayout lyFechaPrincipal;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrincipal;
     DatePickerDialog DialogoFechaPrincipal;
-    ListView lvTransaccionesPrincipal;
-    TransaccionAdapter adapter;
+    //ListView lvTransaccionesPrincipal;
+    //TransaccionAdapter adapter;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
     ArrayList<Categoria> listaCategorias;
@@ -48,11 +49,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     private TransaccionesPagerAdapter2 pagerAdapter2;
     private TransaccionesFragmentPagerAdapter adapterFrag;
     Calendar c;
-
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally
-     * to access previous and next pages.
-     */
     ViewPager pager = null;
 
     @Override
@@ -95,45 +91,17 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         tvFechaPrincipalMes.setText(getMonthForInt(mes).substring(0, 3).toUpperCase());
 
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni,fechaFin);
+        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
         this.pager = (ViewPager) this.findViewById(R.id.pager);
-        // Create an adapter with the fragments we show on the ViewPager
         adapterFrag = new TransaccionesFragmentPagerAdapter(
                 getSupportFragmentManager());
-        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones);
+        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones, false);
         pagerAdapter1.setCallback(this);
         pagerAdapter2 = TransaccionesPagerAdapter2.newInstance(listaCategorias);
         adapterFrag.addFragment(pagerAdapter1);
         adapterFrag.addFragment(pagerAdapter2);
         this.pager.setAdapter(adapterFrag);
-        /*
-        lvTransaccionesPrincipal = (ListView)findViewById(R.id.lvTransaccionesPrincipal);
-        adapter = new TransaccionAdapter(MainActivity.this,listaTransacciones, false);
-        adapter.setCallback(this);
-        lvTransaccionesPrincipal.setAdapter(adapter);
-        lvTransaccionesPrincipal.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            final Transaccion trans = listaTransacciones.get(i);
-            new AlertDialog.Builder(MainActivity.this)
-                .setMessage("¿Seguro que desea borrar la transacción?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
 
-                        if(dbHelper.Transacciones.Elimina(trans.id))
-                        {
-                            ActualizaVentana();
-                            Toast.makeText(MainActivity.this, "Se elimino la transaccion", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
-                return true;
-            }
-        });
-        */
         DialogoFechaPrincipal = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -272,12 +240,21 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ActualizaVentana();
-        ActualizaAdapter();
+
         if (requestCode == 1)
         {
             if(resultCode != 1)
                 Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
+            else
+            {
+                ActualizaVentana();
+                ActualizaAdapter();
+            }
+        }
+        if (requestCode == 2)
+        {
+            ActualizaVentana();
+            ActualizaAdapter();
         }
     }
 }

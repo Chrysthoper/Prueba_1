@@ -9,7 +9,7 @@
     </item>
 
     <!-- White Top color -->
-    <item android:bottom="3px">
+    <item android:bottom="3px" android:id="@+id/shape_itemgrid_color">
         <shape android:shape="rectangle">
             <solid android:color="#FFFFFF" />
             <corners android:radius="7dp" />
