@@ -12,11 +12,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
+import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 
 public class CategoriaAdapter extends BaseAdapter {
+
     private Context context;
     private final ArrayList<Categoria> categorias;
     private int seleccion;
@@ -24,12 +27,14 @@ public class CategoriaAdapter extends BaseAdapter {
     public CategoriaAdapter(Context context, ArrayList<Categoria> categorias, int seleccion) {
         this.context = context;
         this.categorias = categorias;
+        this.categorias.add(0,new Categoria(0,"Nueva Categoria",R.mipmap.agregar_blanco,R.drawable.forma_circulonegro,Color.BLACK,0));
         this.seleccion = seleccion;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         MyViewHolder holder;
+        final Categoria cat = this.categorias.get(position);
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.categoria_adapter, null, false);
@@ -43,19 +48,21 @@ public class CategoriaAdapter extends BaseAdapter {
             if (context instanceof VentanaCategorias)
                 holder.tvNombreCategoria.setTextColor(Color.BLACK);
 
-            if(seleccion == categorias.get(position).id)
+            if(seleccion == cat.id)
                 row.setBackgroundColor(Color.parseColor("#FFAA2300"));
 
             row.setTag(holder);
         } else {
             holder = (MyViewHolder) row.getTag();
         }
-        holder.tvNombreCategoria.setText(categorias.get(position).nombre);
-        holder.tvIDCategoriaAdapter.setText(String.valueOf(categorias.get(position).id));
-        holder.ivImagenCategoria.setImageResource(categorias.get(position).resource);
-        holder.lyColorCategoria.setBackgroundResource(categorias.get(position).formaCirculo);
+        holder.tvNombreCategoria.setText(cat.nombre);
+        holder.tvIDCategoriaAdapter.setText(String.valueOf(cat.id));
+        holder.ivImagenCategoria.setImageResource(cat.resource);
+        holder.lyColorCategoria.setBackgroundResource(cat.formaCirculo);
         return row;
     }
+
+
 
     @Override
     public int getCount() {

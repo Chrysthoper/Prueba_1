@@ -24,7 +24,6 @@ import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentada;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
@@ -59,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         dbHelper = new DBHelper(getApplicationContext());
 
