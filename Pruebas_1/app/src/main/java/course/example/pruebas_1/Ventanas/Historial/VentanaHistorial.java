@@ -26,8 +26,6 @@ import course.example.pruebas_1.Util;
 public class VentanaHistorial extends ActionBarActivity implements IAdaptersCallerVentana {
 
     TextView tvBalanceHistorial;
-    ListView lvTransaccionesHistorial;
-    TransaccionAdapter adapter;
     DBHelper dbHelper;
     String fecha_inicial;
     String fecha_final;
@@ -73,14 +71,6 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         adapterFrag.addFragment(pagerAdapter1);
         adapterFrag.addFragment(pagerAdapter2);
         this.pager.setAdapter(adapterFrag);
-
-        /*
-        lvTransaccionesHistorial = (ListView)findViewById(R.id.lvTransaccionesHistorial);
-        listaTransacciones = dbHelper.Transacciones.Obten(fecha_inicial,fecha_final);
-        adapter = new TransaccionAdapter(VentanaHistorial.this,listaTransacciones, true);
-        adapter.setCallback(this);
-        lvTransaccionesHistorial.setAdapter(adapter);
-        */
     }
 
     @Override
@@ -98,13 +88,6 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fecha_inicial, fecha_final);
         pagerAdapter2.ActualizaGrid(listaCategorias);
         adapterFrag.notifyDataSetChanged();
-        /*
-        lvTransaccionesHistorial = (ListView)findViewById(R.id.lvTransaccionesHistorial);
-        listaTransacciones = dbHelper.Transacciones.Obten(fecha_inicial,fecha_final);
-        adapter = new TransaccionAdapter(VentanaHistorial.this,listaTransacciones, true);
-        adapter.setCallback(this);
-        lvTransaccionesHistorial.setAdapter(adapter);
-        */
     }
 
     public void ActualizaAdapter(){

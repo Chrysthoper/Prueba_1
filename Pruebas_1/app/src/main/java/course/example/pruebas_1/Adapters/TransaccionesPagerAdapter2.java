@@ -22,7 +22,7 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
 
     private ArrayList<Categoria> categorias;
     private CategoriasGroupAdapter adapter;
-    ListView lvTransaccionesPrincipal;
+    ListView lvCategoriasGroupPrincipal;
 
     public static TransaccionesPagerAdapter2 newInstance(ArrayList<Categoria> listaCategorias) {
 
@@ -47,13 +47,13 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.transacciones_pager_adapter1, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.transacciones_pager_adapter2, container, false);
 
         // Show the current page index in the view
-        lvTransaccionesPrincipal = (ListView) rootView.findViewById(R.id.lvTransaccionesPrincipal);
+        lvCategoriasGroupPrincipal = (ListView) rootView.findViewById(R.id.lvCategoriasGroupPrincipal);
         this.adapter = new CategoriasGroupAdapter(getActivity(),this.categorias);
         adapter.setCallback(this);
-        lvTransaccionesPrincipal.setAdapter(adapter);
+        lvCategoriasGroupPrincipal.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         return rootView;
@@ -64,7 +64,7 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
     public void ActualizaGrid(ArrayList<Categoria> listaCategorias) {
         this.categorias = listaCategorias;
         this.adapter = new CategoriasGroupAdapter(getActivity(),this.categorias);
-        lvTransaccionesPrincipal.setAdapter(adapter);
+        lvCategoriasGroupPrincipal.setAdapter(adapter);
         adapter.setCallback(this);
         adapter.notifyDataSetChanged();
     }

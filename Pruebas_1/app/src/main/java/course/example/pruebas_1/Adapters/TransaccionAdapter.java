@@ -30,7 +30,6 @@ public class TransaccionAdapter extends BaseAdapter {
     private final ArrayList<Transaccion> Transacciones;
     private int seleccion;
     private DBHelper dbHelper;
-    private final ArrayList<Categoria> Categorias;
     private String fecha = "2500-01-01";
     private boolean ConFechas;
     private ArrayList<Integer> TransaccionConBaner;
@@ -39,7 +38,6 @@ public class TransaccionAdapter extends BaseAdapter {
     public TransaccionAdapter(Context context, ArrayList<Transaccion> Transacciones, boolean ConFechas) {
         this.context = context;
         dbHelper = new DBHelper(context);
-        this.Categorias = dbHelper.Categorias.Obten();
         this.Transacciones = Transacciones;
         this.ConFechas = ConFechas;
         TransaccionConBaner = new ArrayList<Integer>();
@@ -64,6 +62,10 @@ public class TransaccionAdapter extends BaseAdapter {
             holder.tvNotaAdapter = (TextView) row.findViewById(R.id.tvNotaAdapter);
             holder.ivCategoriaAdapter = (ImageView) row.findViewById(R.id.ivCategoriaAdapter);
             holder.tvDescripcionAdapter = (TextView) row.findViewById(R.id.tvDescripcionAdapter);
+
+            holder.tvFechaAdapter = (TextView) row.findViewById(R.id.tvFechaAdapter);
+            holder.ivCuentaAdapter = (ImageView) row.findViewById(R.id.ivCuentaAdapter);
+
             holder.lyTransAdapter1 = (LinearLayout) row.findViewById(R.id.lyTransAdapter1);
             holder.lyTransAdapter1.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -92,7 +94,7 @@ public class TransaccionAdapter extends BaseAdapter {
         } else {
             holder = (MyViewHolder) row.getTag();
         }
-
+/*
         if (ConFechas &&
                 (Util.FormatToFecha(fecha).after(Util.FormatToFecha(trans.fecha_alta)) && !FechaContada.contains(trans.fecha_alta)) ||
                 TransaccionConBaner.contains(trans.id)) {
@@ -109,6 +111,11 @@ public class TransaccionAdapter extends BaseAdapter {
             holder.lyTransAdapterDia = (LinearLayout)row.findViewById(R.id.lyTransAdapterDia);
             holder.lyTransAdapterDia.setVisibility(View.GONE);
         }
+*/
+        holder.tvFechaAdapter.setText(trans.fecha_alta);
+        holder.ivCuentaAdapter.setImageResource(trans.cuentaObj.resource);
+        int color = context.getResources().getColor(trans.cuentaObj.color);
+        holder.ivCuentaAdapter.setBackgroundColor(color);
 
         holder.tvCostoAdapter.setText(Util.PriceFormat(trans.costo));
         holder.tvDescripcionAdapter.setText(trans.descripcion);
@@ -116,12 +123,12 @@ public class TransaccionAdapter extends BaseAdapter {
         holder.ivCategoriaAdapter.setImageResource(trans.categoriaObj.resource);
         holder.ivCategoriaAdapter.setBackgroundResource(trans.categoriaObj.formaCirculo);
 
-        switch(trans.tipoTransaccion)
+        switch(trans.categoriaObj.tipo)
         {
-            case 1:
+            case 0:
                 holder.tvCostoAdapter.setTextColor(Color.parseColor("#ff99cc00"));
                 break;
-            case 0:
+            case 1:
                 holder.tvCostoAdapter.setTextColor(Color.parseColor("#ffff4444"));
                 break;
             default:
@@ -150,8 +157,8 @@ public class TransaccionAdapter extends BaseAdapter {
     }
 
     private static class MyViewHolder {
-        public TextView tvCostoAdapter,tvDescripcionAdapter,tvNotaAdapter;
-        public ImageView ivCategoriaAdapter;
+        public TextView tvCostoAdapter,tvDescripcionAdapter,tvNotaAdapter,tvFechaAdapter;
+        public ImageView ivCategoriaAdapter,ivCuentaAdapter;
         public LinearLayout lyTransAdapterDia,lyTransAdapter1;
         public TextView tvTransAdapterDia;
     }
