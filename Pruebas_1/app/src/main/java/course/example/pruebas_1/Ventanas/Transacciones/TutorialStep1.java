@@ -85,7 +85,7 @@ public class TutorialStep1 extends WizardStep {
     };
 
     public void IngresaCosto(String costo){
-        Pattern patron = Pattern.compile("^([1-9][0-9]{0,9})?(\\.[0-9]{0,2})?$");
+        Pattern patron = Pattern.compile("^([1-9][0-9]{0,7})?(\\.[0-9]{0,2})?$");
         Matcher matcher = patron.matcher(costo);
         if(matcher.matches())
         {

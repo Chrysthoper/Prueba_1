@@ -16,69 +16,31 @@ import android.widget.Toast;
 import course.example.pruebas_1.Adapters.ColoresAdapter;
 import course.example.pruebas_1.Adapters.ImagenesAdapter;
 import course.example.pruebas_1.DB.DBHelper;
+import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.R;
+import course.example.pruebas_1.Util;
 
 public class abcCategorias extends ActionBarActivity {
 
+    private IAdaptersCallerGridCategoriasGroup caller;
     private int indexColor = -1;
     private int indexImagen = -1;
     public GridView gvColores, gvImagenes;
     public ImageView ivCategoriaDummy;
     public EditText etNombreCategoria;
-    public int[] colores = new int[]{
-            R.drawable.forma_circulo1,
-            R.drawable.forma_circulo2,
-            R.drawable.forma_circulo3,
-            R.drawable.forma_circulo4,
-            R.drawable.forma_circulo5,
-            R.drawable.forma_circulo6,
-            R.drawable.forma_circulo7,
-            R.drawable.forma_circulo8,
-            R.drawable.forma_circulo9,
-            R.drawable.forma_circulo10
-    };
-    public int[] coloresHex = new int[]{
-            R.color.color1,
-            R.color.color2,
-            R.color.color3,
-            R.color.color4,
-            R.color.color5,
-            R.color.color6,
-            R.color.color7,
-            R.color.color8,
-            R.color.color9,
-            R.color.color10
-    };
-    public int[] imagenes = new int[]{
-            R.mipmap.gas,
-            R.mipmap.chucherias,
-            R.mipmap.camion,
-            R.mipmap.agua,
-            R.mipmap.casa,
-            R.mipmap.comida,
-            R.mipmap.compras,
-            R.mipmap.luz,
-            R.mipmap.gasolina,
-            R.mipmap.pareja,
-            R.mipmap.ropa,
-            R.mipmap.carro,
-            R.mipmap.internet,
-            R.mipmap.cellphone,
-            R.mipmap.credito,
-            R.mipmap.trabajo
-    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.abc_categorias);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         gvColores = (GridView)findViewById(R.id.gvColores);
-        gvColores.setAdapter(new ColoresAdapter(this, colores, -1));
+        gvColores.setAdapter(new ColoresAdapter(this, Util.colores, -1));
         gvColores.setOnItemClickListener(click_color);
 
         gvImagenes = (GridView)findViewById(R.id.gvImagenes);
-        gvImagenes.setAdapter(new ImagenesAdapter(this, imagenes, -1));
+        gvImagenes.setAdapter(new ImagenesAdapter(this, Util.imagenes, -1));
         gvImagenes.setOnItemClickListener(click_imagen);
 
         ivCategoriaDummy = (ImageView)findViewById(R.id.ivCategoriaDummy);
@@ -101,7 +63,7 @@ public class abcCategorias extends ActionBarActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
-            ivCategoriaDummy.setBackgroundResource(colores[position]);
+            ivCategoriaDummy.setBackgroundResource(Util.colores[position]);
             indexColor = position;
         }
     };
@@ -110,7 +72,7 @@ public class abcCategorias extends ActionBarActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            ivCategoriaDummy.setImageResource(imagenes[position]);
+            ivCategoriaDummy.setImageResource(Util.imagenes[position]);
             if(indexColor == -1)
                 ivCategoriaDummy.setBackgroundResource(R.drawable.forma_circulonegro);
             indexImagen = position;
@@ -135,7 +97,7 @@ public class abcCategorias extends ActionBarActivity {
         if (id == R.id.btnCrearCategoriaNueva) {
             if(Validate())
             {
-                Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),imagenes[indexImagen],colores[indexColor],coloresHex[indexColor]);
+                Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),Util.imagenes[indexImagen],Util.colores[indexColor],Util.coloresHex[indexColor],0);
                 DBHelper dbHelper = new DBHelper(getApplicationContext());
                 if(dbHelper.Categorias.Inserta(categoria))
                 {
@@ -148,5 +110,9 @@ public class abcCategorias extends ActionBarActivity {
                 Toast.makeText(abcCategorias.this, "No se puede crear la categoria ya que falta informacion", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setCallback(IAdaptersCallerGridCategoriasGroup caller){
+        this.caller = caller;
     }
 }

@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import course.example.pruebas_1.R;
+
 public class TransaccionesFragmentPagerAdapter extends FragmentPagerAdapter {
 
     // List of fragments which are going to set in the view pager widget

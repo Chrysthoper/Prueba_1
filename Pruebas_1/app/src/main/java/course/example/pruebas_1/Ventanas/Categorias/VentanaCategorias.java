@@ -62,6 +62,8 @@ public class VentanaCategorias extends ActionBarActivity {
     AdapterView.OnItemLongClickListener click_long_item = new AdapterView.OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        if(position > 0)
+        {
             final Categoria categoria = ListaCategorias.get(position);
             new AlertDialog.Builder(VentanaCategorias.this)
                     .setMessage("¿Seguro que desea borrar la categoria?")
@@ -76,7 +78,8 @@ public class VentanaCategorias extends ActionBarActivity {
                     })
                     .setNegativeButton("No", null)
                     .show();
-            return true;
+        }
+        return true;
         }
     };
 
@@ -93,29 +96,16 @@ public class VentanaCategorias extends ActionBarActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
-
+            if(position > 0)
+            {
+            }
+            else
+            {
+                startActivityForResult(new Intent(getApplicationContext(), abcCategorias.class),1);
+            }
         }
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_ventana_categorias, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.btnCrearCategoriaNueva) {
-            startActivityForResult(new Intent(getApplicationContext(), abcCategorias.class),1);
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ActualizaVentana();

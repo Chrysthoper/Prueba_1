@@ -2,7 +2,6 @@ package course.example.pruebas_1;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.ViewPager;
@@ -21,7 +19,6 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
@@ -40,8 +37,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     LinearLayout lyFechaPrincipal;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrincipal;
     DatePickerDialog DialogoFechaPrincipal;
-    //ListView lvTransaccionesPrincipal;
-    //TransaccionAdapter adapter;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
     ArrayList<Categoria> listaCategorias;
@@ -54,7 +49,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         dbHelper = new DBHelper(getApplicationContext());
 
@@ -88,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         tvFechaPrincipalDia = (TextView)findViewById(R.id.tvFechaPrincipalDia);
         tvFechaPrincipalDia.setText(Integer.toString(dia));
         tvFechaPrincipalMes = (TextView)findViewById(R.id.tvFechaPrincipalMes);
-        tvFechaPrincipalMes.setText(getMonthForInt(mes).substring(0, 3).toUpperCase());
+        tvFechaPrincipalMes.setText(Util.getMonthForInt(mes).substring(0, 3).toUpperCase());
 
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
@@ -106,7 +101,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 tvFechaPrincipalDia.setText(Integer.toString(dayOfMonth));
-                tvFechaPrincipalMes.setText(getMonthForInt(monthOfYear).substring(0, 3).toUpperCase());
+                tvFechaPrincipalMes.setText(Util.getMonthForInt(monthOfYear).substring(0, 3).toUpperCase());
                 c.set(year,monthOfYear,dayOfMonth);
                 ActualizaVentana();
                 ActualizaAdapter();
@@ -115,14 +110,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         },c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
     }
 
-    @Override
-    public void onBackPressed() {
-        // Return to previous page when we press back button
-        if (this.pager.getCurrentItem() == 0)
-            super.onBackPressed();
-        else
-            this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
-    }
+    //region ActualizaVentana
 
     public void ActualizaAdapter(){
         Calendar cFin = Calendar.getInstance();
@@ -174,21 +162,22 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     }
 
+    //endregion
+
+    @Override
+    public void onBackPressed() {
+        // Return to previous page when we press back button
+        if (this.pager.getCurrentItem() == 0)
+            super.onBackPressed();
+        else
+            this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    String getMonthForInt(int num) {
-        String month = "wrong";
-        DateFormatSymbols dfs = new DateFormatSymbols();
-        String[] months = dfs.getMonths();
-        if (num >= 0 && num <= 11 ) {
-            month = months[num];
-        }
-        return month;
     }
 
     @Override
@@ -209,6 +198,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
         return super.onOptionsItemSelected(item);
     }
+
+    //region Listeners
 
     LinearLayout.OnClickListener clickFechaPrincipal = new View.OnClickListener() {
         @Override
@@ -238,6 +229,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         }
     };
 
+    //endregion
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -257,4 +250,19 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             ActualizaAdapter();
         }
     }
+
+    //region Window State
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedState) {
+        super.onRestoreInstanceState(savedState);
+    }
+
+    //endregion
+
 }

@@ -7,19 +7,16 @@ public final class DatabaseSchema {
     // give it an empty constructor.
     public DatabaseSchema() {}
 
-    /* Inner class that defines the table contents */
     public static abstract class TD_Transacciones implements BaseColumns {
         public static final String TABLE_NAME = "TD_Transacciones";
         public static final String COLUMN_NAME_ID = "ID";
         public static final String COLUMN_NAME_2 = "COSTO";
-        public static final String COLUMN_NAME_3 = "TIPO_TRANSACCION";
-        public static final String COLUMN_NAME_4 = "CATEGORIA_ID";
-        public static final String COLUMN_NAME_5 = "FECHA_ALTA";
-        public static final String COLUMN_NAME_6 = "NOTA";
-        public static final String COLUMN_NAME_7 = "DESCRIPCION";
+        public static final String COLUMN_NAME_3 = "CATEGORIA_ID";
+        public static final String COLUMN_NAME_4 = "FECHA_ALTA";
+        public static final String COLUMN_NAME_5 = "NOTA";
+        public static final String COLUMN_NAME_6 = "DESCRIPCION";
+        public static final String COLUMN_NAME_7 = "CUENTA_ID";
     }
-
-    /* Inner class that defines the table contents */
     public static abstract class TD_Categorias implements BaseColumns {
         public static final String TABLE_NAME = "TD_Categorias";
         public static final String COLUMN_NAME_ID = "ID";
@@ -27,5 +24,13 @@ public final class DatabaseSchema {
         public static final String COLUMN_NAME_3 = "RECURSO_ID";
         public static final String COLUMN_NAME_4 = "FORMACIRCULO_ID";
         public static final String COLUMN_NAME_5 = "COLOR_ID";
+        public static final String COLUMN_NAME_6 = "TIPO";
+    }
+    public static abstract class TD_Cuentas implements BaseColumns {
+        public static final String TABLE_NAME = "TD_Cuentas";
+        public static final String COLUMN_NAME_ID = "ID";
+        public static final String COLUMN_NAME_2 = "NOMBRE";
+        public static final String COLUMN_NAME_3 = "RECURSO_ID";
+        public static final String COLUMN_NAME_4 = "COLOR_ID";
     }
 }

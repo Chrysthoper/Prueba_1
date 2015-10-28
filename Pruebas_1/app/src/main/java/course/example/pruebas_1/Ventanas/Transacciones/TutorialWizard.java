@@ -19,7 +19,7 @@ import course.example.pruebas_1.R;
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
-    private Transaccion trans = new Transaccion("",-1,-1,"","","");
+    private Transaccion trans = new Transaccion("",-1,-1,"","","",0);
 
     /**
      * Note that initially BasicWizardLayout inherits from {@link android.support.v4.app.Fragment} and therefore you must have an empty constructor
@@ -52,22 +52,22 @@ public class TutorialWizard extends BasicWizardLayout {
             fecha = savedInstanceState.getString("FECHA");
             op = savedInstanceState.getInt("OP");
             trans.fecha_alta = fecha;
-            trans.tipoTransaccion = op;
+            trans.tipo_transaccion = op;
         } else {
             fecha = getArguments().getString("FECHA");
             op = getArguments().getInt("OP", 0);
             trans.fecha_alta = fecha;
-            trans.tipoTransaccion = op;
+            trans.tipo_transaccion = op;
         }
 
         switch(op)
         {
             case R.id.btnTransacionEntrada:case 1:
-                trans.tipoTransaccion = 1;
+                trans.tipo_transaccion = 1;
                 frag.setBackgroundColor(Color.parseColor("#ff99cc00"));
                 break;
             case R.id.btnTransacionSalida:case 0:
-                trans.tipoTransaccion = 0;
+                trans.tipo_transaccion = 0;
                 frag.setBackgroundColor(Color.parseColor("#ffff4444"));
                 break;
             default:
@@ -80,7 +80,7 @@ public class TutorialWizard extends BasicWizardLayout {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("FECHA", trans.fecha_alta);
-        outState.putInt("OP", trans.tipoTransaccion);
+        outState.putInt("OP", trans.tipo_transaccion);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class TutorialWizard extends BasicWizardLayout {
         if(error.equals(""))
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.tipoTransaccion,trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion);
+            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,2);
             dbHelper.Transacciones.Inserta(transaccion);
             returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);
