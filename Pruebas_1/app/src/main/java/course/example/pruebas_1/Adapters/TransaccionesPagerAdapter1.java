@@ -1,10 +1,16 @@
 package course.example.pruebas_1.Adapters;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableListView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
 import java.util.ArrayList;
 
@@ -13,7 +19,7 @@ import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 
-public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCallerGrid {
+public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCallerGrid,ObservableScrollViewCallbacks {
 
     private IAdaptersCallerVentana caller;
     /**
@@ -21,10 +27,11 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
      */
     private static final ArrayList<Transaccion> TRANSACCIONES = null;
 
-    private ListView lvTransaccionesPrincipal;
+    private ObservableListView lvTransaccionesPrincipal;
     private ArrayList<Transaccion> transacciones;
     private boolean ConFechas;
     private TransaccionAdapter adapter;
+    private LinearLayout lyInfoExtraTransAdapter;
 
     public static TransaccionesPagerAdapter1 newInstance(ArrayList<Transaccion> listaTransacciones, boolean ConFechas) {
 
@@ -56,11 +63,13 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.transacciones_pager_adapter1, container, false);
 
         // Show the current page index in the view
-        lvTransaccionesPrincipal = (ListView) rootView.findViewById(R.id.lvTransaccionesPrincipal);
+        lvTransaccionesPrincipal = (ObservableListView) rootView.findViewById(R.id.lvTransaccionesPrincipal);
+        lvTransaccionesPrincipal.setScrollViewCallbacks(this);
         this.adapter = new TransaccionAdapter(getActivity(),this.transacciones, ConFechas);
         adapter.setCallback(this);
         lvTransaccionesPrincipal.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        lyInfoExtraTransAdapter = (LinearLayout)rootView.findViewById(R.id.lyInfoExtraTransAdapter);
 
         return rootView;
     }
@@ -77,5 +86,28 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
 
     public void setCallback(IAdaptersCallerVentana caller){
         this.caller = caller;
+    }
+
+    @Override
+    public void onScrollChanged(int i, boolean b, boolean b1) {
+
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        if (scrollState == ScrollState.UP) {
+            if (lyInfoExtraTransAdapter.isShown()) {
+                lyInfoExtraTransAdapter.setVisibility(View.GONE);
+            }
+        } else if (scrollState == ScrollState.DOWN) {
+            if (!lyInfoExtraTransAdapter.isShown()) {
+                lyInfoExtraTransAdapter.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
-import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Negocio.Transaccion;
@@ -160,7 +160,6 @@ public class TransaccionAdapter extends BaseAdapter {
         public TextView tvCostoAdapter,tvDescripcionAdapter,tvNotaAdapter,tvFechaAdapter;
         public ImageView ivCategoriaAdapter,ivCuentaAdapter;
         public LinearLayout lyTransAdapterDia,lyTransAdapter1;
-        public TextView tvTransAdapterDia;
     }
 
 }
