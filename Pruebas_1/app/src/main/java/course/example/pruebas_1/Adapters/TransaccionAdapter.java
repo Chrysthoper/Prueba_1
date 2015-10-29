@@ -126,10 +126,10 @@ public class TransaccionAdapter extends BaseAdapter {
         switch(trans.categoriaObj.tipo)
         {
             case 0:
-                holder.tvCostoAdapter.setTextColor(Color.parseColor("#ff99cc00"));
+                holder.tvCostoAdapter.setTextColor(Color.parseColor("#ffff4444"));
                 break;
             case 1:
-                holder.tvCostoAdapter.setTextColor(Color.parseColor("#ffff4444"));
+                holder.tvCostoAdapter.setTextColor(Color.parseColor("#ff99cc00"));
                 break;
             default:
                 break;

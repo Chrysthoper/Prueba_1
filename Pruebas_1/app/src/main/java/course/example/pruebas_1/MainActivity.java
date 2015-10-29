@@ -1,6 +1,8 @@
 package course.example.pruebas_1;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
@@ -19,11 +21,13 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import course.example.pruebas_1.Adapters.CuentasAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
+import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
@@ -213,19 +217,35 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         @Override
         public void onClick(View v) {
             String msj = "";
-            Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
+            final Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
+            final ArrayList<Cuenta> Cuentas = dbHelper.Cuentas.ObtenTotalCuentas();
             String fecha = Util.FechaToFormat(c.getTime());
+
             intent.putExtra("FECHA", fecha);
-            switch(v.getId()) {
-                case R.id.btnTransacionEntrada:
-                    intent.putExtra("OP", R.id.btnTransacionEntrada);
-                    startActivityForResult(intent, 1);
-                    break;
-                case R.id.btnTransacionSalida:
-                    intent.putExtra("OP", R.id.btnTransacionSalida);
-                    startActivityForResult(intent, 1);
-                    break;
-            }
+            intent.putExtra("OP", v.getId());
+
+            AlertDialog.Builder builderSingle = new AlertDialog.Builder(MainActivity.this);
+            builderSingle.setTitle("Selecciona una Cuenta");
+            final CuentasAdapter adapter = new CuentasAdapter(MainActivity.this,Cuentas);
+            builderSingle.setNegativeButton(
+                    "Cancelar",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            builderSingle.setAdapter(
+                    adapter,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            intent.putExtra("CUENTA_ID", Cuentas.get(which).id);
+                            startActivityForResult(intent, 1);
+                        }
+                    });
+            builderSingle.show();
         }
     };
 

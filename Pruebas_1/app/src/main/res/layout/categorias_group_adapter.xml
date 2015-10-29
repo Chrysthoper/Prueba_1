@@ -17,7 +17,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@mipmap/ic_launcher"
-            android:background="@drawable/forma_circulo1"
             android:padding="5dp" />
 
         <LinearLayout
@@ -51,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="$ 00000.00"
-                android:textSize="13dp"
+                android:textSize="11dp"
                 android:gravity="left|center_vertical"
                 android:layout_weight="2"
                 android:textColor="@android:color/white"

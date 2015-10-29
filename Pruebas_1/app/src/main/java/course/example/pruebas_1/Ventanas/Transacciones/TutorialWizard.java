@@ -47,17 +47,22 @@ public class TutorialWizard extends BasicWizardLayout {
         View frag = (View)view.findViewById(R.id.step_container);
         String fecha;
         int op = 0;
+        int cuenta_id = 0;
         if (savedInstanceState != null) {
             // Restore last state
             fecha = savedInstanceState.getString("FECHA");
             op = savedInstanceState.getInt("OP");
+            cuenta_id = savedInstanceState.getInt("CUENTA_ID");
             trans.fecha_alta = fecha;
             trans.tipo_transaccion = op;
+            trans.cuenta_id = cuenta_id;
         } else {
             fecha = getArguments().getString("FECHA");
             op = getArguments().getInt("OP", 0);
+            cuenta_id = getArguments().getInt("CUENTA_ID", 0);
             trans.fecha_alta = fecha;
             trans.tipo_transaccion = op;
+            trans.cuenta_id = cuenta_id;
         }
 
         switch(op)
@@ -81,6 +86,7 @@ public class TutorialWizard extends BasicWizardLayout {
         super.onSaveInstanceState(outState);
         outState.putString("FECHA", trans.fecha_alta);
         outState.putInt("OP", trans.tipo_transaccion);
+        outState.putInt("CUENTA_ID", trans.cuenta_id);
     }
 
     @Override
@@ -91,7 +97,7 @@ public class TutorialWizard extends BasicWizardLayout {
         if(error.equals(""))
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,2);
+            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_id);
             dbHelper.Transacciones.Inserta(transaccion);
             returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);

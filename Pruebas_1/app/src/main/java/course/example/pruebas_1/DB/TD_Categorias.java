@@ -45,6 +45,30 @@ public class TD_Categorias
         return lista;
     }
 
+    public ArrayList<Categoria> ObtenPorTipo(int Tipo_Transaccion){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_ID,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_2,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_3,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_4,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_5,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_6
+        };
+        String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
+        Cursor c = db.query(
+                DatabaseSchema.TD_Categorias.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_6 + "=?",                                // The columns for the WHERE clause
+                new String[] { String.valueOf(Tipo_Transaccion) },// The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+        ArrayList<Categoria> lista = GetObject(c,false);
+        return lista;
+    }
+
     public Categoria Obten(int ID){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {
@@ -52,7 +76,8 @@ public class TD_Categorias
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_2,
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_3,
                 DatabaseSchema.TD_Categorias.COLUMN_NAME_4,
-                DatabaseSchema.TD_Categorias.COLUMN_NAME_5
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_5,
+                DatabaseSchema.TD_Categorias.COLUMN_NAME_6
         };
         String sortOrder = DatabaseSchema.TD_Categorias.COLUMN_NAME_ID + " DESC";
         Cursor c = db.query(
@@ -154,6 +179,7 @@ public class TD_Categorias
                 categoria.resource = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_3));
                 categoria.formaCirculo = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_4));
                 categoria.color = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_5));
+                categoria.tipo = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Categorias.COLUMN_NAME_6));
             } while(c.moveToNext());
         }
         return categoria;

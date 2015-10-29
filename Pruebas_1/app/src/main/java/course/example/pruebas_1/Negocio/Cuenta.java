@@ -11,6 +11,7 @@ public class Cuenta implements Serializable
     public String nombre;
     public int resource;
     public int color;
+    public double total;
 
     public Cuenta(){}
 

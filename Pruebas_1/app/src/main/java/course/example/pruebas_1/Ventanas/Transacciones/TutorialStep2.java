@@ -49,7 +49,7 @@ public class TutorialStep2 extends WizardStep{
         View v = inflater.inflate(R.layout.step2_tutorial, container, false);
         dbHelper = new DBHelper(getActivity().getApplicationContext());
         td_categorias = dbHelper.Categorias;
-        ListaCategorias = td_categorias.Obten();
+        ListaCategorias = td_categorias.ObtenPorTipo(trans.tipo_transaccion);
         lvCategoriasPaso2 = (GridView)v.findViewById(R.id.lvCategoriasPaso2);
         adapter = new CategoriaAdapter(v.getContext(), ListaCategorias, trans.numeroCategoria);
         lvCategoriasPaso2.setAdapter(adapter);
@@ -94,7 +94,7 @@ public class TutorialStep2 extends WizardStep{
             else
             {
                 td_categorias = dbHelper.Categorias;
-                ListaCategorias = td_categorias.Obten();
+                ListaCategorias = td_categorias.ObtenPorTipo(trans.tipo_transaccion);
                 adapter = new CategoriaAdapter(getActivity().getApplicationContext(),ListaCategorias, -1);
                 lvCategoriasPaso2.setAdapter(adapter);
                 adapter.notifyDataSetChanged();

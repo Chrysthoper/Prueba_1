@@ -1,55 +1,39 @@
 package course.example.pruebas_1.Adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import course.example.pruebas_1.DB.DBHelper;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
 import course.example.pruebas_1.Negocio.Categoria;
-import course.example.pruebas_1.Negocio.Transaccion;
+import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Util;
 
-public class CategoriasGroupAdapter extends BaseAdapter {
-
-    private IAdaptersCallerGridCategoriasGroup caller;
+public class CuentasAdapter extends BaseAdapter {
 
     private Context context;
-    private final ArrayList<Categoria> Categorias;
-    private int seleccion;
-    private DBHelper dbHelper;
-    private String fecha = "2500-01-01";
-    private boolean ConFechas;
-    private ArrayList<Integer> TransaccionConBaner;
-    private ArrayList<String> FechaContada;
+    private final ArrayList<Cuenta> Cuentas;
 
-    public CategoriasGroupAdapter(Context context, ArrayList<Categoria> Categorias) {
+    public CuentasAdapter(Context context, ArrayList<Cuenta> Cuentas) {
         this.context = context;
-        dbHelper = new DBHelper(context);
-        this.Categorias = Categorias;
+        this.Cuentas = Cuentas;
     }
 
     public View getView(final int position, final View convertView, ViewGroup parent) {
 
         View row = convertView;
         final MyViewHolder holder;
-        final Categoria categoria = Categorias.get(position);
+        final Cuenta cuenta = Cuentas.get(position);
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -68,22 +52,18 @@ public class CategoriasGroupAdapter extends BaseAdapter {
 
         LayerDrawable bgDrawable = (LayerDrawable)holder.lyTransAdapterGroup1.getBackground();
         GradientDrawable shape_item_color = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_itemgrid_color);
-        int color = context.getResources().getColor(categoria.color);
+        int color = context.getResources().getColor(cuenta.color);
         shape_item_color.setColor(color);
 
-        holder.tvCostoAdapterGroup.setText(Util.PriceFormat(categoria.total));
-        holder.tvDescripcionAdapterGroup.setText(categoria.nombre);
-        holder.ivCategoriaAdapterGroup.setImageResource(categoria.resource);
+        holder.tvCostoAdapterGroup.setText(Util.PriceFormat(cuenta.total));
+        holder.tvDescripcionAdapterGroup.setText(cuenta.nombre);
+        holder.ivCategoriaAdapterGroup.setImageResource(cuenta.resource);
         return row;
-    }
-
-    public void setCallback(IAdaptersCallerGridCategoriasGroup caller){
-        this.caller = caller;
     }
 
     @Override
     public int getCount() {
-        return Categorias.size();
+        return Cuentas.size();
     }
 
     @Override

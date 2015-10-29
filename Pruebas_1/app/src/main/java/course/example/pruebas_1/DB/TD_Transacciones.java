@@ -48,6 +48,29 @@ public class TD_Transacciones
         return lista;
     }
 
+    public ArrayList<Transaccion> Obten(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_2,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_3,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_4,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_5,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_6,
+                DatabaseSchema.TD_Transacciones.COLUMN_NAME_7
+        };
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
+
+        Cursor c = db.rawQuery("SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
+                " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " DESC, " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " ASC", null);
+
+        ArrayList<Transaccion> lista = GetObject(c);
+        return lista;
+    }
+
     public Boolean Inserta(Transaccion trans){
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();

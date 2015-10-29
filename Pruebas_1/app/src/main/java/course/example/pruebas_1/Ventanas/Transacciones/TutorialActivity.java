@@ -21,11 +21,13 @@ public class TutorialActivity extends FragmentActivity {
             Intent intent = getIntent();
             int op = intent.getIntExtra("OP", 0);
             String fecha = intent.getStringExtra("FECHA");
+            int cuenta_id = intent.getIntExtra("CUENTA_ID",0);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             TutorialWizard fragment = new TutorialWizard();
             Bundle args = new Bundle();
             args.putInt("OP", op);
             args.putString("FECHA", fecha);
+            args.putInt("CUENTA_ID", cuenta_id);
             fragment.setArguments(args);
             //ft.add(R.id.tutorial_wizard_fragment, fragment);
             ft.replace(R.id.tutorial_wizard_fragment, fragment, "your_fragment_tag");

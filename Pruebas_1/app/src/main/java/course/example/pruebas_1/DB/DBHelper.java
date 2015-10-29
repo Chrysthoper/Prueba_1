@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public TD_Cuentas Cuentas;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "MiChochinito.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -76,7 +76,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TRANSACCIONES);
         db.execSQL(SQL_CREATE_CUENTAS);
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('SIN CATEGORIA'," + R.mipmap.sin_categoria + "," + R.drawable.forma_circulonegro + "," + Color.BLACK + ",0)");
-        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('GENERAL'," + R.mipmap.casa + "," + R.drawable.forma_circulo5 + "," + R.color.color5 + ",1)");
+        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('SUELDO'," + R.mipmap.trabajo + "," + R.drawable.forma_circulo7 + "," + R.color.color7 + ",1)");
+        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('FINANCIAMIENTO'," + R.mipmap.prestamo + "," + R.drawable.forma_circulo9 + "," + R.color.color9 + ",1)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('AGUA'," + R.mipmap.agua + "," + R.drawable.forma_circulo1 + "," + R.color.color1 + ",0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('LUZ'," + R.mipmap.luz + "," + R.drawable.forma_circulo2 + "," + R.color.color2 + ",0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('CABLE'," + R.mipmap.casa + "," + R.drawable.forma_circulo3 + "," + R.color.color3 + ",0)");
@@ -89,8 +90,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('PAREJA'," + R.mipmap.pareja + "," + R.drawable.forma_circulo10 + "," + R.color.color10 + ",0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('ROPA'," + R.mipmap.ropa + "," + R.drawable.forma_circulo10 + "," + R.color.color10 + ",0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('BANAMEX'," + R.mipmap.credito + "," + R.color.color4 + ")");
-        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('EFECTIVO'," + R.mipmap.casa + "," + R.color.color10 + ")");
-        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('FINANCIAMIENTO'," + R.mipmap.pareja + "," + R.color.color2 + ")");
+        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('EFECTIVO'," + R.mipmap.monedas + "," + R.color.color10 + ")");
+        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('FINANCIAMIENTO'," + R.mipmap.prestamo + "," + R.color.color2 + ")");
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
