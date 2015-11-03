@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.timessquare.CalendarPickerView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
@@ -24,7 +27,7 @@ import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Util;
 
-public class VentanaHistorial extends ActionBarActivity implements IAdaptersCallerVentana {
+public class VentanaHistorial extends ActionBarActivity {
 
     TextView tvBalanceHistorial;
     DBHelper dbHelper;
@@ -47,6 +50,18 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
 
         dbHelper = new DBHelper(getApplicationContext());
 
+        final Calendar nextYear = Calendar.getInstance();
+        nextYear.add(Calendar.YEAR, 1);
+
+        final Calendar lastYear = Calendar.getInstance();
+        lastYear.add(Calendar.YEAR, -1);
+
+        CalendarPickerView calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
+        Date today = new Date();
+        calendar.init(lastYear.getTime(), nextYear.getTime())
+                .inMode(CalendarPickerView.SelectionMode.RANGE);
+
+        /*
         Intent intent = getIntent();
         fecha_inicial = intent.getStringExtra("FECHA_INICIAL");
         fecha_final = intent.getStringExtra("FECHA_FINAL");
@@ -74,8 +89,10 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         adapterFrag.addFragment(pagerAdapter1);
         adapterFrag.addFragment(pagerAdapter2);
         this.pager.setAdapter(adapterFrag);
+        */
     }
 
+    /*
     @Override
     public void ActualizaVentana() {
         double SumEntradas = dbHelper.Transacciones.SumatoriaEntradas(fecha_inicial,fecha_final);
@@ -100,6 +117,7 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         pagerAdapter2.ActualizaGrid(listaCategorias);
         adapterFrag.notifyDataSetChanged();
     }
+    */
 
 
 }

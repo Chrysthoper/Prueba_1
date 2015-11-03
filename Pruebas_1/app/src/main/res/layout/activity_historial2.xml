@@ -4,6 +4,7 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
+    <!--
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -24,5 +25,12 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    -->
+
+    <com.squareup.timessquare.CalendarPickerView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>

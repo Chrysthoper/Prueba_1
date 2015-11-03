@@ -58,8 +58,8 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
     public void ActualizaGrid(ArrayList<Categoria> listaCategorias) {
         this.categorias = listaCategorias;
         this.adapter = new CategoriasGroupAdapter(getActivity(),this.categorias);
-        //lvCategoriasGroupPrincipal.setAdapter(adapter);
-        //adapter.setCallback(this);
+        lvCategoriasGroupPrincipal.setAdapter(adapter);
+        adapter.setCallback(this);
         adapter.notifyDataSetChanged();
     }
 }
