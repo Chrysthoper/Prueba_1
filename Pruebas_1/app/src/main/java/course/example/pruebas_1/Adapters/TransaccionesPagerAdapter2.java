@@ -14,12 +14,6 @@ import course.example.pruebas_1.R;
 
 public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCallerGridCategoriasGroup {
 
-    /**
-     * Key to insert the background color into the mapping of a Bundle.
-     */
-    private static final ArrayList<Categoria> CATEGORIAS = null;
-
-
     private ArrayList<Categoria> categorias;
     private CategoriasGroupAdapter adapter;
     ListView lvCategoriasGroupPrincipal;
@@ -64,8 +58,8 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
     public void ActualizaGrid(ArrayList<Categoria> listaCategorias) {
         this.categorias = listaCategorias;
         this.adapter = new CategoriasGroupAdapter(getActivity(),this.categorias);
-        lvCategoriasGroupPrincipal.setAdapter(adapter);
-        adapter.setCallback(this);
+        //lvCategoriasGroupPrincipal.setAdapter(adapter);
+        //adapter.setCallback(this);
         adapter.notifyDataSetChanged();
     }
 }

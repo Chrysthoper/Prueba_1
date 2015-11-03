@@ -19,6 +19,7 @@ import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
+import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Util;
@@ -31,6 +32,7 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
     String fecha_final;
     ArrayList<Transaccion> listaTransacciones;
     ArrayList<Categoria> listaCategorias;
+    ArrayList<Cuenta> listaCuentas;
     private TransaccionesPagerAdapter1 pagerAdapter1;
     private TransaccionesPagerAdapter2 pagerAdapter2;
     private TransaccionesFragmentPagerAdapter adapterFrag;
@@ -61,11 +63,12 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
 
         listaTransacciones = dbHelper.Transacciones.Obten(fecha_inicial,fecha_final);
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fecha_inicial,fecha_final);
+        listaCuentas = dbHelper.Cuentas.Obten();
         this.pager = (ViewPager) this.findViewById(R.id.pager);
         // Create an adapter with the fragments we show on the ViewPager
         adapterFrag = new TransaccionesFragmentPagerAdapter(
                 getSupportFragmentManager());
-        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones,true);
+        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones);
         pagerAdapter1.setCallback(this);
         pagerAdapter2 = TransaccionesPagerAdapter2.newInstance(listaCategorias);
         adapterFrag.addFragment(pagerAdapter1);

@@ -7,21 +7,27 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.ViewPager;
 
-import java.text.DateFormatSymbols;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import course.example.pruebas_1.Adapters.CuentasAdapter;
+import course.example.pruebas_1.Adapters.CuentasGridAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
@@ -38,22 +44,28 @@ import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 public class MainActivity extends ActionBarActivity implements IAdaptersCallerVentana {
 
     Button btnTransaccionSalida,btnTransaccionEntrada;
-    LinearLayout lyFechaPrincipal;
+    LinearLayout lyFechaPrincipal,lyTransferenciaPrincipal;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrincipal;
     DatePickerDialog DialogoFechaPrincipal;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
     ArrayList<Categoria> listaCategorias;
+    ArrayList<Cuenta> listaCuentas;
     private TransaccionesPagerAdapter1 pagerAdapter1;
     private TransaccionesPagerAdapter2 pagerAdapter2;
     private TransaccionesFragmentPagerAdapter adapterFrag;
     Calendar c;
     ViewPager pager = null;
 
+    private SlidingUpPanelLayout mLayout;
+    private static final String TAG = "DemoActivity";
+    GridView lvCuentasGridPager;
+    CuentasGridAdapter adapterCuentas;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
         dbHelper = new DBHelper(getApplicationContext());
 
@@ -89,17 +101,59 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         tvFechaPrincipalMes = (TextView)findViewById(R.id.tvFechaPrincipalMes);
         tvFechaPrincipalMes.setText(Util.getMonthForInt(mes).substring(0, 3).toUpperCase());
 
-        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
+        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni, fechaFin);
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+
         this.pager = (ViewPager) this.findViewById(R.id.pager);
         adapterFrag = new TransaccionesFragmentPagerAdapter(
                 getSupportFragmentManager());
-        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones, false);
+        pagerAdapter1 = TransaccionesPagerAdapter1.newInstance(listaTransacciones);
         pagerAdapter1.setCallback(this);
         pagerAdapter2 = TransaccionesPagerAdapter2.newInstance(listaCategorias);
         adapterFrag.addFragment(pagerAdapter1);
         adapterFrag.addFragment(pagerAdapter2);
         this.pager.setAdapter(adapterFrag);
+
+        listaCuentas = dbHelper.Cuentas.Obten();
+        lvCuentasGridPager = (GridView) findViewById(R.id.lvCuentasGridPager);
+        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
+        lvCuentasGridPager.setAdapter(adapterCuentas);
+        adapterCuentas.notifyDataSetChanged();
+
+        mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        mLayout.setPanelState(PanelState.EXPANDED);
+        mLayout.setPanelSlideListener(new PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+            }
+
+            @Override
+            public void onPanelExpanded(View panel) {
+                Log.i(TAG, "onPanelExpanded");
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+                Log.i(TAG, "onPanelCollapsed");
+
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+                Log.i(TAG, "onPanelAnchored");
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+                Log.i(TAG, "onPanelHidden");
+            }
+        });
+        mLayout.setDragView(R.id.lyControlBar);
+
+        lyTransferenciaPrincipal = (LinearLayout)findViewById(R.id.lyTransferenciaPrincipal);
+        lyTransferenciaPrincipal.setOnClickListener(btnTransacciones);
 
         DialogoFechaPrincipal = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
@@ -129,6 +183,11 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         pagerAdapter2.ActualizaGrid(listaCategorias);
         adapterFrag.notifyDataSetChanged();
 
+        listaCuentas = dbHelper.Cuentas.Obten();
+        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
+        lvCuentasGridPager.setAdapter(adapterCuentas);
+        adapterCuentas.notifyDataSetChanged();
+
     }
 
     public void ActualizaVentana(){
@@ -144,20 +203,16 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         btnTransaccionEntrada.setText(Util.PriceFormat(SumEntradas));
         btnTransaccionSalida.setText(Util.PriceFormat(SumSalidas));
 
+        /*
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
         pagerAdapter2.ActualizaGrid(listaCategorias);
         adapterFrag.notifyDataSetChanged();
-        /*
-        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        pagerAdapter1.ActualizaGrid(listaTransacciones);
-        adapterFrag.notifyDataSetChanged();
         */
-        /*
-        adapter = new TransaccionAdapter(MainActivity.this,listaTransacciones, false);
-        adapter.setCallback(this);
-        lvTransaccionesPrincipal.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        */
+        listaCuentas = dbHelper.Cuentas.Obten();
+        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
+        lvCuentasGridPager.setAdapter(adapterCuentas);
+        adapterCuentas.notifyDataSetChanged();
+
         tvBalancePrincipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
         if((SumEntradas - SumSalidas) < 0)
             tvBalancePrincipal.setTextColor(Color.parseColor("#ffff4444"));
@@ -171,7 +226,10 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     @Override
     public void onBackPressed() {
         // Return to previous page when we press back button
-        if (this.pager.getCurrentItem() == 0)
+        if (mLayout != null &&
+                (mLayout.getPanelState() == PanelState.EXPANDED || mLayout.getPanelState() == PanelState.ANCHORED)) {
+            mLayout.setPanelState(PanelState.COLLAPSED);
+        } else if (this.pager.getCurrentItem() == 0)
             super.onBackPressed();
         else
             this.pager.setCurrentItem(this.pager.getCurrentItem() - 1);
@@ -218,7 +276,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         public void onClick(View v) {
             String msj = "";
             final Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
-            final ArrayList<Cuenta> Cuentas = dbHelper.Cuentas.ObtenTotalCuentas();
+            final ArrayList<Cuenta> Cuentas = dbHelper.Cuentas.Obten();
             String fecha = Util.FechaToFormat(c.getTime());
 
             intent.putExtra("FECHA", fecha);
@@ -282,6 +340,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     protected void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
     }
+
+
 
     //endregion
 

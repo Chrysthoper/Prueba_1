@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public TD_Cuentas Cuentas;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "MiChochinito.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -39,6 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         DatabaseSchema.TD_Categorias.COLUMN_NAME_4 + INTEGER_TYPE + COMMA_SEP +
                         DatabaseSchema.TD_Categorias.COLUMN_NAME_5 + INTEGER_TYPE + COMMA_SEP +
                         DatabaseSchema.TD_Categorias.COLUMN_NAME_6 + INTEGER_TYPE +
+
                     " )";
     private static final String SQL_CREATE_TRANSACCIONES =
             "CREATE TABLE " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
@@ -49,7 +50,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + INTEGER_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + DATETIME_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_6 + TEXT_TYPE + COMMA_SEP +
-                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_7 + TEXT_TYPE +
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_7 + INTEGER_TYPE + COMMA_SEP +
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_8 + INTEGER_TYPE + COMMA_SEP +
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_9 + INTEGER_TYPE +
                     " )";
     private static final String SQL_CREATE_CUENTAS =
             "CREATE TABLE " + DatabaseSchema.TD_Cuentas.TABLE_NAME +
@@ -57,7 +60,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     DatabaseSchema.TD_Cuentas.COLUMN_NAME_2 + TEXT_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Cuentas.COLUMN_NAME_3 + INTEGER_TYPE + COMMA_SEP +
-                    DatabaseSchema.TD_Cuentas.COLUMN_NAME_4 + INTEGER_TYPE +
+                    DatabaseSchema.TD_Cuentas.COLUMN_NAME_4 + INTEGER_TYPE + COMMA_SEP +
+                    DatabaseSchema.TD_Cuentas.COLUMN_NAME_5 + DOUBLE_TYPE +
                     " )";
 
     private static final String SQL_DELETE_CATEGORIAS = "DROP TABLE IF EXISTS " + DatabaseSchema.TD_Categorias.TABLE_NAME;
@@ -77,7 +81,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_CUENTAS);
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('SIN CATEGORIA'," + R.mipmap.sin_categoria + "," + R.drawable.forma_circulonegro + "," + Color.BLACK + ",0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('SUELDO'," + R.mipmap.trabajo + "," + R.drawable.forma_circulo7 + "," + R.color.color7 + ",1)");
-        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('FINANCIAMIENTO'," + R.mipmap.prestamo + "," + R.drawable.forma_circulo9 + "," + R.color.color9 + ",1)");
+        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('CREDITO'," + R.mipmap.credito + "," + R.drawable.forma_circulo1 + "," + R.color.color1 + ",1)");
+        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('PRESTAMO'," + R.mipmap.prestamo + "," + R.drawable.forma_circulo9 + "," + R.color.color9 + ",1)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('AGUA'," + R.mipmap.agua + "," + R.drawable.forma_circulo1 + "," + R.color.color1 + ",0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('LUZ'," + R.mipmap.luz + "," + R.drawable.forma_circulo2 + "," + R.color.color2 + ",0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('CABLE'," + R.mipmap.casa + "," + R.drawable.forma_circulo3 + "," + R.color.color3 + ",0)");

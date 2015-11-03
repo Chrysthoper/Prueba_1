@@ -15,7 +15,9 @@ public final class DatabaseSchema {
         public static final String COLUMN_NAME_4 = "FECHA_ALTA";
         public static final String COLUMN_NAME_5 = "NOTA";
         public static final String COLUMN_NAME_6 = "DESCRIPCION";
-        public static final String COLUMN_NAME_7 = "CUENTA_ID";
+        public static final String COLUMN_NAME_7 = "CUENTA_PRIN_ID";
+        public static final String COLUMN_NAME_8 = "CUENTA_SECU_ID";
+        public static final String COLUMN_NAME_9 = "TIPO_TRANSACCION";//0 = SALIDA, 1 = ENTRADA, 2 = TRANSFERENCIA
     }
     public static abstract class TD_Categorias implements BaseColumns {
         public static final String TABLE_NAME = "TD_Categorias";
@@ -32,5 +34,6 @@ public final class DatabaseSchema {
         public static final String COLUMN_NAME_2 = "NOMBRE";
         public static final String COLUMN_NAME_3 = "RECURSO_ID";
         public static final String COLUMN_NAME_4 = "COLOR_ID";
+        public static final String COLUMN_NAME_5 = "TOTAL";
     }
 }

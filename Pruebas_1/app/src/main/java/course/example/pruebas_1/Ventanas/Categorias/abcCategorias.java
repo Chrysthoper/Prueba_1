@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import course.example.pruebas_1.Adapters.ColoresAdapter;
@@ -29,6 +30,7 @@ public class abcCategorias extends ActionBarActivity {
     public GridView gvColores, gvImagenes;
     public ImageView ivCategoriaDummy;
     public EditText etNombreCategoria;
+    public RadioGroup rdbGroupTipoCategorias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class abcCategorias extends ActionBarActivity {
 
         ivCategoriaDummy = (ImageView)findViewById(R.id.ivCategoriaDummy);
         etNombreCategoria = (EditText)findViewById(R.id.etNombreCategoria);
+
+        rdbGroupTipoCategorias = (RadioGroup) findViewById(R.id.rdbGroupTipoCategorias);
     }
 
     public boolean Validate()
@@ -97,7 +101,8 @@ public class abcCategorias extends ActionBarActivity {
         if (id == R.id.btnCrearCategoriaNueva) {
             if(Validate())
             {
-                Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),Util.imagenes[indexImagen],Util.colores[indexColor],Util.coloresHex[indexColor],0);
+                int TipoCategoria = (rdbGroupTipoCategorias.getCheckedRadioButtonId() == R.id.rdbEntradas) ? 1 : 0;
+                Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),Util.imagenes[indexImagen],Util.colores[indexColor],Util.coloresHex[indexColor],TipoCategoria);
                 DBHelper dbHelper = new DBHelper(getApplicationContext());
                 if(dbHelper.Categorias.Inserta(categoria))
                 {

@@ -95,7 +95,9 @@ public class Util
             R.mipmap.cellphone,
             R.mipmap.credito,
             R.mipmap.trabajo,
-            R.mipmap.phone
+            R.mipmap.phone,
+            R.mipmap.prestamo,
+            R.mipmap.monedas
     };
 
 }

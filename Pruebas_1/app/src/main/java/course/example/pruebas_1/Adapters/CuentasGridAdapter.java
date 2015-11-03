@@ -1,7 +1,6 @@
 package course.example.pruebas_1.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,27 +11,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import course.example.pruebas_1.Negocio.Categoria;
+import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.R;
-import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
+import course.example.pruebas_1.Util;
 
-public class CategoriaAdapter extends BaseAdapter {
+public class CuentasGridAdapter extends BaseAdapter {
 
     private Context context;
-    private final ArrayList<Categoria> categorias;
+    private final ArrayList<Cuenta> cuentas;
     private int seleccion;
 
-    public CategoriaAdapter(Context context, ArrayList<Categoria> categorias, int seleccion) {
+    public CuentasGridAdapter(Context context, ArrayList<Cuenta> cuentas, int seleccion) {
         this.context = context;
-        this.categorias = categorias;
-        this.categorias.add(0,new Categoria(0,"Nueva Categoria",R.mipmap.agregar_blanco,R.drawable.forma_circulonegro,Color.BLACK,0));
+        this.cuentas = cuentas;
         this.seleccion = seleccion;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         MyViewHolder holder;
-        final Categoria cat = this.categorias.get(position);
+        final Cuenta cuenta = this.cuentas.get(position);
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.categoria_adapter, null, false);
@@ -43,28 +41,19 @@ public class CategoriaAdapter extends BaseAdapter {
             holder.ivImagenCategoria = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
             holder.lyColorCategoria = (LinearLayout) row.findViewById(R.id.lyGridCategoriaAdapter);
 
-            if (context instanceof VentanaCategorias)
-                holder.tvNombreCategoria.setTextColor(Color.BLACK);
-
-            if(seleccion == cat.id)
-                row.setBackgroundColor(Color.parseColor("#FFAA2300"));
-
             row.setTag(holder);
         } else {
             holder = (MyViewHolder) row.getTag();
         }
-        holder.tvNombreCategoria.setText(cat.nombre);
-        holder.tvIDCategoriaAdapter.setText(String.valueOf(cat.id));
-        holder.ivImagenCategoria.setImageResource(cat.resource);
-        holder.lyColorCategoria.setBackgroundResource(cat.formaCirculo);
+        holder.tvNombreCategoria.setText(Util.PriceFormat(cuenta.total));
+        holder.tvIDCategoriaAdapter.setText(String.valueOf(cuenta.id));
+        holder.ivImagenCategoria.setImageResource(cuenta.resource);
         return row;
     }
 
-
-
     @Override
     public int getCount() {
-        return categorias.size();
+        return cuentas.size();
     }
 
     @Override

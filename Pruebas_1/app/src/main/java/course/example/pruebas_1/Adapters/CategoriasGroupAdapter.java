@@ -1,28 +1,20 @@
 package course.example.pruebas_1.Adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import course.example.pruebas_1.DB.DBHelper;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
 import course.example.pruebas_1.Negocio.Categoria;
-import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Util;
 

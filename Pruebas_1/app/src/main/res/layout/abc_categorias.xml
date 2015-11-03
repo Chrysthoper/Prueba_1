@@ -26,6 +26,54 @@
             android:maxLines="1"
             android:singleLine="true"
             android:maxLength="25" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tipo Categoria"
+            android:id="@+id/textView5"
+            android:textSize="20dp"
+            android:gravity="center_horizontal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:id="@+id/rdbGroupTipoCategorias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/rdbSalidas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rdb_selector"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Gastos"
+                android:textColor="@drawable/rdb_textcolor_selector" />
+
+            <RadioButton
+                android:id="@+id/rdbEntradas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rdb_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Ingresos"
+                android:textColor="@drawable/rdb_textcolor_selector" />
+        </RadioGroup>
     </LinearLayout>
 
     <LinearLayout

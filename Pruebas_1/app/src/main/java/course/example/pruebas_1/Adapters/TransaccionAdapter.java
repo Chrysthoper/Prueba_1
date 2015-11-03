@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
@@ -22,26 +22,18 @@ import course.example.pruebas_1.R;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.Util;
 
-public class TransaccionAdapter extends BaseAdapter {
+public class TransaccionAdapter extends BaseAdapter implements Serializable {
 
     private IAdaptersCallerGrid caller;
 
     private Context context;
-    private final ArrayList<Transaccion> Transacciones;
-    private int seleccion;
+    public ArrayList<Transaccion> Transacciones;
     private DBHelper dbHelper;
-    private String fecha = "2500-01-01";
-    private boolean ConFechas;
-    private ArrayList<Integer> TransaccionConBaner;
-    private ArrayList<String> FechaContada;
 
-    public TransaccionAdapter(Context context, ArrayList<Transaccion> Transacciones, boolean ConFechas) {
+    public TransaccionAdapter(Context context, ArrayList<Transaccion> Transacciones) {
         this.context = context;
         dbHelper = new DBHelper(context);
         this.Transacciones = Transacciones;
-        this.ConFechas = ConFechas;
-        TransaccionConBaner = new ArrayList<Integer>();
-        FechaContada = new ArrayList<String>();
     }
 
     public View getView(final int position, final View convertView, ViewGroup parent) {
@@ -54,9 +46,6 @@ public class TransaccionAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.transaccion_adapter, null, false);
             holder = new MyViewHolder();
-
-            holder.lyTransAdapterDia = (LinearLayout) row.findViewById(R.id.lyTransAdapterDia);
-            holder.lyTransAdapterDia.setVisibility(View.GONE);
 
             holder.tvCostoAdapter = (TextView) row.findViewById(R.id.tvCostoAdapter);
             holder.tvNotaAdapter = (TextView) row.findViewById(R.id.tvNotaAdapter);
@@ -89,51 +78,82 @@ public class TransaccionAdapter extends BaseAdapter {
                 }
             });
 
+            holder.lyTransAdapter2 = (LinearLayout) row.findViewById(R.id.lyTransAdapter2);
+            holder.lyTransAdapter2.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    new AlertDialog.Builder(context)
+                            .setMessage("¿Seguro que desea borrar la transacción?")
+                            .setCancelable(false)
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    if (dbHelper.Transacciones.Elimina(trans.id)) {
+                                        Transacciones.remove(position);
+                                        notifyDataSetChanged();
+                                        caller.ActualizaGrid(Transacciones);
+                                        Toast.makeText(context, "Se elimino la transacción", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                    return true;
+                }
+            });
+
+            holder.tvMontoTransAdapter2 = (TextView) row.findViewById(R.id.tvMontoTransAdapter2);
+            holder.tvFechaTransAdapter2 = (TextView) row.findViewById(R.id.tvFechaTransAdapter2);
+
+            holder.tvDescTransAdapter2 = (TextView) row.findViewById(R.id.tvDescTransAdapter2);
+            holder.tvNotaTransAdapter2 = (TextView) row.findViewById(R.id.tvNotaTransAdapter2);
+
+            holder.ivCuenta1TransAdapter2 = (ImageView) row.findViewById(R.id.ivCuenta1TransAdapter2);
+            holder.ivCuenta2TransAdapter2 = (ImageView) row.findViewById(R.id.ivCuenta2TransAdapter2);
 
             row.setTag(holder);
         } else {
             holder = (MyViewHolder) row.getTag();
         }
-/*
-        if (ConFechas &&
-                (Util.FormatToFecha(fecha).after(Util.FormatToFecha(trans.fecha_alta)) && !FechaContada.contains(trans.fecha_alta)) ||
-                TransaccionConBaner.contains(trans.id)) {
-            TransaccionConBaner.add(trans.id);
-            fecha = trans.fecha_alta;
-            FechaContada.add(fecha);
-            holder.lyTransAdapterDia = (LinearLayout) row.findViewById(R.id.lyTransAdapterDia);
-            holder.lyTransAdapterDia.setVisibility(View.VISIBLE);
-            holder.tvTransAdapterDia = (TextView) row.findViewById(R.id.tvTransAdapterDia);
-            holder.tvTransAdapterDia.setText(fecha);
+        holder.lyTransAdapter1.setVisibility(View.GONE);
+        holder.lyTransAdapter2.setVisibility(View.GONE);
+
+        if(trans.tipo_transaccion < 2)//0 && 1
+        {
+            holder.lyTransAdapter1.setVisibility(View.VISIBLE);
+            holder.tvFechaAdapter.setText(Util.FormatToShort(trans.fecha_alta));
+            holder.ivCuentaAdapter.setImageResource(trans.cuentaPrincipalObj.resource);
+
+            holder.tvCostoAdapter.setText(Util.PriceFormat(trans.costo));
+            holder.tvDescripcionAdapter.setText(trans.descripcion);
+            holder.tvNotaAdapter.setText(trans.nota);
+            holder.ivCategoriaAdapter.setImageResource(trans.categoriaObj.resource);
+            holder.ivCategoriaAdapter.setBackgroundResource(trans.categoriaObj.formaCirculo);
+
+            switch(trans.categoriaObj.tipo)
+            {
+                case 0:
+                    holder.tvCostoAdapter.setTextColor(Color.parseColor("#ffff4444"));
+                    break;
+                case 1:
+                    holder.tvCostoAdapter.setTextColor(Color.parseColor("#ff99cc00"));
+                    break;
+                default:
+                    break;
+            }
         }
         else
         {
-            holder.lyTransAdapterDia = (LinearLayout)row.findViewById(R.id.lyTransAdapterDia);
-            holder.lyTransAdapterDia.setVisibility(View.GONE);
-        }
-*/
-        holder.tvFechaAdapter.setText(Util.FormatToShort(trans.fecha_alta));
-        holder.ivCuentaAdapter.setImageResource(trans.cuentaObj.resource);
-        int color = context.getResources().getColor(trans.cuentaObj.color);
-        //holder.ivCuentaAdapter.setBackgroundColor(color);
+            holder.lyTransAdapter2.setVisibility(View.VISIBLE);
+            holder.tvFechaTransAdapter2.setText(Util.FormatToShort(trans.fecha_alta));
 
-        holder.tvCostoAdapter.setText(Util.PriceFormat(trans.costo));
-        holder.tvDescripcionAdapter.setText(trans.descripcion);
-        holder.tvNotaAdapter.setText(trans.nota);
-        holder.ivCategoriaAdapter.setImageResource(trans.categoriaObj.resource);
-        holder.ivCategoriaAdapter.setBackgroundResource(trans.categoriaObj.formaCirculo);
+            holder.tvMontoTransAdapter2.setText(Util.PriceFormat(trans.costo));
+            holder.tvDescTransAdapter2.setText(trans.descripcion);
+            holder.tvNotaTransAdapter2.setText(trans.nota);
 
-        switch(trans.categoriaObj.tipo)
-        {
-            case 0:
-                holder.tvCostoAdapter.setTextColor(Color.parseColor("#ffff4444"));
-                break;
-            case 1:
-                holder.tvCostoAdapter.setTextColor(Color.parseColor("#ff99cc00"));
-                break;
-            default:
-                break;
+            holder.ivCuenta1TransAdapter2.setImageResource(trans.cuentaPrincipalObj.resource);
+            holder.ivCuenta2TransAdapter2.setImageResource(trans.cuentaSecundariaObj.resource);
         }
+
         return row;
     }
 
@@ -157,9 +177,9 @@ public class TransaccionAdapter extends BaseAdapter {
     }
 
     private static class MyViewHolder {
-        public TextView tvCostoAdapter,tvDescripcionAdapter,tvNotaAdapter,tvFechaAdapter;
-        public ImageView ivCategoriaAdapter,ivCuentaAdapter;
-        public LinearLayout lyTransAdapterDia,lyTransAdapter1;
+        public TextView tvCostoAdapter,tvMontoTransAdapter2,tvDescripcionAdapter,tvDescTransAdapter2,tvNotaAdapter,tvNotaTransAdapter2,tvFechaAdapter,tvFechaTransAdapter2;
+        public ImageView ivCategoriaAdapter,ivCuenta2TransAdapter2,ivCuenta1TransAdapter2,ivCuentaAdapter;
+        public LinearLayout lyTransAdapter2,lyTransAdapter1;
     }
 
 }

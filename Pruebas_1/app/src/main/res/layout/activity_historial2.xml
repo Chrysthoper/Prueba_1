@@ -8,7 +8,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/lyControlBar"
         android:gravity="center_vertical|center_horizontal">
 
         <TextView

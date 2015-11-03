@@ -24,16 +24,6 @@ public class TD_Cuentas
 
     public ArrayList<Cuenta> Obten(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID,
-                DatabaseSchema.TD_Cuentas.COLUMN_NAME_2,
-                DatabaseSchema.TD_Cuentas.COLUMN_NAME_3,
-                DatabaseSchema.TD_Cuentas.COLUMN_NAME_4
-        };
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder = DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID + " DESC";
 
         Cursor c = db.rawQuery("SELECT * FROM " + DatabaseSchema.TD_Cuentas.TABLE_NAME, null);
 
@@ -47,7 +37,8 @@ public class TD_Cuentas
                 DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID,
                 DatabaseSchema.TD_Cuentas.COLUMN_NAME_2,
                 DatabaseSchema.TD_Cuentas.COLUMN_NAME_3,
-                DatabaseSchema.TD_Cuentas.COLUMN_NAME_4
+                DatabaseSchema.TD_Cuentas.COLUMN_NAME_4,
+                DatabaseSchema.TD_Cuentas.COLUMN_NAME_5
         };
         String sortOrder = DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID + " DESC";
         Cursor c = db.query(
@@ -89,6 +80,16 @@ public class TD_Cuentas
                 null) > 0;
     }
 
+    public Boolean Actualiza(Cuenta cuenta){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues valores = new ContentValues();
+        valores.put(DatabaseSchema.TD_Cuentas.COLUMN_NAME_5,cuenta.total);
+
+        return db.update(DatabaseSchema.TD_Cuentas.TABLE_NAME, valores, DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID + "=" + cuenta.id, null) > 0;
+    }
+
+    /*
     public ArrayList<Cuenta> ObtenTotalCuentas() {
         ArrayList<Transaccion> transacciones = dbHelper.Transacciones.Obten();
         ArrayList<Cuenta> cuentas = this.Obten();
@@ -96,7 +97,7 @@ public class TD_Cuentas
         {
             for(Transaccion t : transacciones)
             {
-                if(c.id == t.cuenta_id)
+                if(c.id == t.cuenta_prin_id)
                 {
                     if(t.categoriaObj.tipo == 1)
                         c.total += t.costo;
@@ -108,6 +109,7 @@ public class TD_Cuentas
         }
         return cuentas;
     }
+    */
 
     private ArrayList<Cuenta> GetObject(Cursor c){
         ArrayList<Cuenta> lista = new ArrayList<Cuenta>();
@@ -120,6 +122,7 @@ public class TD_Cuentas
                 cuenta.nombre = c.getString(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_2));
                 cuenta.resource = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_3));
                 cuenta.color = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_4));
+                cuenta.total = c.getDouble(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_5));
                 lista.add(cuenta);
             } while(c.moveToNext());
         }
@@ -136,6 +139,7 @@ public class TD_Cuentas
                 cuenta.nombre = c.getString(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_2));
                 cuenta.resource = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_3));
                 cuenta.color = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_4));
+                cuenta.total = c.getDouble(c.getColumnIndex(DatabaseSchema.TD_Cuentas.COLUMN_NAME_5));
             } while(c.moveToNext());
         }
         return cuenta;

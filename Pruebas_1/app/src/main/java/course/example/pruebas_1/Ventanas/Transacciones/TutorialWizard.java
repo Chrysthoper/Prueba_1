@@ -19,7 +19,7 @@ import course.example.pruebas_1.R;
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
-    private Transaccion trans = new Transaccion("",-1,-1,"","","",0);
+    private Transaccion trans = new Transaccion("",-1,-1,"","","",0,0);
 
     /**
      * Note that initially BasicWizardLayout inherits from {@link android.support.v4.app.Fragment} and therefore you must have an empty constructor
@@ -55,14 +55,14 @@ public class TutorialWizard extends BasicWizardLayout {
             cuenta_id = savedInstanceState.getInt("CUENTA_ID");
             trans.fecha_alta = fecha;
             trans.tipo_transaccion = op;
-            trans.cuenta_id = cuenta_id;
+            trans.cuenta_prin_id = cuenta_id;
         } else {
             fecha = getArguments().getString("FECHA");
             op = getArguments().getInt("OP", 0);
             cuenta_id = getArguments().getInt("CUENTA_ID", 0);
             trans.fecha_alta = fecha;
             trans.tipo_transaccion = op;
-            trans.cuenta_id = cuenta_id;
+            trans.cuenta_prin_id = cuenta_id;
         }
 
         switch(op)
@@ -75,6 +75,10 @@ public class TutorialWizard extends BasicWizardLayout {
                 trans.tipo_transaccion = 0;
                 frag.setBackgroundColor(Color.parseColor("#ffff4444"));
                 break;
+            case R.id.lyTransferenciaPrincipal:case 2:
+                trans.tipo_transaccion = 2;
+                frag.setBackgroundColor(Color.BLACK);
+                break;
             default:
                 break;
         }
@@ -86,7 +90,7 @@ public class TutorialWizard extends BasicWizardLayout {
         super.onSaveInstanceState(outState);
         outState.putString("FECHA", trans.fecha_alta);
         outState.putInt("OP", trans.tipo_transaccion);
-        outState.putInt("CUENTA_ID", trans.cuenta_id);
+        outState.putInt("CUENTA_ID", trans.cuenta_prin_id);
     }
 
     @Override
@@ -97,7 +101,7 @@ public class TutorialWizard extends BasicWizardLayout {
         if(error.equals(""))
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_id);
+            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion);
             dbHelper.Transacciones.Inserta(transaccion);
             returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);
@@ -112,10 +116,21 @@ public class TutorialWizard extends BasicWizardLayout {
     public String Validate(){
         if(trans.textoKeyPad.equals(".") || trans.textoKeyPad.equals(""))
             return "No se ha ingresado un total";
-        else if(trans.numeroCategoria == -1)
-            return "No se ha seleccionado una categoria";
+        else if(trans.tipo_transaccion < 2)
+        {
+            if(trans.numeroCategoria == -1)
+                return "No se ha seleccionado una categoria";
+            else
+                return "";
+        }
         else
-            return "";
+        {
+            if(trans.cuenta_secu_id == -1)
+                return "No se ha seleccionado una cuenta";
+            else
+                return "";
+        }
+
     }
 
 }

@@ -12,9 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import course.example.pruebas_1.DB.DBHelper;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerGridCategoriasGroup;
-import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Util;
@@ -23,6 +20,7 @@ public class CuentasAdapter extends BaseAdapter {
 
     private Context context;
     private final ArrayList<Cuenta> Cuentas;
+
 
     public CuentasAdapter(Context context, ArrayList<Cuenta> Cuentas) {
         this.context = context;

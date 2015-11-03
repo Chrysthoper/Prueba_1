@@ -11,9 +11,6 @@ import java.sql.Date;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.Util;
 
-/**
- * Created by Chrys-Emcor on 08/10/2015.
- */
 public class TD_Transacciones
 {
     private DBHelper dbHelper;
@@ -25,24 +22,12 @@ public class TD_Transacciones
 
     public ArrayList<Transaccion> Obten(String fechaIni, String fechaFin){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_2,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_3,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_4,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_5,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_6,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_7
-        };
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
 
-        Cursor c = db.rawQuery("SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
-                        " WHERE " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " > Datetime('" + fechaIni.substring(0,10) + "')" +
-                        " AND " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " < Datetime('" + fechaFin.substring(0,10) + "')" +
-                        " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " DESC, " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " ASC", null);
+        Cursor c = db.rawQuery(
+                "SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
+                " WHERE " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " > Datetime('" + fechaIni.substring(0,10) + "')" +
+                " AND " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " < Datetime('" + fechaFin.substring(0,10) + "')" +
+                " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " DESC, " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " ASC", null);
 
         ArrayList<Transaccion> lista = GetObject(c);
         return lista;
@@ -50,25 +35,25 @@ public class TD_Transacciones
 
     public ArrayList<Transaccion> Obten(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_2,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_3,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_4,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_5,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_6,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_7
-        };
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder = DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " DESC";
 
-        Cursor c = db.rawQuery("SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
-                " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " DESC, " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " ASC", null);
+        Cursor c = db.rawQuery(
+            "SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
+            " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " DESC, " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " ASC", null);
 
         ArrayList<Transaccion> lista = GetObject(c);
         return lista;
+    }
+
+    public Transaccion Obten(int transaccion_id){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
+                        " WHERE " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " = " + transaccion_id +
+                        " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " DESC", null);
+
+        Transaccion transaccion = GetObjectTransaccion(c);
+        return transaccion;
     }
 
     public Boolean Inserta(Transaccion trans){
@@ -82,22 +67,81 @@ public class TD_Transacciones
         values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4, trans.fecha_alta);
         values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5, trans.nota);
         values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6, trans.descripcion);
-        values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7, trans.cuenta_id);
+        values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7, trans.cuenta_prin_id);
+        values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_8, trans.cuenta_secu_id);
+        values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_9, trans.tipo_transaccion);
 
         long newRowId;
         newRowId = db.insert(
                 DatabaseSchema.TD_Transacciones.TABLE_NAME,
                 null,
                 values);
-        return (newRowId != 0) ? true : false;
+        if (newRowId > 0)
+            return ActualizaCuentas((int)newRowId);
+        else
+            return false;
+    }
+
+    public Boolean ActualizaCuentas(int transaccion_id) {
+        Transaccion transaccion = this.Obten(transaccion_id);
+        switch(transaccion.tipo_transaccion)
+        {
+            case 0:
+                transaccion.cuentaPrincipalObj.total -= transaccion.costo;
+                return this.dbHelper.Cuentas.Actualiza(transaccion.cuentaPrincipalObj);
+            case 1:
+                transaccion.cuentaPrincipalObj.total += transaccion.costo;
+                return this.dbHelper.Cuentas.Actualiza(transaccion.cuentaPrincipalObj);
+            case 2:
+                if(transaccion.cuenta_prin_id != transaccion.cuenta_secu_id)
+                {
+                    transaccion.cuentaPrincipalObj.total -= transaccion.costo;
+                    transaccion.cuentaSecundariaObj.total += transaccion.costo;
+                    return this.dbHelper.Cuentas.Actualiza(transaccion.cuentaPrincipalObj) && this.dbHelper.Cuentas.Actualiza(transaccion.cuentaSecundariaObj);
+                }
+                else
+                    return true;
+            default:
+                return false;
+        }
     }
 
     public Boolean Elimina(int transaccion_id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(
-                DatabaseSchema.TD_Transacciones.TABLE_NAME,
-                DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + "=" + transaccion_id,
-                null) > 0;
+        Transaccion trans = this.Obten(transaccion_id);
+        boolean actualiza = false;
+        switch(trans.tipo_transaccion)
+        {
+            case 0:
+                trans.cuentaPrincipalObj.total += trans.costo;
+                actualiza = this.dbHelper.Cuentas.Actualiza(trans.cuentaPrincipalObj);
+                break;
+            case 1:
+                trans.cuentaPrincipalObj.total -= trans.costo;
+                actualiza = this.dbHelper.Cuentas.Actualiza(trans.cuentaPrincipalObj);
+                break;
+            case 2:
+                if(trans.cuenta_prin_id != trans.cuenta_secu_id)
+                {
+                    trans.cuentaPrincipalObj.total += trans.costo;
+                    trans.cuentaSecundariaObj.total -= trans.costo;
+                    actualiza = this.dbHelper.Cuentas.Actualiza(trans.cuentaPrincipalObj) && this.dbHelper.Cuentas.Actualiza(trans.cuentaSecundariaObj);
+                }
+                else
+                    actualiza = true;
+                break;
+            default:
+                actualiza = false;
+                break;
+        }
+        if(actualiza)
+            return db.delete(
+                    DatabaseSchema.TD_Transacciones.TABLE_NAME,
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + "=" + transaccion_id,
+                    null) > 0;
+        else
+            return false;
+
     }
 
     public double SumatoriaSalidas(String fechaIni, String fechaFin){
@@ -105,7 +149,7 @@ public class TD_Transacciones
         double sum = 0;
         for(Transaccion t : transacciones)
         {
-            if(t.categoriaObj.tipo == 0)
+            if(t.tipo_transaccion == 0)
                 sum += t.costo;
         }
         return sum;
@@ -116,7 +160,7 @@ public class TD_Transacciones
         double sum = 0;
         for(Transaccion t : transacciones)
         {
-            if(t.categoriaObj.tipo == 1)
+            if(t.tipo_transaccion == 1)
                 sum += t.costo;
         }
         return sum;
@@ -135,13 +179,38 @@ public class TD_Transacciones
                 transaccion.fecha_alta = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4)).substring(0, 10);
                 transaccion.nota = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5));
                 transaccion.descripcion = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6));
-                transaccion.cuenta_id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7));
-                transaccion.categoriaObj = dbHelper.Categorias.Obten(transaccion.numeroCategoria);
-                transaccion.cuentaObj = dbHelper.Cuentas.Obten(transaccion.cuenta_id);
+                transaccion.cuenta_prin_id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7));
+                transaccion.cuenta_secu_id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_8));
+                transaccion.tipo_transaccion = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_9));
+                transaccion.categoriaObj = (transaccion.numeroCategoria != 0) ? dbHelper.Categorias.Obten(transaccion.numeroCategoria) : null;
+                transaccion.cuentaPrincipalObj = dbHelper.Cuentas.Obten(transaccion.cuenta_prin_id);
+                transaccion.cuentaSecundariaObj = (transaccion.cuenta_secu_id != 0) ? dbHelper.Cuentas.Obten(transaccion.cuenta_secu_id) : null;
                 lista.add(transaccion);
             } while(c.moveToNext());
         }
         return lista;
     }
 
+    private Transaccion GetObjectTransaccion(Cursor c){
+        Transaccion Transaccion = new Transaccion();
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya mas registros
+            do {
+                Transaccion.id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID));
+                Transaccion.costo = c.getDouble(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_2));
+                Transaccion.numeroCategoria = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_3));
+                Transaccion.fecha_alta = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4)).substring(0, 10);
+                Transaccion.nota = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5));
+                Transaccion.descripcion = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6));
+                Transaccion.cuenta_prin_id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7));
+                Transaccion.cuenta_secu_id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_8));
+                Transaccion.tipo_transaccion = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_9));
+                Transaccion.categoriaObj = (Transaccion.numeroCategoria != 0) ? dbHelper.Categorias.Obten(Transaccion.numeroCategoria) : null;
+                Transaccion.cuentaPrincipalObj = dbHelper.Cuentas.Obten(Transaccion.cuenta_prin_id);
+                Transaccion.cuentaSecundariaObj = (Transaccion.cuenta_secu_id != 0) ? dbHelper.Cuentas.Obten(Transaccion.cuenta_secu_id) : null;
+            } while(c.moveToNext());
+        }
+        return Transaccion;
+    }
 }
