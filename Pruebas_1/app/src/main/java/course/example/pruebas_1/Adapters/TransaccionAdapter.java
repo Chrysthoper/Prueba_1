@@ -121,13 +121,13 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
         {
             holder.lyTransAdapter1.setVisibility(View.VISIBLE);
             holder.tvFechaAdapter.setText(Util.FormatToShort(trans.fecha_alta));
-            holder.ivCuentaAdapter.setImageResource(trans.cuentaPrincipalObj.resource);
+            holder.ivCuentaAdapter.setImageResource(Util.imagenes[trans.cuentaPrincipalObj.resource]);
 
             holder.tvCostoAdapter.setText(Util.PriceFormat(trans.costo));
             holder.tvDescripcionAdapter.setText(trans.descripcion);
             holder.tvNotaAdapter.setText(trans.nota);
-            holder.ivCategoriaAdapter.setImageResource(trans.categoriaObj.resource);
-            holder.ivCategoriaAdapter.setBackgroundResource(trans.categoriaObj.formaCirculo);
+            holder.ivCategoriaAdapter.setImageResource(Util.imagenes[trans.categoriaObj.resource]);
+            holder.ivCategoriaAdapter.setBackgroundResource(Util.colores[trans.categoriaObj.formaCirculo]);
 
             switch(trans.categoriaObj.tipo)
             {
@@ -150,8 +150,8 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
             holder.tvDescTransAdapter2.setText(trans.descripcion);
             holder.tvNotaTransAdapter2.setText(trans.nota);
 
-            holder.ivCuenta1TransAdapter2.setImageResource(trans.cuentaPrincipalObj.resource);
-            holder.ivCuenta2TransAdapter2.setImageResource(trans.cuentaSecundariaObj.resource);
+            holder.ivCuenta1TransAdapter2.setImageResource(Util.imagenesFull[trans.cuentaPrincipalObj.resource]);
+            holder.ivCuenta2TransAdapter2.setImageResource(Util.imagenesFull[trans.cuentaSecundariaObj.resource]);
         }
 
         return row;

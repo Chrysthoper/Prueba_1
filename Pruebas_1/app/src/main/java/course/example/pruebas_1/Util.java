@@ -1,5 +1,7 @@
 package course.example.pruebas_1;
 
+import android.graphics.Color;
+
 import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -64,7 +66,8 @@ public class Util
             R.drawable.forma_circulo7,
             R.drawable.forma_circulo8,
             R.drawable.forma_circulo9,
-            R.drawable.forma_circulo10
+            R.drawable.forma_circulo10,
+            R.drawable.forma_circulonegro
     };
     public static int[] coloresHex = new int[]{
             R.color.color1,
@@ -76,7 +79,8 @@ public class Util
             R.color.color7,
             R.color.color8,
             R.color.color9,
-            R.color.color10
+            R.color.color10,
+            Color.BLACK
     };
     public static int[] imagenes = new int[]{
             R.mipmap.gas,
@@ -98,6 +102,29 @@ public class Util
             R.mipmap.phone,
             R.mipmap.prestamo,
             R.mipmap.monedas
+    };
+    public static int[] imagenesFull = new int[]{
+            R.mipmap.gas,
+            R.mipmap.chucherias,
+            R.mipmap.camion,
+            R.mipmap.agua,
+            R.mipmap.casa,
+            R.mipmap.comida,
+            R.mipmap.compras,
+            R.mipmap.luz,
+            R.mipmap.gasolina,
+            R.mipmap.pareja,
+            R.mipmap.ropa,
+            R.mipmap.carro,
+            R.mipmap.internet,
+            R.mipmap.cellphone,
+            R.mipmap.credito,
+            R.mipmap.trabajo,
+            R.mipmap.phone,
+            R.mipmap.prestamo,
+            R.mipmap.monedas,
+            R.mipmap.sin_categoria,
+            R.mipmap.agregar_blanco
     };
 
 }

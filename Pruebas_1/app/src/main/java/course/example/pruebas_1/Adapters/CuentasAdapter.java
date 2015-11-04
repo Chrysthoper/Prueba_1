@@ -50,12 +50,12 @@ public class CuentasAdapter extends BaseAdapter {
 
         LayerDrawable bgDrawable = (LayerDrawable)holder.lyTransAdapterGroup1.getBackground();
         GradientDrawable shape_item_color = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_itemgrid_color);
-        int color = context.getResources().getColor(cuenta.color);
+        int color = context.getResources().getColor(Util.coloresHex[cuenta.color]);
         shape_item_color.setColor(color);
 
         holder.tvCostoAdapterGroup.setText(Util.PriceFormat(cuenta.total));
         holder.tvDescripcionAdapterGroup.setText(cuenta.nombre);
-        holder.ivCategoriaAdapterGroup.setImageResource(cuenta.resource);
+        holder.ivCategoriaAdapterGroup.setImageResource(Util.imagenesFull[cuenta.resource]);
         return row;
     }
 

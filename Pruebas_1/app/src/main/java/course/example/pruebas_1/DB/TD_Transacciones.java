@@ -25,7 +25,7 @@ public class TD_Transacciones
 
         Cursor c = db.rawQuery(
                 "SELECT * FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME +
-                " WHERE " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " > Datetime('" + fechaIni.substring(0,10) + "')" +
+                " WHERE " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " >= Datetime('" + fechaIni.substring(0,10) + "')" +
                 " AND " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " < Datetime('" + fechaFin.substring(0,10) + "')" +
                 " ORDER BY " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " DESC, " + DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " ASC", null);
 

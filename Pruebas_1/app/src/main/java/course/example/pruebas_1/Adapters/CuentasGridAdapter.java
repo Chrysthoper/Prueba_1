@@ -47,7 +47,7 @@ public class CuentasGridAdapter extends BaseAdapter {
         }
         holder.tvNombreCategoria.setText(Util.PriceFormat(cuenta.total));
         holder.tvIDCategoriaAdapter.setText(String.valueOf(cuenta.id));
-        holder.ivImagenCategoria.setImageResource(cuenta.resource);
+        holder.ivImagenCategoria.setImageResource(Util.imagenesFull[cuenta.resource]);
         return row;
     }
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.R;
+import course.example.pruebas_1.Util;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 
 public class CategoriaAdapter extends BaseAdapter {
@@ -25,7 +26,7 @@ public class CategoriaAdapter extends BaseAdapter {
     public CategoriaAdapter(Context context, ArrayList<Categoria> categorias, int seleccion) {
         this.context = context;
         this.categorias = categorias;
-        this.categorias.add(0,new Categoria(0,"Nueva Categoria",R.mipmap.agregar_blanco,R.drawable.forma_circulonegro,Color.BLACK,0));
+        this.categorias.add(0,new Categoria(0,"Nueva Categoria",20,10,10,0));
         this.seleccion = seleccion;
     }
 
@@ -55,8 +56,8 @@ public class CategoriaAdapter extends BaseAdapter {
         }
         holder.tvNombreCategoria.setText(cat.nombre);
         holder.tvIDCategoriaAdapter.setText(String.valueOf(cat.id));
-        holder.ivImagenCategoria.setImageResource(cat.resource);
-        holder.lyColorCategoria.setBackgroundResource(cat.formaCirculo);
+        holder.ivImagenCategoria.setImageResource(Util.imagenesFull[cat.resource]);
+        holder.lyColorCategoria.setBackgroundResource(Util.colores[cat.formaCirculo]);
         return row;
     }
 

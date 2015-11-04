@@ -19,12 +19,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.ViewPager;
 
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import course.example.pruebas_1.Adapters.CuentasAdapter;
 import course.example.pruebas_1.Adapters.CuentasGridAdapter;
@@ -54,7 +58,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     private TransaccionesPagerAdapter1 pagerAdapter1;
     private TransaccionesPagerAdapter2 pagerAdapter2;
     private TransaccionesFragmentPagerAdapter adapterFrag;
-    Calendar c;
+    Calendar c,cFin,cTransaccion;
     ViewPager pager = null;
 
     private SlidingUpPanelLayout mLayout;
@@ -70,7 +74,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         dbHelper = new DBHelper(getApplicationContext());
 
         c = Calendar.getInstance();
-        Calendar cFin = Calendar.getInstance();
+        cTransaccion = Calendar.getInstance();
+        cFin = Calendar.getInstance();
         cFin.add(Calendar.DAY_OF_MONTH, 1);
         int dia = c.get(Calendar.DAY_OF_MONTH);
         int mes = c.get(Calendar.MONTH);
@@ -160,20 +165,18 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 tvFechaPrincipalDia.setText(Integer.toString(dayOfMonth));
                 tvFechaPrincipalMes.setText(Util.getMonthForInt(monthOfYear).substring(0, 3).toUpperCase());
-                c.set(year,monthOfYear,dayOfMonth);
-                ActualizaVentana();
-                ActualizaAdapter();
+                cTransaccion.set(year, monthOfYear,dayOfMonth);
+                //ActualizaVentana();
+                //ActualizaAdapter();
             }
 
-        },c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        },cTransaccion.get(Calendar.YEAR), cTransaccion.get(Calendar.MONTH), cTransaccion.get(Calendar.DAY_OF_MONTH));
     }
 
     //region ActualizaVentana
 
     public void ActualizaAdapter(){
-        Calendar cFin = Calendar.getInstance();
-        cFin.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-        cFin.add(Calendar.DAY_OF_MONTH, 1);
+
         String fechaIni = Util.FechaToFormat(c.getTime());
         String fechaFin = Util.FechaToFormat(cFin.getTime());
 
@@ -191,9 +194,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     }
 
     public void ActualizaVentana(){
-        Calendar cFin = Calendar.getInstance();
-        cFin.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-        cFin.add(Calendar.DAY_OF_MONTH, 1);
+
         String fechaIni = Util.FechaToFormat(c.getTime());
         String fechaFin = Util.FechaToFormat(cFin.getTime());
 
@@ -208,6 +209,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         pagerAdapter2.ActualizaGrid(listaCategorias);
         adapterFrag.notifyDataSetChanged();
         */
+
         listaCuentas = dbHelper.Cuentas.Obten();
         this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
         lvCuentasGridPager.setAdapter(adapterCuentas);
@@ -277,7 +279,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             String msj = "";
             final Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
             final ArrayList<Cuenta> Cuentas = dbHelper.Cuentas.Obten();
-            String fecha = Util.FechaToFormat(c.getTime());
+            String fecha = Util.FechaToFormat(cTransaccion.getTime());
 
             intent.putExtra("FECHA", fecha);
             intent.putExtra("OP", v.getId());
@@ -324,8 +326,27 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         }
         if (requestCode == 2)
         {
-            ActualizaVentana();
-            ActualizaAdapter();
+            if(resultCode == 1)
+            {
+                boolean rango = data.getBooleanExtra("RANGO", false);
+                Date fecha1 = new Date(data.getLongExtra("FECHA1",-1));
+                c.setTime(fecha1);
+                //c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                if(rango)
+                {
+                    Date fecha2 = new Date(data.getLongExtra("FECHA2",-1));
+                    cFin.setTime(fecha2);
+                    //cFin.set(cFin.get(Calendar.YEAR), cFin.get(Calendar.MONTH), cFin.get(Calendar.DAY_OF_MONTH));
+                    cFin.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                else
+                {
+                    cFin.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                    cFin.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                ActualizaVentana();
+                ActualizaAdapter();
+            }
         }
     }
 
@@ -340,8 +361,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     protected void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
     }
-
-
 
     //endregion
 

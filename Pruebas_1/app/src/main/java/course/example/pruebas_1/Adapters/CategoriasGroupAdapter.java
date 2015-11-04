@@ -60,12 +60,12 @@ public class CategoriasGroupAdapter extends BaseAdapter {
 
         LayerDrawable bgDrawable = (LayerDrawable)holder.lyTransAdapterGroup1.getBackground();
         GradientDrawable shape_item_color = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_itemgrid_color);
-        int color = context.getResources().getColor(categoria.color);
-        shape_item_color.setColor(color);
+        //int color = context.getResources().getColor();
+        shape_item_color.setColor(Util.coloresHex[categoria.color]);
 
         holder.tvCostoAdapterGroup.setText(Util.PriceFormat(categoria.total));
         holder.tvDescripcionAdapterGroup.setText(categoria.nombre);
-        holder.ivCategoriaAdapterGroup.setImageResource(categoria.resource);
+        holder.ivCategoriaAdapterGroup.setImageResource(Util.imagenesFull[categoria.resource]);
         return row;
     }
 

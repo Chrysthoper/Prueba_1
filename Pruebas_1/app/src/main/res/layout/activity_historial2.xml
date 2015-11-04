@@ -1,36 +1,131 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <!--
     <LinearLayout
+        android:id="@+id/lyFechaPrincipalButtons"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_below="@+id/lyControlBar"
-        android:gravity="center_vertical|center_horizontal">
-
-        <TextView
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+        <Button
+            android:id="@+id/btnDiaFechaPrincipal"
+            android:text="Día"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
+        <View
+            android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:text="$ 0.00"
-            android:id="@+id/tvBalanceHistorial"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@android:color/white" />
+            android:background="@android:color/darker_gray"
+            />
+        <Button
+            android:id="@+id/btnSemanaFechaPrincipal"
+            android:text="Semana"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            />
+        <Button
+            android:id="@+id/btnMesFechaPrincipal"
+            android:text="Mes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            />
+        <Button
+            android:id="@+id/btnAnoFechaPrincipal"
+            android:text="Año"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    -->
+    <LinearLayout
+            android:id="@+id/calendar1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
 
+    <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnConfirmarFechaPrincipal"
+            android:text="Aceptar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            />
+        <Button
+            android:id="@+id/btnCancelarFechaPrincipal"
+            android:text="Cancelar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            />
+        </LinearLayout>
+
+    <!--
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="25dp"
+    android:layout_below="@+id/lyControlBar"
+    android:gravity="center_vertical|center_horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="$ 0.00"
+        android:id="@+id/tvBalanceHistorial"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@android:color/white" />
+</LinearLayout>
+
+<android.support.v4.view.ViewPager
+    android:id="@+id/pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+-->
+
+    <!--
     <com.squareup.timessquare.CalendarPickerView
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+    -->
 
 </LinearLayout>

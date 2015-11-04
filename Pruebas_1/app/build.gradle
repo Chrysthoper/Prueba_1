@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 17
+    compileSdkVersion 18
     buildToolsVersion '22.0.1'
 
     defaultConfig {
         applicationId "course.example.pruebas_1"
-        minSdkVersion 17
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "0.6"
@@ -25,4 +25,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.sothree.slidinguppanel:library:3.2.0'
     compile 'com.squareup:android-times-square:1.6.4@aar'
+    compile 'com.roomorama:caldroid:2.2.1'
 }
