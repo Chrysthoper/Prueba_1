@@ -14,20 +14,17 @@ import java.util.Date;
  */
 public class Util
 {
-    public static String PriceFormat(Double costo)
-    {
+    public static String PriceFormat(Double costo){
         DecimalFormat formatter = new DecimalFormat("#,##0.00");
         return "$ " + formatter.format(costo);
     }
 
-    public static String FechaToFormat(Date fecha)
-    {
+    public static String FechaToFormat(Date fecha){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(fecha.getTime());
     }
 
-    public static Date FormatToFecha(String format)
-    {
+    public static Date FormatToFecha(String format){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return dateFormat.parse(format);
@@ -38,15 +35,14 @@ public class Util
         return null;
     }
 
-    public static String FormatToShort(String format)
-    {
+    public static String FormatToShort(String format){
         Date fecha = Util.FormatToFecha(format);
         String stringMonth = (String) android.text.format.DateFormat.format("MMM", fecha);
         String day = (String) android.text.format.DateFormat.format("dd", fecha);
         return stringMonth.toUpperCase() + " " + day;
     }
 
-    public static String getMonthForInt(int num) {
+    public static String getMonthForInt(int num){
         String month = "wrong";
         DateFormatSymbols dfs = new DateFormatSymbols();
         String[] months = dfs.getMonths();

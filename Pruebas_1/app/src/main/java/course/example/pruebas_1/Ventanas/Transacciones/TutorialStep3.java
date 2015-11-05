@@ -4,17 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
-
-import java.text.DecimalFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
@@ -36,7 +29,7 @@ public class TutorialStep3 extends WizardStep {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.step3_tutorial, container, false);
+        View v = inflater.inflate(R.layout.ventana_transaccion_paso3, container, false);
         etDescripcion = (EditText) v.findViewById(R.id.etDescripcion);
         etDescripcion.setText(trans.descripcion);
         etNotas = (EditText) v.findViewById(R.id.etNotas);

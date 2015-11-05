@@ -33,11 +33,10 @@ public class CuentasGridAdapter extends BaseAdapter {
         final Cuenta cuenta = this.cuentas.get(position);
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.categoria_adapter, null, false);
+            row = inflater.inflate(R.layout.adapter_categoria_grid, null, false);
 
             holder = new MyViewHolder();
             holder.tvNombreCategoria = (TextView) row.findViewById(R.id.tvGridCategoriaAdapter);
-            holder.tvIDCategoriaAdapter = (TextView) row.findViewById(R.id.tvIDCategoriaAdapter);
             holder.ivImagenCategoria = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
             holder.lyColorCategoria = (LinearLayout) row.findViewById(R.id.lyGridCategoriaAdapter);
 
@@ -46,7 +45,6 @@ public class CuentasGridAdapter extends BaseAdapter {
             holder = (MyViewHolder) row.getTag();
         }
         holder.tvNombreCategoria.setText(Util.PriceFormat(cuenta.total));
-        holder.tvIDCategoriaAdapter.setText(String.valueOf(cuenta.id));
         holder.ivImagenCategoria.setImageResource(Util.imagenesFull[cuenta.resource]);
         return row;
     }

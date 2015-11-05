@@ -1,15 +1,11 @@
 package course.example.pruebas_1.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import course.example.pruebas_1.R;
 
@@ -29,7 +25,7 @@ public class ColoresAdapter extends BaseAdapter {
         MyViewHolder holder;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.colores_adapter, null, false);
+            row = inflater.inflate(R.layout.adapter_colores_imagenes_list, null, false);
 
             holder = new MyViewHolder();
             holder.ivHolderImagen = (ImageView) row.findViewById(R.id.ivGridColor);

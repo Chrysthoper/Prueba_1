@@ -19,13 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.ViewPager;
 
-import com.roomorama.caldroid.CaldroidFragment;
-import com.roomorama.caldroid.CaldroidListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,7 +37,7 @@ import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
-import course.example.pruebas_1.Ventanas.Historial.VentanaHistorial;
+import course.example.pruebas_1.Ventanas.Calendario.VentanaCalendario;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 
@@ -58,25 +54,35 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     private TransaccionesPagerAdapter1 pagerAdapter1;
     private TransaccionesPagerAdapter2 pagerAdapter2;
     private TransaccionesFragmentPagerAdapter adapterFrag;
-    Calendar c,cFin,cTransaccion;
+    Calendar c,cFin,cTransaccion = Calendar.getInstance();
     ViewPager pager = null;
 
     private SlidingUpPanelLayout mLayout;
-    private static final String TAG = "DemoActivity";
     GridView lvCuentasGridPager;
     CuentasGridAdapter adapterCuentas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.ventana_principal);
 
         dbHelper = new DBHelper(getApplicationContext());
 
-        c = Calendar.getInstance();
-        cTransaccion = Calendar.getInstance();
-        cFin = Calendar.getInstance();
-        cFin.add(Calendar.DAY_OF_MONTH, 1);
+        if(savedInstanceState != null)
+        {
+            c = Calendar.getInstance();
+            c.setTime(new Date(savedInstanceState.getLong("FECHA1")));
+            cFin = Calendar.getInstance();
+            cFin.setTime(new Date(savedInstanceState.getLong("FECHA2")));
+        }
+        else
+        {
+            c = Calendar.getInstance();
+            cTransaccion = Calendar.getInstance();
+            cFin = Calendar.getInstance();
+            cFin.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
         int dia = c.get(Calendar.DAY_OF_MONTH);
         int mes = c.get(Calendar.MONTH);
         String fechaIni = Util.FechaToFormat(c.getTime());
@@ -127,34 +133,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setPanelState(PanelState.EXPANDED);
-        mLayout.setPanelSlideListener(new PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                Log.i(TAG, "onPanelSlide, offset " + slideOffset);
-            }
-
-            @Override
-            public void onPanelExpanded(View panel) {
-                Log.i(TAG, "onPanelExpanded");
-
-            }
-
-            @Override
-            public void onPanelCollapsed(View panel) {
-                Log.i(TAG, "onPanelCollapsed");
-
-            }
-
-            @Override
-            public void onPanelAnchored(View panel) {
-                Log.i(TAG, "onPanelAnchored");
-            }
-
-            @Override
-            public void onPanelHidden(View panel) {
-                Log.i(TAG, "onPanelHidden");
-            }
-        });
         mLayout.setDragView(R.id.lyControlBar);
 
         lyTransferenciaPrincipal = (LinearLayout)findViewById(R.id.lyTransferenciaPrincipal);
@@ -166,8 +144,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                 tvFechaPrincipalDia.setText(Integer.toString(dayOfMonth));
                 tvFechaPrincipalMes.setText(Util.getMonthForInt(monthOfYear).substring(0, 3).toUpperCase());
                 cTransaccion.set(year, monthOfYear,dayOfMonth);
-                //ActualizaVentana();
-                //ActualizaAdapter();
             }
 
         },cTransaccion.get(Calendar.YEAR), cTransaccion.get(Calendar.MONTH), cTransaccion.get(Calendar.DAY_OF_MONTH));
@@ -229,8 +205,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     public void onBackPressed() {
         // Return to previous page when we press back button
         if (mLayout != null &&
-                (mLayout.getPanelState() == PanelState.EXPANDED || mLayout.getPanelState() == PanelState.ANCHORED)) {
-            mLayout.setPanelState(PanelState.COLLAPSED);
+                (mLayout.getPanelState() == PanelState.COLLAPSED || mLayout.getPanelState() == PanelState.ANCHORED)) {
+            mLayout.setPanelState(PanelState.EXPANDED);
         } else if (this.pager.getCurrentItem() == 0)
             super.onBackPressed();
         else
@@ -247,19 +223,15 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if(id == R.id.categorias_settings)
+        if(id == R.id.categorias_settings)
             startActivity(new Intent(getApplicationContext(), VentanaCategorias.class));
-        else if(id == R.id.historial_settings)
+        else if(id == R.id.calendario_settings)
         {
-            Intent i = new Intent(getApplicationContext(), VentanaHistorial.class);
+            Intent i = new Intent(getApplicationContext(), VentanaCalendario.class);
             i.putExtra("FECHA_INICIAL", "2015-10-01");
             i.putExtra("FECHA_FINAL", "2015-11-30");
             startActivityForResult(i,2);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -284,6 +256,9 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             intent.putExtra("FECHA", fecha);
             intent.putExtra("OP", v.getId());
 
+            intent.putExtra("CUENTA_ID", 2);//Cuentas.get(which).id);
+            startActivityForResult(intent, 1);
+            /*
             AlertDialog.Builder builderSingle = new AlertDialog.Builder(MainActivity.this);
             builderSingle.setTitle("Selecciona una Cuenta");
             final CuentasAdapter adapter = new CuentasAdapter(MainActivity.this,Cuentas);
@@ -306,6 +281,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                         }
                     });
             builderSingle.show();
+            */
         }
     };
 
@@ -354,12 +330,16 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putLong("FECHA1", c.getTimeInMillis());
+        outState.putLong("FECHA2", cFin.getTimeInMillis());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedState) {
         super.onRestoreInstanceState(savedState);
+        c.setTime(new Date(savedState.getLong("FECHA1")));
+        cFin.setTime(new Date(savedState.getLong("FECHA2")));
     }
 
     //endregion

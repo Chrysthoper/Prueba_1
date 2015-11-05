@@ -1,96 +1,49 @@
-package course.example.pruebas_1.Ventanas.Historial;
+package course.example.pruebas_1.Ventanas.Calendario;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
-import com.squareup.timessquare.CalendarPickerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
 import course.example.pruebas_1.DB.DBHelper;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
-import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
-import course.example.pruebas_1.Util;
 
-public class VentanaHistorial extends FragmentActivity {
+public class VentanaCalendario extends FragmentActivity {
 
-    TextView tvBalanceHistorial;
     DBHelper dbHelper;
-    String fecha_inicial;
-    String fecha_final;
-    ArrayList<Transaccion> listaTransacciones;
-    ArrayList<Categoria> listaCategorias;
-    ArrayList<Cuenta> listaCuentas;
-    private TransaccionesPagerAdapter1 pagerAdapter1;
-    private TransaccionesPagerAdapter2 pagerAdapter2;
-    private TransaccionesFragmentPagerAdapter adapterFrag;
-    Calendar c;
-
-    ViewPager pager = null;
-
-    private boolean undo = false;
     private CaldroidFragment caldroidFragment;
 
     private Date fecha1 = new Date(0);
     private Date fecha2 = new Date(0);
     boolean RangoCompleto = false;
 
-    private void setCustomResourceForDates() {
-        Calendar cal = Calendar.getInstance();
-
-        // Min date is last 7 days
-        cal.add(Calendar.DATE, -7);
-        Date blueDate = cal.getTime();
-
-        // Max date is next 7 days
-        cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 7);
-        Date greenDate = cal.getTime();
-
-        if (caldroidFragment != null) {
-            caldroidFragment.setBackgroundResourceForDate(R.color.caldroid_sky_blue,
-                    blueDate);
-            caldroidFragment.setBackgroundResourceForDate(R.color.caldroid_gray,
-                    greenDate);
-            caldroidFragment.setTextColorForDate(R.color.caldroid_white, blueDate);
-            caldroidFragment.setTextColorForDate(R.color.caldroid_white, greenDate);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_historial2);
+        setContentView(R.layout.ventana_calendario);
 
         dbHelper = new DBHelper(getApplicationContext());
-
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
 
         caldroidFragment = new CaldroidFragment();
 
@@ -108,8 +61,6 @@ public class VentanaHistorial extends FragmentActivity {
 
             caldroidFragment.setArguments(args);
         }
-
-        setCustomResourceForDates();
 
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
         t.replace(R.id.calendar1, caldroidFragment);
@@ -142,29 +93,18 @@ public class VentanaHistorial extends FragmentActivity {
                     }
                 }
                 caldroidFragment.refreshView();
-                Toast.makeText(getApplicationContext(), "FECHA 1:" + formatter.format(fecha1) + "FECHA 2:" + formatter.format(fecha2),
-                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onChangeMonth(int month, int year) {
-                String text = "month: " + month + " year: " + year;
-                Toast.makeText(getApplicationContext(), text,
-                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClickDate(Date date, View view) {
-                Toast.makeText(getApplicationContext(),
-                        "Long click " + formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCaldroidViewCreated() {
-                Toast.makeText(getApplicationContext(),
-                        "Caldroid view is created", Toast.LENGTH_SHORT)
-                        .show();
             }
 
         };
@@ -199,8 +139,10 @@ public class VentanaHistorial extends FragmentActivity {
                 Calendar c = Calendar.getInstance();
                 caldroidFragment.clearSelectedDates();
                 caldroidFragment.setSelectedDate(c.getTime());
+                caldroidFragment.moveToDate(c.getTime());
                 caldroidFragment.refreshView();
-                RangoCompleto = false;
+                RangoCompleto = true;
+                fecha1.setTime(c.getTimeInMillis());
             }
         });
 
@@ -216,8 +158,11 @@ public class VentanaHistorial extends FragmentActivity {
                 cFin.add(Calendar.DAY_OF_WEEK, -1);
                 caldroidFragment.clearSelectedDates();
                 caldroidFragment.setSelectedDates(c.getTime(), cFin.getTime());
+                caldroidFragment.moveToDate(c.getTime());
                 caldroidFragment.refreshView();
-                RangoCompleto = false;
+                RangoCompleto = true;
+                fecha1.setTime(c.getTimeInMillis());
+                fecha2.setTime(cFin.getTimeInMillis());
             }
         });
 
@@ -233,8 +178,11 @@ public class VentanaHistorial extends FragmentActivity {
                 cFin.add(Calendar.DAY_OF_MONTH, -1);
                 caldroidFragment.clearSelectedDates();
                 caldroidFragment.setSelectedDates(c.getTime(), cFin.getTime());
+                caldroidFragment.moveToDate(c.getTime());
                 caldroidFragment.refreshView();
-                RangoCompleto = false;
+                RangoCompleto = true;
+                fecha1.setTime(c.getTimeInMillis());
+                fecha2.setTime(cFin.getTimeInMillis());
             }
         });
 
@@ -245,13 +193,16 @@ public class VentanaHistorial extends FragmentActivity {
                 Calendar c = Calendar.getInstance();
                 c.set(Calendar.DAY_OF_YEAR,1);
                 Calendar cFin = Calendar.getInstance();
-                cFin.set(Calendar.DAY_OF_YEAR,1);
+                cFin.set(Calendar.DAY_OF_YEAR, 1);
                 cFin.add(Calendar.YEAR, 1);
                 cFin.add(Calendar.DAY_OF_YEAR, -1);
                 caldroidFragment.clearSelectedDates();
                 caldroidFragment.setSelectedDates(c.getTime(), cFin.getTime());
+                caldroidFragment.moveToDate(c.getTime());
                 caldroidFragment.refreshView();
-                RangoCompleto = false;
+                RangoCompleto = true;
+                fecha1.setTime(c.getTimeInMillis());
+                fecha2.setTime(cFin.getTimeInMillis());
             }
         });
 

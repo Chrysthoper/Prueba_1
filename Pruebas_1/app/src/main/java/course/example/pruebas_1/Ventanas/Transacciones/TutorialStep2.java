@@ -16,10 +16,8 @@ import org.codepond.wizardroid.persistence.ContextVariable;
 import java.util.ArrayList;
 
 import course.example.pruebas_1.Adapters.CategoriaAdapter;
-import course.example.pruebas_1.Adapters.CuentasAdapter;
 import course.example.pruebas_1.Adapters.CuentasGridAdapter;
 import course.example.pruebas_1.DB.DBHelper;
-import course.example.pruebas_1.DB.TD_Categorias;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.Transaccion;
@@ -47,7 +45,7 @@ public class TutorialStep2 extends WizardStep{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.step2_tutorial, container, false);
+        View v = inflater.inflate(R.layout.ventana_transaccion_paso2, container, false);
         dbHelper = new DBHelper(getActivity().getApplicationContext());
 
         lvCategoriasPaso2 = (GridView)v.findViewById(R.id.lvCategoriasPaso2);

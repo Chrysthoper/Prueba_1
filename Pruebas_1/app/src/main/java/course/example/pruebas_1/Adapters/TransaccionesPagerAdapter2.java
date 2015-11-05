@@ -41,7 +41,7 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.transacciones_pager_adapter2, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.adapter_transacciones_pager2, container, false);
 
         // Show the current page index in the view
         lvCategoriasGroupPrincipal = (ListView) rootView.findViewById(R.id.lvCategoriasGroupPrincipal);

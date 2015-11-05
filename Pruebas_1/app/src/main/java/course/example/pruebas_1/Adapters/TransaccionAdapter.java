@@ -44,7 +44,7 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.transaccion_adapter, null, false);
+            row = inflater.inflate(R.layout.adapter_transaccion_list, null, false);
             holder = new MyViewHolder();
 
             holder.tvCostoAdapter = (TextView) row.findViewById(R.id.tvCostoAdapter);

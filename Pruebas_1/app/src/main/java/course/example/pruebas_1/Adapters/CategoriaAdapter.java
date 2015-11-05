@@ -36,11 +36,10 @@ public class CategoriaAdapter extends BaseAdapter {
         final Categoria cat = this.categorias.get(position);
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.categoria_adapter, null, false);
+            row = inflater.inflate(R.layout.adapter_categoria_grid, null, false);
 
             holder = new MyViewHolder();
             holder.tvNombreCategoria = (TextView) row.findViewById(R.id.tvGridCategoriaAdapter);
-            holder.tvIDCategoriaAdapter = (TextView) row.findViewById(R.id.tvIDCategoriaAdapter);
             holder.ivImagenCategoria = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
             holder.lyColorCategoria = (LinearLayout) row.findViewById(R.id.lyGridCategoriaAdapter);
 
@@ -55,7 +54,6 @@ public class CategoriaAdapter extends BaseAdapter {
             holder = (MyViewHolder) row.getTag();
         }
         holder.tvNombreCategoria.setText(cat.nombre);
-        holder.tvIDCategoriaAdapter.setText(String.valueOf(cat.id));
         holder.ivImagenCategoria.setImageResource(Util.imagenesFull[cat.resource]);
         holder.lyColorCategoria.setBackgroundResource(Util.colores[cat.formaCirculo]);
         return row;

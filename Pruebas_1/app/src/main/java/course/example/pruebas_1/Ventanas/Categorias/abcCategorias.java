@@ -35,7 +35,7 @@ public class abcCategorias extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.abc_categorias);
+        setContentView(R.layout.ventana_categorias_abc);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         gvColores = (GridView)findViewById(R.id.gvColores);
         gvColores.setAdapter(new ColoresAdapter(this, Util.colores, -1));

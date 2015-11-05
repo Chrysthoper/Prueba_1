@@ -35,7 +35,7 @@ public class CuentasAdapter extends BaseAdapter {
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.categorias_group_adapter, null, false);
+            row = inflater.inflate(R.layout.adapter_categoria_list, null, false);
             holder = new MyViewHolder();
 
             holder.tvCostoAdapterGroup = (TextView) row.findViewById(R.id.tvCostoAdapterGroup);

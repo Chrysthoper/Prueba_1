@@ -9,6 +9,7 @@
         android:theme="@style/Theme.AppCompat.Light" >
         <activity
             android:name=".MainActivity"
+            android:finishOnTaskLaunch="true"
             android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +28,7 @@
             android:label="Categorias" >
         </activity>
         <activity
-            android:name=".Ventanas.Historial.VentanaHistorial"
+            android:name=".Ventanas.Calendario.VentanaCalendario"
             android:theme="@android:style/Theme.Holo.Light.Dialog" >
         </activity>
         <activity

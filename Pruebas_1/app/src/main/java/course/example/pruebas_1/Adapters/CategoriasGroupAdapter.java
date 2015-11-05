@@ -45,7 +45,7 @@ public class CategoriasGroupAdapter extends BaseAdapter {
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.categorias_group_adapter, null, false);
+            row = inflater.inflate(R.layout.adapter_categoria_list, null, false);
             holder = new MyViewHolder();
 
             holder.tvCostoAdapterGroup = (TextView) row.findViewById(R.id.tvCostoAdapterGroup);
@@ -60,8 +60,8 @@ public class CategoriasGroupAdapter extends BaseAdapter {
 
         LayerDrawable bgDrawable = (LayerDrawable)holder.lyTransAdapterGroup1.getBackground();
         GradientDrawable shape_item_color = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_itemgrid_color);
-        //int color = context.getResources().getColor();
-        shape_item_color.setColor(Util.coloresHex[categoria.color]);
+        int color = context.getResources().getColor(Util.coloresHex[categoria.color]);
+        shape_item_color.setColor(color);
 
         holder.tvCostoAdapterGroup.setText(Util.PriceFormat(categoria.total));
         holder.tvDescripcionAdapterGroup.setText(categoria.nombre);

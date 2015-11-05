@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
-import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 
@@ -19,7 +17,7 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
 
     private IAdaptersCallerVentana caller;
 
-    private ListView lvTransaccionesPrincipal;
+    public ListView lvTransaccionesPrincipal;
     private ArrayList<Transaccion> transacciones;
     private TransaccionAdapter adapter;
     public static TransaccionesPagerAdapter1 newInstance(ArrayList<Transaccion> listaTransacciones) {
@@ -45,15 +43,26 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.transacciones_pager_adapter1, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.adapter_transacciones_pager1, container, false);
 
         // Show the current page index in the view
         lvTransaccionesPrincipal = (ListView) rootView.findViewById(R.id.lvTransaccionesPrincipal);
-        this.adapter = new TransaccionAdapter(getActivity(),this.transacciones);
-        adapter.setCallback(this);
-        lvTransaccionesPrincipal.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        //this.adapter = new TransaccionAdapter(getActivity(),this.transacciones);
+        //adapter.setCallback(this);
+        //lvTransaccionesPrincipal.setAdapter(adapter);
+        //adapter.notifyDataSetChanged();
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            this.adapter = new TransaccionAdapter(getActivity(),this.transacciones);
+            adapter.setCallback(this);
+            lvTransaccionesPrincipal.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -68,5 +77,10 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
 
     public void setCallback(IAdaptersCallerVentana caller){
         this.caller = caller;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

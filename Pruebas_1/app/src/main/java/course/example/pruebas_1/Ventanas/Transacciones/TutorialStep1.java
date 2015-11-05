@@ -5,15 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import course.example.pruebas_1.Adapters.CuentasGridAdapter;
+import course.example.pruebas_1.DB.DBHelper;
+import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 
@@ -24,6 +29,9 @@ public class TutorialStep1 extends WizardStep {
 
 
     TextView tvCostoTransaccion;
+    Spinner spCuentaPrincipalTransaccion;
+    private DBHelper dbHelper;
+    ArrayList<Cuenta> ListaCuenta;
 
     //Wire the layout to the step
     public TutorialStep1() {
@@ -34,7 +42,7 @@ public class TutorialStep1 extends WizardStep {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.step1_tutorial, container, false);
+        View v = inflater.inflate(R.layout.ventana_transaccion_paso1, container, false);
         tvCostoTransaccion = (TextView) v.findViewById(R.id.tvCostoTransaccion);
         if(!trans.textoKeyPad.equals(""))
             IngresaCosto(trans.textoKeyPad);
@@ -62,6 +70,18 @@ public class TutorialStep1 extends WizardStep {
         btnZero.setOnClickListener(clickEvent);
         btnDel.setOnClickListener(clickEvent);
         btnPunto.setOnClickListener(clickEvent);
+        spCuentaPrincipalTransaccion = (Spinner)v.findViewById(R.id.spCuentaPrincipalTransaccion);
+
+        dbHelper = new DBHelper(getActivity().getApplicationContext());
+
+        ListaCuenta = this.dbHelper.Cuentas.Obten();
+        CuentasGridAdapter adapter = new CuentasGridAdapter(getActivity().getApplicationContext(), ListaCuenta, 0);
+        spCuentaPrincipalTransaccion.setAdapter(adapter);
+        int Seleccion = -1;
+        for(Cuenta c : ListaCuenta)
+           if(c.id == trans.cuenta_prin_id)
+               Seleccion = ListaCuenta.indexOf(c);
+        spCuentaPrincipalTransaccion.setSelection(Seleccion);
         return v;
     }
 
