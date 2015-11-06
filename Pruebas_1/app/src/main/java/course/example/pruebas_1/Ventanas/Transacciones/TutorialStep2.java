@@ -28,6 +28,8 @@ public class TutorialStep2 extends WizardStep{
 
     @ContextVariable
     private Transaccion trans;
+    @ContextVariable
+    private char op;
     ArrayList<Categoria> ListaCategorias;
     ArrayList<Cuenta> ListaCuenta;
     GridView lvCategoriasPaso2;
@@ -56,6 +58,12 @@ public class TutorialStep2 extends WizardStep{
             adapter1 = new CategoriaAdapter(v.getContext(), ListaCategorias, trans.numeroCategoria);
             lvCategoriasPaso2.setAdapter(adapter1);
             lvCategoriasPaso2.setOnItemClickListener(click_grid);
+            if(op == 'C')
+            {
+                for(Categoria cat : ListaCategorias)
+                    if(cat.id == trans.categoriaObj.id)
+                        trans.categoriaObj = cat;
+            }
         }
         else
         {
@@ -63,6 +71,12 @@ public class TutorialStep2 extends WizardStep{
             adapter2 = new CuentasGridAdapter(v.getContext(), ListaCuenta, trans.cuenta_secu_id);
             lvCategoriasPaso2.setAdapter(adapter2);
             lvCategoriasPaso2.setOnItemClickListener(click_grid);
+            if(op == 'C')
+            {
+                for(Cuenta cuenta : ListaCuenta)
+                    if(cuenta.id == trans.cuentaSecundariaObj.id)
+                        trans.cuentaSecundariaObj = cuenta;
+            }
         }
         return v;
     }
@@ -79,12 +93,18 @@ public class TutorialStep2 extends WizardStep{
                     int idCategoria = ListaCategorias.get(position).id;
                     if (trans.numeroCategoria != idCategoria) {
                         if (trans.numeroCategoria != -1 && trans.categoriaObj != null)
-                            lvCategoriasPaso2.getChildAt(ListaCategorias.indexOf(trans.categoriaObj)).setBackground(null);
+                        {
+                            for(Categoria cat : ListaCategorias)
+                                if(cat.id == trans.categoriaObj.id)
+                                    lvCategoriasPaso2.getChildAt(ListaCategorias.indexOf(cat)).setBackground(null);
+                        }
                         trans.numeroCategoria = ListaCategorias.get(position).id;
                         trans.categoriaObj = ListaCategorias.get(position);
                         v.setBackgroundColor(Color.parseColor("#FFAA2300"));
                     } else {
-                        lvCategoriasPaso2.getChildAt(ListaCategorias.indexOf(trans.categoriaObj)).setBackground(null);
+                        for(Categoria cat : ListaCategorias)
+                            if(cat.id == trans.categoriaObj.id)
+                                lvCategoriasPaso2.getChildAt(ListaCategorias.indexOf(cat)).setBackground(null);
                         trans.numeroCategoria = -1;
                     }
                 }
@@ -98,14 +118,20 @@ public class TutorialStep2 extends WizardStep{
                 if (trans.cuenta_secu_id != idCuenta)
                 {
                     if (trans.cuenta_secu_id != -1 && trans.cuentaSecundariaObj != null)
-                        lvCategoriasPaso2.getChildAt(ListaCuenta.indexOf(trans.cuentaSecundariaObj)).setBackground(null);
+                    {
+                        for(Cuenta cuenta : ListaCuenta)
+                            if(cuenta.id == trans.cuentaSecundariaObj.id)
+                                lvCategoriasPaso2.getChildAt(ListaCuenta.indexOf(cuenta)).setBackground(null);
+                    }
                     trans.cuenta_secu_id = ListaCuenta.get(position).id;
                     trans.cuentaSecundariaObj = ListaCuenta.get(position);
                     v.setBackgroundColor(Color.parseColor("#FFAA2300"));
                 }
                 else
                 {
-                    lvCategoriasPaso2.getChildAt(ListaCuenta.indexOf(trans.cuentaSecundariaObj)).setBackground(null);
+                    for(Cuenta cuenta : ListaCuenta)
+                        if(cuenta.id == trans.cuentaSecundariaObj.id)
+                            lvCategoriasPaso2.getChildAt(ListaCuenta.indexOf(cuenta)).setBackground(null);
                     trans.cuenta_secu_id = -1;
                 }
             }

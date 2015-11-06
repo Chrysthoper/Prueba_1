@@ -3,6 +3,7 @@ package course.example.pruebas_1.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.R;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.Util;
+import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 public class TransaccionAdapter extends BaseAdapter implements Serializable {
 
@@ -100,6 +102,7 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
                     return true;
                 }
             });
+
 
             holder.tvMontoTransAdapter2 = (TextView) row.findViewById(R.id.tvMontoTransAdapter2);
             holder.tvFechaTransAdapter2 = (TextView) row.findViewById(R.id.tvFechaTransAdapter2);

@@ -143,7 +143,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 tvFechaPrincipalDia.setText(Integer.toString(dayOfMonth));
                 tvFechaPrincipalMes.setText(Util.getMonthForInt(monthOfYear).substring(0, 3).toUpperCase());
-                cTransaccion.set(year, monthOfYear,dayOfMonth);
+                cTransaccion.set(year, monthOfYear, dayOfMonth);
             }
 
         },cTransaccion.get(Calendar.YEAR), cTransaccion.get(Calendar.MONTH), cTransaccion.get(Calendar.DAY_OF_MONTH));
@@ -248,40 +248,13 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
         @Override
         public void onClick(View v) {
-            String msj = "";
-            final Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
-            final ArrayList<Cuenta> Cuentas = dbHelper.Cuentas.Obten();
             String fecha = Util.FechaToFormat(cTransaccion.getTime());
-
+            final Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
             intent.putExtra("FECHA", fecha);
-            intent.putExtra("OP", v.getId());
-
+            intent.putExtra("TIPO", v.getId());
+            intent.putExtra("OP", 'A');
             intent.putExtra("CUENTA_ID", 2);//Cuentas.get(which).id);
             startActivityForResult(intent, 1);
-            /*
-            AlertDialog.Builder builderSingle = new AlertDialog.Builder(MainActivity.this);
-            builderSingle.setTitle("Selecciona una Cuenta");
-            final CuentasAdapter adapter = new CuentasAdapter(MainActivity.this,Cuentas);
-            builderSingle.setNegativeButton(
-                    "Cancelar",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-            builderSingle.setAdapter(
-                    adapter,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            intent.putExtra("CUENTA_ID", Cuentas.get(which).id);
-                            startActivityForResult(intent, 1);
-                        }
-                    });
-            builderSingle.show();
-            */
         }
     };
 
@@ -307,12 +280,10 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                 boolean rango = data.getBooleanExtra("RANGO", false);
                 Date fecha1 = new Date(data.getLongExtra("FECHA1",-1));
                 c.setTime(fecha1);
-                //c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 if(rango)
                 {
                     Date fecha2 = new Date(data.getLongExtra("FECHA2",-1));
                     cFin.setTime(fecha2);
-                    //cFin.set(cFin.get(Calendar.YEAR), cFin.get(Calendar.MONTH), cFin.get(Calendar.DAY_OF_MONTH));
                     cFin.add(Calendar.DAY_OF_MONTH, 1);
                 }
                 else

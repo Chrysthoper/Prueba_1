@@ -77,7 +77,38 @@ public class TD_Transacciones
                 null,
                 values);
         if (newRowId > 0)
-            return ActualizaCuentas((int)newRowId);
+            return ActualizaCuentas((int) newRowId);
+        else
+            return false;
+    }
+
+    public Boolean Modifica(Transaccion trans){
+
+        if(this.RestablecerCuentas(trans.id))
+        {
+            // Gets the data repository in write mode
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            // Create a new map of values, where column names are the keys
+            ContentValues values = new ContentValues();
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_2, trans.costo);
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_3, trans.numeroCategoria);
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4, trans.fecha_alta);
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5, trans.nota);
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6, trans.descripcion);
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7, trans.cuenta_prin_id);
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_8, trans.cuenta_secu_id);
+            values.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_9, trans.tipo_transaccion);
+
+            long newRowId;
+            newRowId = db.update(DatabaseSchema.TD_Transacciones.TABLE_NAME,
+                    values,
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + "=" + trans.id, null);
+            if (newRowId > 0)
+                return this.ActualizaCuentas(trans.id);
+            else
+                return false;
+        }
         else
             return false;
     }
@@ -97,6 +128,30 @@ public class TD_Transacciones
                 {
                     transaccion.cuentaPrincipalObj.total -= transaccion.costo;
                     transaccion.cuentaSecundariaObj.total += transaccion.costo;
+                    return this.dbHelper.Cuentas.Actualiza(transaccion.cuentaPrincipalObj) && this.dbHelper.Cuentas.Actualiza(transaccion.cuentaSecundariaObj);
+                }
+                else
+                    return true;
+            default:
+                return false;
+        }
+    }
+
+    public Boolean RestablecerCuentas(int transaccion_id) {
+        Transaccion transaccion = this.Obten(transaccion_id);
+        switch(transaccion.tipo_transaccion)
+        {
+            case 0:
+                transaccion.cuentaPrincipalObj.total += transaccion.costo;
+                return this.dbHelper.Cuentas.Actualiza(transaccion.cuentaPrincipalObj);
+            case 1:
+                transaccion.cuentaPrincipalObj.total -= transaccion.costo;
+                return this.dbHelper.Cuentas.Actualiza(transaccion.cuentaPrincipalObj);
+            case 2:
+                if(transaccion.cuenta_prin_id != transaccion.cuenta_secu_id)
+                {
+                    transaccion.cuentaPrincipalObj.total += transaccion.costo;
+                    transaccion.cuentaSecundariaObj.total -= transaccion.costo;
                     return this.dbHelper.Cuentas.Actualiza(transaccion.cuentaPrincipalObj) && this.dbHelper.Cuentas.Actualiza(transaccion.cuentaSecundariaObj);
                 }
                 else
@@ -185,6 +240,7 @@ public class TD_Transacciones
                 transaccion.categoriaObj = (transaccion.numeroCategoria != 0) ? dbHelper.Categorias.Obten(transaccion.numeroCategoria) : null;
                 transaccion.cuentaPrincipalObj = dbHelper.Cuentas.Obten(transaccion.cuenta_prin_id);
                 transaccion.cuentaSecundariaObj = (transaccion.cuenta_secu_id != 0) ? dbHelper.Cuentas.Obten(transaccion.cuenta_secu_id) : null;
+                transaccion.textoKeyPad = "";
                 lista.add(transaccion);
             } while(c.moveToNext());
         }
@@ -209,6 +265,7 @@ public class TD_Transacciones
                 Transaccion.categoriaObj = (Transaccion.numeroCategoria != 0) ? dbHelper.Categorias.Obten(Transaccion.numeroCategoria) : null;
                 Transaccion.cuentaPrincipalObj = dbHelper.Cuentas.Obten(Transaccion.cuenta_prin_id);
                 Transaccion.cuentaSecundariaObj = (Transaccion.cuenta_secu_id != 0) ? dbHelper.Cuentas.Obten(Transaccion.cuenta_secu_id) : null;
+                Transaccion.textoKeyPad = "";
             } while(c.moveToNext());
         }
         return Transaccion;

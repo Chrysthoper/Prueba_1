@@ -1,6 +1,7 @@
 package course.example.pruebas_1.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,9 @@ public class CuentasGridAdapter extends BaseAdapter {
             holder.tvNombreCategoria = (TextView) row.findViewById(R.id.tvGridCategoriaAdapter);
             holder.ivImagenCategoria = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
             holder.lyColorCategoria = (LinearLayout) row.findViewById(R.id.lyGridCategoriaAdapter);
+
+            if(seleccion == cuenta.id)
+                row.setBackgroundColor(Color.parseColor("#FFAA2300"));
 
             row.setTag(holder);
         } else {

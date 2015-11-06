@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Window;
 
+import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 
 
@@ -19,17 +20,20 @@ public class TutorialActivity extends FragmentActivity {
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
-            int op = intent.getIntExtra("OP", 0);
+            int tipo = intent.getIntExtra("TIPO", 0);
+            char op = intent.getCharExtra("OP", 'X');
             String fecha = intent.getStringExtra("FECHA");
-            int cuenta_id = intent.getIntExtra("CUENTA_ID",0);
+            int cuenta_id = intent.getIntExtra("CUENTA_ID", 0);
+            Transaccion trans = (Transaccion)intent.getSerializableExtra("TRANS");
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             TutorialWizard fragment = new TutorialWizard();
             Bundle args = new Bundle();
-            args.putInt("OP", op);
+            args.putChar("OP", op);
+            args.putInt("TIPO", tipo);
             args.putString("FECHA", fecha);
             args.putInt("CUENTA_ID", cuenta_id);
+            args.putSerializable("TRANS", trans);
             fragment.setArguments(args);
-            //ft.add(R.id.tutorial_wizard_fragment, fragment);
             ft.replace(R.id.tutorial_wizard_fragment, fragment, "your_fragment_tag");
             ft.commit();
         } else {

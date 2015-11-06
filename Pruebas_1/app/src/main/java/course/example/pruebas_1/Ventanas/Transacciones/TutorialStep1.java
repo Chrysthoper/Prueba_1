@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import org.codepond.wizardroid.persistence.ContextVariable;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.MissingResourceException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,12 +23,14 @@ import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
+import course.example.pruebas_1.Util;
 
 public class TutorialStep1 extends WizardStep {
 
     @ContextVariable
     private Transaccion trans;
-
+    @ContextVariable
+    private char op;
 
     TextView tvCostoTransaccion;
     Spinner spCuentaPrincipalTransaccion;
@@ -82,6 +86,18 @@ public class TutorialStep1 extends WizardStep {
            if(c.id == trans.cuenta_prin_id)
                Seleccion = ListaCuenta.indexOf(c);
         spCuentaPrincipalTransaccion.setSelection(Seleccion);
+        spCuentaPrincipalTransaccion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                trans.cuenta_prin_id = ListaCuenta.get(position).id;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         return v;
     }
 

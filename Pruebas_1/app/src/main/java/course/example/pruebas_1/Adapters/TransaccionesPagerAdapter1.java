@@ -1,10 +1,12 @@
 package course.example.pruebas_1.Adapters;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
+import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCallerGrid {
 
@@ -63,6 +66,19 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
             lvTransaccionesPrincipal.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
+        lvTransaccionesPrincipal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Transaccion trans = transacciones.get(position);
+                final Intent intent = new Intent(getActivity(), TutorialActivity.class);
+                intent.putExtra("FECHA", trans.fecha_alta);
+                intent.putExtra("TIPO", trans.tipo_transaccion);
+                intent.putExtra("OP", 'C');
+                intent.putExtra("TRANS", trans);
+                intent.putExtra("CUENTA_ID", trans.cuenta_prin_id);//Cuentas.get(which).id);
+                getActivity().startActivityForResult(intent, 1);
+            }
+        });
     }
 
     @Override
@@ -83,4 +99,11 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
 }

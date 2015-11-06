@@ -20,6 +20,8 @@ public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
     private Transaccion trans = new Transaccion("",-1,-1,"","","",0,0);
+    @ContextVariable
+    private char op = 'X';
 
     /**
      * Note that initially BasicWizardLayout inherits from {@link android.support.v4.app.Fragment} and therefore you must have an empty constructor
@@ -46,41 +48,52 @@ public class TutorialWizard extends BasicWizardLayout {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         View frag = (View)view.findViewById(R.id.step_container);
         String fecha;
-        int op = 0;
+        int tipo = 0;
         int cuenta_id = 0;
+        Transaccion transaccion;
         if (savedInstanceState != null) {
             // Restore last state
             fecha = savedInstanceState.getString("FECHA");
-            op = savedInstanceState.getInt("OP");
+            tipo = savedInstanceState.getInt("TIPO");
             cuenta_id = savedInstanceState.getInt("CUENTA_ID");
-            trans.fecha_alta = fecha;
-            trans.tipo_transaccion = op;
-            trans.cuenta_prin_id = cuenta_id;
+            op = savedInstanceState.getChar("OP");
+            transaccion = (Transaccion)savedInstanceState.getSerializable("TRANS");
+            this.trans.fecha_alta = fecha;
+            this.trans.tipo_transaccion = tipo;
+            this.trans.cuenta_prin_id = cuenta_id;
         } else {
             fecha = getArguments().getString("FECHA");
-            op = getArguments().getInt("OP", 0);
+            tipo = getArguments().getInt("TIPO", 0);
             cuenta_id = getArguments().getInt("CUENTA_ID", 0);
-            trans.fecha_alta = fecha;
-            trans.tipo_transaccion = op;
-            trans.cuenta_prin_id = cuenta_id;
+            op = getArguments().getChar("OP");
+            transaccion = (Transaccion)getArguments().getSerializable("TRANS");
+            this.trans.fecha_alta = fecha;
+            this.trans.tipo_transaccion = tipo;
+            this.trans.cuenta_prin_id = cuenta_id;
         }
 
-        switch(op)
+        switch(tipo)
         {
             case R.id.btnTransacionEntrada:case 1:
-                trans.tipo_transaccion = 1;
+                this.trans.tipo_transaccion = 1;
                 frag.setBackgroundColor(Color.parseColor("#ff99cc00"));
                 break;
             case R.id.btnTransacionSalida:case 0:
-                trans.tipo_transaccion = 0;
+                this.trans.tipo_transaccion = 0;
                 frag.setBackgroundColor(Color.parseColor("#ffff4444"));
                 break;
             case R.id.lyTransferenciaPrincipal:case 2:
-                trans.tipo_transaccion = 2;
+                this.trans.tipo_transaccion = 2;
                 frag.setBackgroundColor(Color.BLACK);
                 break;
             default:
                 break;
+        }
+
+        if(op == 'C')
+        {
+            this.trans = transaccion;
+            this.trans.textoKeyPad = String.valueOf(trans.costo);
         }
 
     }
@@ -89,8 +102,10 @@ public class TutorialWizard extends BasicWizardLayout {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("FECHA", trans.fecha_alta);
-        outState.putInt("OP", trans.tipo_transaccion);
+        outState.putInt("TIPO", trans.tipo_transaccion);
         outState.putInt("CUENTA_ID", trans.cuenta_prin_id);
+        outState.putChar("OP", op);
+        outState.putSerializable("TRANS", trans);
     }
 
     @Override
@@ -101,8 +116,11 @@ public class TutorialWizard extends BasicWizardLayout {
         if(error.equals(""))
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(0,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion);
-            dbHelper.Transacciones.Inserta(transaccion);
+            Transaccion transaccion = new Transaccion(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion);
+            if(op == 'C')
+                dbHelper.Transacciones.Modifica(transaccion);
+            else
+                dbHelper.Transacciones.Inserta(transaccion);
             returnIntent.putExtra("trans", trans);
             getActivity().setResult(1, returnIntent);
             getActivity().finish();     //Terminate the wizard
