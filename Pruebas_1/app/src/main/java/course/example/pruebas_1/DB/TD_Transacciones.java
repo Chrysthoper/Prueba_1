@@ -231,7 +231,7 @@ public class TD_Transacciones
                 transaccion.id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID));
                 transaccion.costo = c.getDouble(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_2));
                 transaccion.numeroCategoria = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_3));
-                transaccion.fecha_alta = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4)).substring(0, 10);
+                transaccion.fecha_alta = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4));
                 transaccion.nota = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5));
                 transaccion.descripcion = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6));
                 transaccion.cuenta_prin_id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7));
@@ -256,7 +256,7 @@ public class TD_Transacciones
                 Transaccion.id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID));
                 Transaccion.costo = c.getDouble(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_2));
                 Transaccion.numeroCategoria = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_3));
-                Transaccion.fecha_alta = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4)).substring(0, 10);
+                Transaccion.fecha_alta = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_4));
                 Transaccion.nota = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_5));
                 Transaccion.descripcion = c.getString(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_6));
                 Transaccion.cuenta_prin_id = c.getInt(c.getColumnIndex(DatabaseSchema.TD_Transacciones.COLUMN_NAME_7));

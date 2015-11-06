@@ -1,5 +1,6 @@
 package course.example.pruebas_1.Adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
 import course.example.pruebas_1.DB.DBHelper;
@@ -79,6 +81,18 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
                     return true;
                 }
             });
+            holder.lyTransAdapter1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Intent intent = new Intent((Activity) context, TutorialActivity.class);
+                    intent.putExtra("FECHA", trans.fecha_alta);
+                    intent.putExtra("TIPO", trans.tipo_transaccion);
+                    intent.putExtra("OP", 'C');
+                    intent.putExtra("TRANS", trans);
+                    intent.putExtra("CUENTA_ID", trans.cuenta_prin_id);//Cuentas.get(which).id);
+                    ((Activity) context).startActivityForResult(intent, 1);
+                }
+            });
 
             holder.lyTransAdapter2 = (LinearLayout) row.findViewById(R.id.lyTransAdapter2);
             holder.lyTransAdapter2.setOnLongClickListener(new View.OnLongClickListener() {
@@ -102,6 +116,18 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
                     return true;
                 }
             });
+            holder.lyTransAdapter2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Intent intent = new Intent((Activity) context, TutorialActivity.class);
+                    intent.putExtra("FECHA", trans.fecha_alta);
+                    intent.putExtra("TIPO", trans.tipo_transaccion);
+                    intent.putExtra("OP", 'C');
+                    intent.putExtra("TRANS", trans);
+                    intent.putExtra("CUENTA_ID", trans.cuenta_prin_id);//Cuentas.get(which).id);
+                    ((Activity) context).startActivityForResult(intent, 1);
+                }
+            });
 
 
             holder.tvMontoTransAdapter2 = (TextView) row.findViewById(R.id.tvMontoTransAdapter2);
@@ -123,7 +149,7 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
         if(trans.tipo_transaccion < 2)//0 && 1
         {
             holder.lyTransAdapter1.setVisibility(View.VISIBLE);
-            holder.tvFechaAdapter.setText(Util.FormatToShort(trans.fecha_alta));
+            holder.tvFechaAdapter.setText(Util.FormatToShort(trans.fecha_alta.substring(0,10)));
             holder.ivCuentaAdapter.setImageResource(Util.imagenes[trans.cuentaPrincipalObj.resource]);
 
             holder.tvCostoAdapter.setText(Util.PriceFormat(trans.costo));
@@ -147,7 +173,7 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
         else
         {
             holder.lyTransAdapter2.setVisibility(View.VISIBLE);
-            holder.tvFechaTransAdapter2.setText(Util.FormatToShort(trans.fecha_alta));
+            holder.tvFechaTransAdapter2.setText(Util.FormatToShort(trans.fecha_alta.substring(0, 10)));
 
             holder.tvMontoTransAdapter2.setText(Util.PriceFormat(trans.costo));
             holder.tvDescTransAdapter2.setText(trans.descripcion);

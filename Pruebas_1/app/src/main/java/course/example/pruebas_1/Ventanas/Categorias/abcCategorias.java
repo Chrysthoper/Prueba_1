@@ -102,7 +102,7 @@ public class abcCategorias extends ActionBarActivity {
             if(Validate())
             {
                 int TipoCategoria = (rdbGroupTipoCategorias.getCheckedRadioButtonId() == R.id.rdbEntradas) ? 1 : 0;
-                Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),Util.imagenes[indexImagen],Util.colores[indexColor],Util.coloresHex[indexColor],TipoCategoria);
+                Categoria categoria = new Categoria(0,etNombreCategoria.getText().toString().toUpperCase(),indexImagen,indexColor,indexColor,TipoCategoria);
                 DBHelper dbHelper = new DBHelper(getApplicationContext());
                 if(dbHelper.Categorias.Inserta(categoria))
                 {

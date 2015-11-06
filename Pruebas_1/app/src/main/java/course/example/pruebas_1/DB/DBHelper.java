@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public TD_Cuentas Cuentas;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 15;
+    public static final int DATABASE_VERSION = 16;
     public static final String DATABASE_NAME = "MiChochinito.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -47,7 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_2 + DOUBLE_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_3 + INTEGER_TYPE + COMMA_SEP +
-                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + INTEGER_TYPE + COMMA_SEP +
+                    DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + TEXT_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_5 + DATETIME_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_6 + TEXT_TYPE + COMMA_SEP +
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_7 + INTEGER_TYPE + COMMA_SEP +

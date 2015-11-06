@@ -89,28 +89,6 @@ public class TD_Cuentas
         return db.update(DatabaseSchema.TD_Cuentas.TABLE_NAME, valores, DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID + "=" + cuenta.id, null) > 0;
     }
 
-    /*
-    public ArrayList<Cuenta> ObtenTotalCuentas() {
-        ArrayList<Transaccion> transacciones = dbHelper.Transacciones.Obten();
-        ArrayList<Cuenta> cuentas = this.Obten();
-        for(Cuenta c : cuentas)
-        {
-            for(Transaccion t : transacciones)
-            {
-                if(c.id == t.cuenta_prin_id)
-                {
-                    if(t.categoriaObj.tipo == 1)
-                        c.total += t.costo;
-                    else
-                        c.total -= t.costo;
-                }
-            }
-
-        }
-        return cuentas;
-    }
-    */
-
     private ArrayList<Cuenta> GetObject(Cursor c){
         ArrayList<Cuenta> lista = new ArrayList<Cuenta>();
         //Nos aseguramos de que existe al menos un registro
