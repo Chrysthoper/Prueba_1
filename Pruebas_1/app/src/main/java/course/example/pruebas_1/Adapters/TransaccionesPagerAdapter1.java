@@ -50,35 +50,11 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
 
         // Show the current page index in the view
         lvTransaccionesPrincipal = (ListView) rootView.findViewById(R.id.lvTransaccionesPrincipal);
-        //this.adapter = new TransaccionAdapter(getActivity(),this.transacciones);
-        //adapter.setCallback(this);
-        //lvTransaccionesPrincipal.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
+        this.adapter = new TransaccionAdapter(getActivity(),this.transacciones);
+        adapter.setCallback(this);
+        lvTransaccionesPrincipal.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            this.adapter = new TransaccionAdapter(getActivity(),this.transacciones);
-            adapter.setCallback(this);
-            lvTransaccionesPrincipal.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-        }
-        lvTransaccionesPrincipal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Transaccion trans = transacciones.get(position);
-                final Intent intent = new Intent(getActivity(), TutorialActivity.class);
-                intent.putExtra("FECHA", trans.fecha_alta);
-                intent.putExtra("TIPO", trans.tipo_transaccion);
-                intent.putExtra("OP", 'C');
-                intent.putExtra("TRANS", trans);
-                intent.putExtra("CUENTA_ID", trans.cuenta_prin_id);//Cuentas.get(which).id);
-                getActivity().startActivityForResult(intent, 1);
-            }
-        });
     }
 
     @Override

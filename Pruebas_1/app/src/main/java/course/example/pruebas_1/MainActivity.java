@@ -1,13 +1,21 @@
 package course.example.pruebas_1;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
@@ -22,6 +30,10 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import org.lucasr.twowayview.TwoWayView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,6 +78,13 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ventana_principal);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialoglayout = inflater.inflate(R.layout.activity_splash, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialoglayout);
+        builder.show();
 
         dbHelper = new DBHelper(getApplicationContext());
 
@@ -255,9 +274,15 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         else if(id == R.id.calendario_settings)
         {
             Intent i = new Intent(getApplicationContext(), VentanaCalendario.class);
-            i.putExtra("FECHA_INICIAL", "2015-10-01");
-            i.putExtra("FECHA_FINAL", "2015-11-30");
             startActivityForResult(i,2);
+        }
+        else if(id == R.id.backup_settings)
+        {
+            this.exportDB();
+        }
+        else if(id == R.id.restore_settings)
+        {
+            this.importDB();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -286,6 +311,58 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     };
 
     //endregion
+
+    private void importDB() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+                String currentDBPath = "//data//" + "course.example.pruebas_1"
+                        + "//databases//" + "MiChochinito.db";
+                String backupDBPath = "MiChochinitoBKUP.db"; // From SD directory.
+                File backupDB = new File(data, currentDBPath);
+                File currentDB = new File(sd, backupDBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(getApplicationContext(), "Import Successful!",
+                        Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+
+            Toast.makeText(getApplicationContext(), "Import Failed!", Toast.LENGTH_SHORT)
+                    .show();
+
+        }
+    }
+
+    private void exportDB() {
+        try {
+            File sd = Environment.getRootDirectory();
+            File data = Environment.getDataDirectory();
+
+            String currentDBPath = "//data//" + "course.example.pruebas_1"
+                    + "//databases//" + "MiChochinito.db";
+            String backupDBPath = "MiChochinitoBKUP.db";
+            File currentDB = new File(data, currentDBPath);
+            File backupDB = new File(sd, backupDBPath);
+
+            FileChannel src = new FileInputStream(currentDB).getChannel();
+            FileChannel dst = new FileOutputStream(backupDB).getChannel();
+            dst.transferFrom(src, 0, src.size());
+            src.close();
+            dst.close();
+            Toast.makeText(getApplicationContext(), "Backup Successful!",
+                    Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+
+            Toast.makeText(getApplicationContext(), "Backup Failed!", Toast.LENGTH_SHORT)
+                    .show();
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

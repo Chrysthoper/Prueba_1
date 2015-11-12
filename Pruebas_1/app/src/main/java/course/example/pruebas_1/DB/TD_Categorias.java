@@ -140,7 +140,7 @@ public class TD_Categorias
                         " FROM " + DatabaseSchema.TD_Transacciones.TABLE_NAME + " trans" +
                         " INNER JOIN " + DatabaseSchema.TD_Categorias.TABLE_NAME + " cat" +
                         " ON trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_3 + " = cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_ID +
-                        " WHERE trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " > Datetime('" + fechaIni.substring(0, 10) + "')" +
+                        " WHERE trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " >= Datetime('" + fechaIni.substring(0, 10) + "')" +
                         " AND trans." + DatabaseSchema.TD_Transacciones.COLUMN_NAME_4 + " < Datetime('" + fechaFin.substring(0, 10) + "')" +
                         " GROUP BY cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_ID +
                         ",cat." + DatabaseSchema.TD_Categorias.COLUMN_NAME_2 +

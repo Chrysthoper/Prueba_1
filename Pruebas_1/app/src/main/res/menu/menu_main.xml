@@ -5,4 +5,8 @@
         android:orderInCategory="100" app:showAsAction="always" />
     <item android:id="@+id/categorias_settings" android:title="Categorias"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/backup_settings" android:title="Backup"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/restore_settings" android:title="Restore"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

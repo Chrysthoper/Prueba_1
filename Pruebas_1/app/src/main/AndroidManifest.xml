@@ -9,18 +9,19 @@
         android:theme="@style/Theme.AppCompat.Light" >
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:finishOnTaskLaunch="true"
-            android:configChanges="orientation|keyboardHidden" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Ventanas.Transacciones.TutorialActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="Crear Transaccion" >
+            android:label="Crear Transaccion"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Ventanas.Categorias.VentanaCategorias"
@@ -29,12 +30,19 @@
         </activity>
         <activity
             android:name=".Ventanas.Calendario.VentanaCalendario"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.Dialog" >
         </activity>
         <activity
             android:name=".Ventanas.Categorias.abcCategorias"
             android:configChanges="orientation|keyboardHidden"
-            android:label="Crear Transaccion" >
+            android:label="Crear Transaccion"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog"
+            android:label="@string/title_activity_splash" >
         </activity>
     </application>
 
