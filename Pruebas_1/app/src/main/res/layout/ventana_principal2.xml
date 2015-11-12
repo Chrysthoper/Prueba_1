@@ -1,0 +1,165 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="4dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lyControlBar"
+            android:gravity="top|center_horizontal">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:background="@android:color/darker_gray"
+                android:id="@+id/lyTransferenciaPrincipal">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/imageView"
+                    android:src="@mipmap/transfer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Transferencia"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/lvCuentasGridPager"
+                android:numColumns="auto_fit"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:drawSelectorOnTop="true"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:columnWidth="100dp"
+                android:background="@android:color/darker_gray">
+            </GridView>
+
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity"
+            android:orientation="vertical"
+            android:id="@+id/lySlidingPrincipal">
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/lyControlBar">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnTransacionEntrada"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/holo_green_light"
+                    android:textColor="@android:color/white"
+                    android:layout_toRightOf="@+id/view"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:height="70dp"
+                    android:paddingLeft="30dp"
+                    android:text="$ 0.00" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_centerHorizontal="true" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$ 0.00"
+                    android:id="@+id/btnTransacionSalida"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toEndOf="@+id/btnTransacionEntrada"
+                    android:layout_toLeftOf="@+id/view"
+                    android:background="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:height="70dp"
+                    android:paddingRight="30dp"
+                    android:clickable="true" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:background="@mipmap/circle_date_2"
+                    android:id="@+id/lyFechaPrincipal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="25"
+                        android:id="@+id/tvFechaPrincipalDia"
+                        android:layout_weight="1"
+                        android:gravity="bottom|center"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SEP"
+                        android:id="@+id/tvFechaPrincipalMes"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_below="@+id/lyControlBar"
+                android:gravity="center_vertical|center_horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="$ 0.00"
+                    android:id="@+id/tvBalancePrinncipal"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+</LinearLayout>

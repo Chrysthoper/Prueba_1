@@ -3,8 +3,9 @@ package course.example.pruebas_1;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,15 +13,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v4.view.ViewPager;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
-
-import org.lucasr.twowayview.TwoWayView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,22 +27,21 @@ import course.example.pruebas_1.Adapters.CuentasGridAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
+import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Negocio.Cuenta;
-import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
-import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.Ventanas.Calendario.VentanaCalendario;
+import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 
-public class MainActivity extends ActionBarActivity implements IAdaptersCallerVentana {
+public class MainActivity1 extends ActionBarActivity implements IAdaptersCallerVentana {
 
-    Button btnSalida,btnEntrada;
-
+    Button btnTransaccionSalida,btnTransaccionEntrada;
     LinearLayout lyFechaPrincipal,lyTransferenciaPrincipal;
-    TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrinncipal, tvEntradasPrincipal,tvSalidasPrincipal,tvBalancePrincipal;
+    TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrincipal;
     DatePickerDialog DialogoFechaPrincipal;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
@@ -59,13 +55,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     private SlidingUpPanelLayout mLayout;
     GridView lvCuentasGridPager;
-    TwoWayView lvCuentasListaPrincipal;
     CuentasGridAdapter adapterCuentas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ventana_principal);
+        setContentView(R.layout.ventana_principal2);
 
         dbHelper = new DBHelper(getApplicationContext());
 
@@ -92,32 +87,26 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         double SumEntradas = dbHelper.Transacciones.SumatoriaEntradas(fechaIni,fechaFin);
         double SumSalidas = dbHelper.Transacciones.SumatoriaSalidas(fechaIni,fechaFin);
 
-        btnEntrada = (Button)findViewById(R.id.btnEntrada);
-        btnEntrada.setOnClickListener(btnTransacciones);
-        btnEntrada.setText(Util.PriceFormat(SumEntradas));
-        btnSalida = (Button)findViewById(R.id.btnSalida);
-        btnSalida.setOnClickListener(btnTransacciones);
-        btnSalida.setText(Util.PriceFormat(SumSalidas));
+        btnTransaccionEntrada = (Button)findViewById(R.id.btnTransacionEntrada);
+        btnTransaccionEntrada.setOnClickListener(btnTransacciones);
+        btnTransaccionEntrada.setText(Util.PriceFormat(SumEntradas));
+        btnTransaccionSalida = (Button)findViewById(R.id.btnTransacionSalida);
+        btnTransaccionSalida.setOnClickListener(btnTransacciones);
+        btnTransaccionSalida.setText(Util.PriceFormat(SumSalidas));
         lyFechaPrincipal = (LinearLayout)findViewById(R.id.lyFechaPrincipal);
         lyFechaPrincipal.setOnClickListener(clickFechaPrincipal);
 
-        tvBalancePrinncipal = (TextView)findViewById(R.id.tvBalancePrinncipal);
-        tvBalancePrincipal = (TextView)findViewById(R.id.tvBalancePrincipal);
+        tvBalancePrincipal = (TextView)findViewById(R.id.tvBalancePrinncipal);
         tvBalancePrincipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
-        tvEntradasPrincipal = (TextView)findViewById(R.id.tvEntradasPrincipal);
-        tvEntradasPrincipal.setText(Util.PriceFormat(SumEntradas));
-        tvSalidasPrincipal = (TextView)findViewById(R.id.tvSalidasPrincipal);
-        tvSalidasPrincipal.setText(Util.PriceFormat(SumSalidas));
-        tvBalancePrinncipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
         if((SumEntradas - SumSalidas) < 0)
-            tvBalancePrinncipal.setTextColor(Color.parseColor("#ffff4444"));
+            tvBalancePrincipal.setTextColor(Color.parseColor("#ffff4444"));
         else
-            tvBalancePrinncipal.setTextColor(Color.parseColor("#ff99cc00"));
+            tvBalancePrincipal.setTextColor(Color.parseColor("#ff99cc00"));
 
         tvFechaPrincipalDia = (TextView)findViewById(R.id.tvFechaPrincipalDia);
         tvFechaPrincipalDia.setText(Integer.toString(dia));
         tvFechaPrincipalMes = (TextView)findViewById(R.id.tvFechaPrincipalMes);
-        tvFechaPrincipalMes.setText(Util.getMonthForInt(mes).toUpperCase());
+        tvFechaPrincipalMes.setText(Util.getMonthForInt(mes).substring(0, 3).toUpperCase());
 
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni, fechaFin);
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
@@ -133,25 +122,17 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         this.pager.setAdapter(adapterFrag);
 
         listaCuentas = dbHelper.Cuentas.Obten();
-        lvCuentasListaPrincipal = (TwoWayView) findViewById(R.id.lvCuentasListaPrincipal);
-        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
-        lvCuentasListaPrincipal.setAdapter(adapterCuentas);
-        //lvCuentasListaPrincipal.setItemMargin(10);
-        adapterCuentas.notifyDataSetChanged();
-
-        /*
-        listaCuentas = dbHelper.Cuentas.Obten();
         lvCuentasGridPager = (GridView) findViewById(R.id.lvCuentasGridPager);
         this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
         lvCuentasGridPager.setAdapter(adapterCuentas);
         adapterCuentas.notifyDataSetChanged();
-        */
+
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        mLayout.setPanelState(PanelState.COLLAPSED);
+        mLayout.setPanelState(PanelState.EXPANDED);
         mLayout.setDragView(R.id.lyControlBar);
 
-        //lyTransferenciaPrincipal = (LinearLayout)findViewById(R.id.lyTransferenciaPrincipal);
-        //lyTransferenciaPrincipal.setOnClickListener(btnTransacciones);
+        lyTransferenciaPrincipal = (LinearLayout)findViewById(R.id.lyTransferenciaPrincipal);
+        lyTransferenciaPrincipal.setOnClickListener(btnTransacciones);
 
         DialogoFechaPrincipal = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
@@ -177,12 +158,11 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         pagerAdapter2.ActualizaGrid(listaCategorias);
         adapterFrag.notifyDataSetChanged();
 
-        /*
         listaCuentas = dbHelper.Cuentas.Obten();
         this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
         lvCuentasGridPager.setAdapter(adapterCuentas);
         adapterCuentas.notifyDataSetChanged();
-        */
+
     }
 
     public void ActualizaVentana(){
@@ -193,8 +173,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         double SumEntradas = dbHelper.Transacciones.SumatoriaEntradas(fechaIni,fechaFin);
         double SumSalidas = dbHelper.Transacciones.SumatoriaSalidas(fechaIni,fechaFin);
 
-        btnEntrada.setText(Util.PriceFormat(SumEntradas));
-        btnSalida.setText(Util.PriceFormat(SumSalidas));
+        btnTransaccionEntrada.setText(Util.PriceFormat(SumEntradas));
+        btnTransaccionSalida.setText(Util.PriceFormat(SumSalidas));
 
         /*
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
@@ -203,26 +183,15 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         */
 
         listaCuentas = dbHelper.Cuentas.Obten();
-        lvCuentasListaPrincipal = (TwoWayView) findViewById(R.id.lvCuentasListaPrincipal);
-        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
-        lvCuentasListaPrincipal.setAdapter(adapterCuentas);
-        adapterCuentas.notifyDataSetChanged();
-
-        /*
-        listaCuentas = dbHelper.Cuentas.Obten();
         this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
         lvCuentasGridPager.setAdapter(adapterCuentas);
         adapterCuentas.notifyDataSetChanged();
-        */
 
         tvBalancePrincipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
-        tvEntradasPrincipal.setText(Util.PriceFormat(SumEntradas));
-        tvSalidasPrincipal.setText(Util.PriceFormat(SumSalidas));
-        tvBalancePrinncipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
         if((SumEntradas - SumSalidas) < 0)
-            tvBalancePrinncipal.setTextColor(Color.parseColor("#ffff4444"));
+            tvBalancePrincipal.setTextColor(Color.parseColor("#ffff4444"));
         else
-            tvBalancePrinncipal.setTextColor(Color.parseColor("#ff99cc00"));
+            tvBalancePrincipal.setTextColor(Color.parseColor("#ff99cc00"));
 
     }
 
@@ -276,7 +245,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         @Override
         public void onClick(View v) {
             String fecha = Util.FechaToFormat(cTransaccion.getTime());
-            final Intent intent = new Intent(MainActivity.this, TutorialActivity.class);
+            final Intent intent = new Intent(MainActivity1.this, TutorialActivity.class);
             intent.putExtra("FECHA", fecha);
             intent.putExtra("TIPO", v.getId());
             intent.putExtra("OP", 'A');
@@ -293,7 +262,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         if (requestCode == 1)
         {
             if(resultCode != 1)
-                Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity1.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
             else
             {
                 ActualizaVentana();

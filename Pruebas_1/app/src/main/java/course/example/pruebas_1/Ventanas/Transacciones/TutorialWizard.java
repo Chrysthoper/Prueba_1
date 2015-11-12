@@ -74,11 +74,11 @@ public class TutorialWizard extends BasicWizardLayout {
 
         switch(tipo)
         {
-            case R.id.btnTransacionEntrada:case 1:
+            case R.id.btnEntrada: case 1:
                 this.trans.tipo_transaccion = 1;
                 frag.setBackgroundColor(Color.parseColor("#ff99cc00"));
                 break;
-            case R.id.btnTransacionSalida:case 0:
+            case R.id.btnSalida: case 0:
                 this.trans.tipo_transaccion = 0;
                 frag.setBackgroundColor(Color.parseColor("#ffff4444"));
                 break;
