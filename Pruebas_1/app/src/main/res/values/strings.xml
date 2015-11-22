@@ -9,4 +9,5 @@
     <string name="title_activity_ventana_categorias">VentanaCategorias</string>
     <string name="title_activity_historial">Historial</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_ventana_historial">VentanaHistorial</string>
 </resources>

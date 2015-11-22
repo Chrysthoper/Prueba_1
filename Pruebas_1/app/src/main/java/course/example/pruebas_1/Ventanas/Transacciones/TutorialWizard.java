@@ -82,7 +82,7 @@ public class TutorialWizard extends BasicWizardLayout {
                 this.trans.tipo_transaccion = 0;
                 frag.setBackgroundColor(Color.parseColor("#ffff4444"));
                 break;
-            case R.id.lyTransferenciaPrincipal:case 2:
+            case R.id.lyTraspaso:case 2:
                 this.trans.tipo_transaccion = 2;
                 frag.setBackgroundColor(Color.BLACK);
                 break;

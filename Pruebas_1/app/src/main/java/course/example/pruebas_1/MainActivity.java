@@ -37,6 +37,8 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import course.example.pruebas_1.Adapters.CuentasGridAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
@@ -49,6 +51,7 @@ import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.Ventanas.Calendario.VentanaCalendario;
+import course.example.pruebas_1.Ventanas.Historial.VentanaHistorial;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 
@@ -56,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     Button btnSalida,btnEntrada;
 
-    LinearLayout lyFechaPrincipal,lyTransferenciaPrincipal;
+    LinearLayout lyFechaPrincipal,lyHistorial,lyTraspaso;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrinncipal, tvEntradasPrincipal,tvSalidasPrincipal,tvBalancePrincipal;
     DatePickerDialog DialogoFechaPrincipal;
     DBHelper dbHelper;
@@ -70,7 +73,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     ViewPager pager = null;
 
     private SlidingUpPanelLayout mLayout;
-    GridView lvCuentasGridPager;
     TwoWayView lvCuentasListaPrincipal;
     CuentasGridAdapter adapterCuentas;
 
@@ -82,9 +84,19 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialoglayout = inflater.inflate(R.layout.activity_splash, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialoglayout);
-        builder.show();
+
+        final AlertDialog dlg = builder.create();
+        dlg.show();
+
+        final Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            public void run() {
+                dlg.dismiss(); // when the task active then close the dialog
+                t.cancel(); // also just top the timer thread, otherwise, you may receive a crash report
+            }
+        }, 2000); // after 2 second (or 2000 miliseconds), the task will be active.
 
         dbHelper = new DBHelper(getApplicationContext());
 
@@ -158,26 +170,33 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         //lvCuentasListaPrincipal.setItemMargin(10);
         adapterCuentas.notifyDataSetChanged();
 
-        /*
-        listaCuentas = dbHelper.Cuentas.Obten();
-        lvCuentasGridPager = (GridView) findViewById(R.id.lvCuentasGridPager);
-        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
-        lvCuentasGridPager.setAdapter(adapterCuentas);
-        adapterCuentas.notifyDataSetChanged();
-        */
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setPanelState(PanelState.COLLAPSED);
         mLayout.setDragView(R.id.lyControlBar);
 
-        //lyTransferenciaPrincipal = (LinearLayout)findViewById(R.id.lyTransferenciaPrincipal);
-        //lyTransferenciaPrincipal.setOnClickListener(btnTransacciones);
+        lyHistorial = (LinearLayout)findViewById(R.id.lyHistorial);
+        lyHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), VentanaCalendario.class);
+                startActivityForResult(i,2);
+            }
+        });
+
+        lyTraspaso = (LinearLayout)findViewById(R.id.lyTraspaso);
+        lyTraspaso.setOnClickListener(btnTransacciones);
 
         DialogoFechaPrincipal = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 tvFechaPrincipalDia.setText(Integer.toString(dayOfMonth));
-                tvFechaPrincipalMes.setText(Util.getMonthForInt(monthOfYear).substring(0, 3).toUpperCase());
+                tvFechaPrincipalMes.setText(Util.getMonthForInt(monthOfYear).toUpperCase());
                 cTransaccion.set(year, monthOfYear, dayOfMonth);
+                c.set(year, monthOfYear, dayOfMonth);
+                cFin.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                cFin.add(Calendar.DAY_OF_MONTH, 1);
+                ActualizaVentana();
+                ActualizaAdapter();
             }
 
         },cTransaccion.get(Calendar.YEAR), cTransaccion.get(Calendar.MONTH), cTransaccion.get(Calendar.DAY_OF_MONTH));
@@ -195,13 +214,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         pagerAdapter1.ActualizaGrid(listaTransacciones);
         pagerAdapter2.ActualizaGrid(listaCategorias);
         adapterFrag.notifyDataSetChanged();
-
-        /*
-        listaCuentas = dbHelper.Cuentas.Obten();
-        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
-        lvCuentasGridPager.setAdapter(adapterCuentas);
-        adapterCuentas.notifyDataSetChanged();
-        */
     }
 
     public void ActualizaVentana(){
@@ -215,24 +227,11 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         btnEntrada.setText(Util.PriceFormat(SumEntradas));
         btnSalida.setText(Util.PriceFormat(SumSalidas));
 
-        /*
-        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
-        pagerAdapter2.ActualizaGrid(listaCategorias);
-        adapterFrag.notifyDataSetChanged();
-        */
-
         listaCuentas = dbHelper.Cuentas.Obten();
         lvCuentasListaPrincipal = (TwoWayView) findViewById(R.id.lvCuentasListaPrincipal);
         this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
         lvCuentasListaPrincipal.setAdapter(adapterCuentas);
         adapterCuentas.notifyDataSetChanged();
-
-        /*
-        listaCuentas = dbHelper.Cuentas.Obten();
-        this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
-        lvCuentasGridPager.setAdapter(adapterCuentas);
-        adapterCuentas.notifyDataSetChanged();
-        */
 
         tvBalancePrincipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
         tvEntradasPrincipal.setText(Util.PriceFormat(SumEntradas));
@@ -283,6 +282,9 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         else if(id == R.id.restore_settings)
         {
             this.importDB();
+            dbHelper = new DBHelper(getApplicationContext());
+            ActualizaVentana();
+            ActualizaAdapter();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -314,53 +316,52 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     private void importDB() {
         try {
-            File sd = Environment.getExternalStorageDirectory();
+            File sd = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File[] archivos = sd.listFiles();
             File data = Environment.getDataDirectory();
-                String currentDBPath = "//data//" + "course.example.pruebas_1"
-                        + "//databases//" + "MiChochinito.db";
-                String backupDBPath = "MiChochinitoBKUP.db"; // From SD directory.
-                File backupDB = new File(data, currentDBPath);
-                File currentDB = new File(sd, backupDBPath);
-
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-                Toast.makeText(getApplicationContext(), "Import Successful!",
-                        Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-
-            Toast.makeText(getApplicationContext(), "Import Failed!", Toast.LENGTH_SHORT)
-                    .show();
-
-        }
-    }
-
-    private void exportDB() {
-        try {
-            File sd = Environment.getRootDirectory();
-            File data = Environment.getDataDirectory();
-
-            String currentDBPath = "//data//" + "course.example.pruebas_1"
-                    + "//databases//" + "MiChochinito.db";
-            String backupDBPath = "MiChochinitoBKUP.db";
-            File currentDB = new File(data, currentDBPath);
-            File backupDB = new File(sd, backupDBPath);
+            String currentDBPath = "//data//" + "course.example.pruebas_1" + "//databases//" + "MiCochinito.db";
+            String backupDBPath = "MiCochinitoBKUP.db"; // From SD directory.
+            File backupDB = new File(data, currentDBPath);
+            File currentDB = new File(sd, backupDBPath);
 
             FileChannel src = new FileInputStream(currentDB).getChannel();
             FileChannel dst = new FileOutputStream(backupDB).getChannel();
             dst.transferFrom(src, 0, src.size());
             src.close();
             dst.close();
-            Toast.makeText(getApplicationContext(), "Backup Successful!",
-                    Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(getApplicationContext(), "Restauración Exitosa!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
 
-            Toast.makeText(getApplicationContext(), "Backup Failed!", Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getApplicationContext(), "La restauración falló", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private void exportDB() {
+        try {
+            File sd = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File data = Environment.getDataDirectory();
+
+            String currentDBPath = "//data//" + "course.example.pruebas_1" + "//databases//" + "MiCochinito.db";
+            String backupDBPath = "MiCochinitoBKUP.db";
+            File currentDB = new File(data, currentDBPath);
+            File backupDB = new File(sd, backupDBPath);
+
+            if(currentDB.exists())
+            {
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(getApplicationContext(), "Respaldo Exitoso!", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "No existe el archivo de respaldo", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(getApplicationContext(), "El respaldo falló", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -381,6 +382,25 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         {
             if(resultCode == 1)
             {
+                final Intent intent = new Intent(MainActivity.this, VentanaHistorial.class);
+                intent.putExtra("FECHA1", data.getLongExtra("FECHA1",-1));
+                boolean rango = data.getBooleanExtra("RANGO", false);
+                if(rango)
+                {
+                    Calendar cAux = Calendar.getInstance();
+                    cAux.setTimeInMillis(data.getLongExtra("FECHA2",-1));
+                    cAux.add(Calendar.DAY_OF_MONTH, 1);
+                    intent.putExtra("FECHA2",cAux.getTimeInMillis());
+                }
+                else
+                {
+                    Calendar cAux = Calendar.getInstance();
+                    cAux.setTimeInMillis(data.getLongExtra("FECHA1", -1));
+                    cAux.add(Calendar.DAY_OF_MONTH, 1);
+                    intent.putExtra("FECHA2", cAux.getTimeInMillis());
+                }
+                startActivity(intent);
+                /*
                 boolean rango = data.getBooleanExtra("RANGO", false);
                 Date fecha1 = new Date(data.getLongExtra("FECHA1",-1));
                 c.setTime(fecha1);
@@ -397,6 +417,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                 }
                 ActualizaVentana();
                 ActualizaAdapter();
+                */
             }
         }
     }

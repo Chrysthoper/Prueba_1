@@ -79,7 +79,6 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
     }
 
 }

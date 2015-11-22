@@ -27,4 +27,5 @@ dependencies {
     compile 'com.squareup:android-times-square:1.6.4@aar'
     compile 'com.roomorama:caldroid:2.2.1'
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
+    compile 'me.grantland:autofittextview:0.2.+'
 }

@@ -22,8 +22,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public TD_Cuentas Cuentas;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 16;
-    public static final String DATABASE_NAME = "MiChochinito.db";
+    public static final int DATABASE_VERSION = 17;
+    public static final String DATABASE_NAME = "MiCochinito.db";
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
