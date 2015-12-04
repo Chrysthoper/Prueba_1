@@ -1,8 +1,12 @@
 package course.example.pruebas_1;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +45,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import course.example.pruebas_1.Adapters.CuentasGridAdapter;
+import course.example.pruebas_1.Adapters.ReceptorBroadcast;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
@@ -71,6 +76,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     private TransaccionesFragmentPagerAdapter adapterFrag;
     Calendar c,cFin,cTransaccion = Calendar.getInstance();
     ViewPager pager = null;
+
+    private PendingIntent pendingIntent;
 
     private SlidingUpPanelLayout mLayout;
     TwoWayView lvCuentasListaPrincipal;
@@ -286,6 +293,25 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             ActualizaVentana();
             ActualizaAdapter();
         }
+        else if (id == R.id.notification_settings)
+        {
+            // Prepare intent which is triggered if the
+            // notification is selected
+            Intent intent = new Intent(this, VentanaCategorias.class);
+            PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+            // Build notification
+            // Actions are just fake
+            Notification noti = new Notification.Builder(this)
+                    .setContentTitle("Mi Cochinito")
+                    .setContentText("¿Ya realizaste esta transacción?").setSmallIcon(R.drawable.icon_app)
+                    .setContentIntent(pIntent)
+                    .addAction(R.mipmap.agregar_blanco, "Crear", pIntent)
+                    .addAction(R.mipmap.compras, "Omitir", pIntent).build();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            notificationManager.notify(0, noti);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -374,6 +400,39 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                 Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
             else
             {
+                Transaccion trans = (Transaccion)data.getExtras().get("trans");
+                // Prepare intent which is triggered if the
+                // notification is selected
+                //Intent intent = new Intent(this, TutorialActivity.class);
+                Intent intent = new Intent(MainActivity.this, ReceptorBroadcast.class);
+                intent.putExtra("FECHA", trans.fecha_alta);
+                intent.putExtra("TIPO", trans.tipo_transaccion);
+                intent.putExtra("OP", 'N');
+                intent.putExtra("TRANS", trans);
+                intent.putExtra("CUENTA_ID", trans.cuenta_prin_id);
+                /*
+                PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+                // Build notification
+                // Actions are just fake
+                Notification noti = new Notification.Builder(this)
+                        .setAutoCancel(true)
+                        .setContentTitle(trans.descripcion)
+                        .setContentText("¿Ya realizaste esta transacción?")
+                        .setSmallIcon(Util.imagenesFull[trans.categoriaObj.resource])
+                        .setContentIntent(pIntent).build();
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                notificationManager.notify(0, noti);
+                */
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.MINUTE, 2);
+                //Intent myIntent = new Intent(MainActivity.this, ReceptorBroadcast.class);
+                pendingIntent = PendingIntent.getBroadcast(this, 1, intent,0);
+
+                AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC, cal.getTimeInMillis(), pendingIntent);
+
                 ActualizaVentana();
                 ActualizaAdapter();
             }

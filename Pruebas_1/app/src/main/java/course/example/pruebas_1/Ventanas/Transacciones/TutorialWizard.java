@@ -61,6 +61,7 @@ public class TutorialWizard extends BasicWizardLayout {
             this.trans.fecha_alta = fecha;
             this.trans.tipo_transaccion = tipo;
             this.trans.cuenta_prin_id = cuenta_id;
+            this.trans.costo = transaccion.costo;
         } else {
             fecha = getArguments().getString("FECHA");
             tipo = getArguments().getInt("TIPO", 0);
@@ -70,6 +71,10 @@ public class TutorialWizard extends BasicWizardLayout {
             this.trans.fecha_alta = fecha;
             this.trans.tipo_transaccion = tipo;
             this.trans.cuenta_prin_id = cuenta_id;
+            if(transaccion != null)
+            {
+                this.trans.costo = transaccion.costo;
+            }
         }
 
         switch(tipo)
@@ -90,7 +95,7 @@ public class TutorialWizard extends BasicWizardLayout {
                 break;
         }
 
-        if(op == 'C')
+        if(op == 'C' || op == 'N')
         {
             this.trans = transaccion;
             this.trans.textoKeyPad = String.valueOf(trans.costo);
@@ -118,10 +123,10 @@ public class TutorialWizard extends BasicWizardLayout {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
             Transaccion transaccion = new Transaccion(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion);
             if(op == 'C')
-                dbHelper.Transacciones.Modifica(transaccion);
+                transaccion = dbHelper.Transacciones.Modifica(transaccion);
             else
-                dbHelper.Transacciones.Inserta(transaccion);
-            returnIntent.putExtra("trans", trans);
+                transaccion = dbHelper.Transacciones.Inserta(transaccion);
+            returnIntent.putExtra("trans", transaccion);
             getActivity().setResult(1, returnIntent);
             getActivity().finish();     //Terminate the wizard
         }
@@ -132,8 +137,10 @@ public class TutorialWizard extends BasicWizardLayout {
     }
 
     public String Validate(){
-        if(trans.textoKeyPad.equals(".") || trans.textoKeyPad.equals(""))
+        if(trans.textoKeyPad.equals(".") || trans.textoKeyPad.equals("") || !tryParseDouble(trans.textoKeyPad))
+        {
             return "No se ha ingresado un total";
+        }
         else if(trans.tipo_transaccion < 2)
         {
             if(trans.numeroCategoria == -1)
@@ -149,6 +156,15 @@ public class TutorialWizard extends BasicWizardLayout {
                 return "";
         }
 
+    }
+
+    boolean tryParseDouble(String value) {
+        try {
+            Double.parseDouble(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

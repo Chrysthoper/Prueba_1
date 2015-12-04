@@ -56,7 +56,7 @@ public class TD_Transacciones
         return transaccion;
     }
 
-    public Boolean Inserta(Transaccion trans){
+    public Transaccion Inserta(Transaccion trans){
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -77,12 +77,15 @@ public class TD_Transacciones
                 null,
                 values);
         if (newRowId > 0)
-            return ActualizaCuentas((int) newRowId);
+        {
+            ActualizaCuentas((int) newRowId);
+            return this.Obten((int) newRowId);
+        }
         else
-            return false;
+            return null;
     }
 
-    public Boolean Modifica(Transaccion trans){
+    public Transaccion Modifica(Transaccion trans){
 
         if(this.RestablecerCuentas(trans.id))
         {
@@ -104,13 +107,17 @@ public class TD_Transacciones
             newRowId = db.update(DatabaseSchema.TD_Transacciones.TABLE_NAME,
                     values,
                     DatabaseSchema.TD_Transacciones.COLUMN_NAME_ID + "=" + trans.id, null);
+
             if (newRowId > 0)
-                return this.ActualizaCuentas(trans.id);
+            {
+                this.ActualizaCuentas(trans.id);
+                return this.Obten(trans.id);
+            }
             else
-                return false;
+                return null;
         }
         else
-            return false;
+            return null;
     }
 
     public Boolean ActualizaCuentas(int transaccion_id) {

@@ -9,4 +9,6 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/restore_settings" android:title="Restore"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/notification_settings" android:title="Notification"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>
