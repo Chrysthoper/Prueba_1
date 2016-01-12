@@ -76,7 +76,8 @@ public class Util
             R.color.color8,
             R.color.color9,
             R.color.color10,
-            Color.BLACK
+            R.color.colorNegro
+
     };
     public static int[] imagenes = new int[]{
             R.mipmap.gas,

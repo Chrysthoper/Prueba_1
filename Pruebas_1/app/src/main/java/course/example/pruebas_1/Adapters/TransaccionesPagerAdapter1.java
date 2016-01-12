@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerGrid;
@@ -23,6 +24,9 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
     public ListView lvTransaccionesPrincipal;
     private ArrayList<Transaccion> transacciones;
     private TransaccionAdapter adapter;
+    private TextView tvAvisoListTrans;
+
+
     public static TransaccionesPagerAdapter1 newInstance(ArrayList<Transaccion> listaTransacciones) {
 
         // Instantiate a new fragment
@@ -54,6 +58,13 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
         adapter.setCallback(this);
         lvTransaccionesPrincipal.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        tvAvisoListTrans = (TextView) rootView.findViewById(R.id.tvAvisoListTrans);
+        if(!this.transacciones.isEmpty())
+            tvAvisoListTrans.setVisibility(View.GONE);
+        else
+            tvAvisoListTrans.setVisibility(View.VISIBLE);
+
         return rootView;
     }
 
@@ -64,6 +75,12 @@ public class TransaccionesPagerAdapter1 extends Fragment implements IAdaptersCal
         lvTransaccionesPrincipal.setAdapter(adapter);
         adapter.setCallback(this);
         adapter.notifyDataSetChanged();
+
+        if(!this.transacciones.isEmpty())
+            tvAvisoListTrans.setVisibility(View.GONE);
+        else
+            tvAvisoListTrans.setVisibility(View.VISIBLE);
+
         caller.ActualizaVentana();
     }
 

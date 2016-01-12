@@ -1,6 +1,7 @@
 package course.example.pruebas_1.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.LayoutInflater;
@@ -62,6 +63,7 @@ public class CategoriasGroupAdapter extends BaseAdapter {
         GradientDrawable shape_item_color = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_itemgrid_color);
         int color = context.getResources().getColor(Util.coloresHex[categoria.color]);
         shape_item_color.setColor(color);
+
 
         holder.tvCostoAdapterGroup.setText(Util.PriceFormat(categoria.total));
         holder.tvDescripcionAdapterGroup.setText(categoria.nombre);

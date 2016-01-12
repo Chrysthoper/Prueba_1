@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
     private ArrayList<Categoria> categorias;
     private CategoriasGroupAdapter adapter;
     ListView lvCategoriasGroupPrincipal;
+    private TextView tvAvisoListTrans;
 
     public static TransaccionesPagerAdapter2 newInstance(ArrayList<Categoria> listaCategorias) {
 
@@ -50,6 +52,12 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
         lvCategoriasGroupPrincipal.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        tvAvisoListTrans = (TextView) rootView.findViewById(R.id.tvAvisoListTrans);
+        if(!this.categorias.isEmpty())
+            tvAvisoListTrans.setVisibility(View.GONE);
+        else
+            tvAvisoListTrans.setVisibility(View.VISIBLE);
+
         return rootView;
 
     }
@@ -61,5 +69,10 @@ public class TransaccionesPagerAdapter2 extends Fragment implements IAdaptersCal
         lvCategoriasGroupPrincipal.setAdapter(adapter);
         adapter.setCallback(this);
         adapter.notifyDataSetChanged();
+
+        if(!this.categorias.isEmpty())
+            tvAvisoListTrans.setVisibility(View.GONE);
+        else
+            tvAvisoListTrans.setVisibility(View.VISIBLE);
     }
 }

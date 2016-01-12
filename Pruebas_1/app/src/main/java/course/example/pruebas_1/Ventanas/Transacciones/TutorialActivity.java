@@ -39,8 +39,6 @@ public class TutorialActivity extends FragmentActivity {
         } else {
             TutorialWizard test = (TutorialWizard) getSupportFragmentManager().findFragmentByTag("your_fragment_tag");
         }
-
-
     }
 
 }

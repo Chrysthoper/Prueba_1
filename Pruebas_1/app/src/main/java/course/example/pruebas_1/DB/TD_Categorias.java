@@ -121,10 +121,15 @@ public class TD_Categorias
 
     public Boolean Elimina(int categoria_id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.delete(
-                DatabaseSchema.TD_Categorias.TABLE_NAME,
-                DatabaseSchema.TD_Categorias.COLUMN_NAME_ID + "=" + categoria_id,
-                null) > 0;
+        if(dbHelper.Transacciones.ModificaCategorias(categoria_id))
+        {
+            return db.delete(
+                    DatabaseSchema.TD_Categorias.TABLE_NAME,
+                    DatabaseSchema.TD_Categorias.COLUMN_NAME_ID + "=" + categoria_id,
+                    null) > 0;
+        }
+        else
+            return false;
     }
 
     public ArrayList<Categoria> ObtenTotalCategorias(String fechaIni, String fechaFin) {

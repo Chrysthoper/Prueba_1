@@ -277,4 +277,15 @@ public class TD_Transacciones
         }
         return Transaccion;
     }
+
+    public Boolean ModificaCategorias(int categoria){
+            // Gets the data repository in write mode
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            // Create a new map of values, where column names are the keys
+            ContentValues valores = new ContentValues();
+            valores.put(DatabaseSchema.TD_Transacciones.COLUMN_NAME_3, 1);
+
+            return db.update(DatabaseSchema.TD_Transacciones.TABLE_NAME, valores, DatabaseSchema.TD_Transacciones.COLUMN_NAME_3 + "=" + categoria, null) > 0;
+    }
 }

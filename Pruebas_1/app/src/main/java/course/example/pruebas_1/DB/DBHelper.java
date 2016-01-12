@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public TD_Cuentas Cuentas;
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 17;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "MiCochinito.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -96,6 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('PAREJA',9,9,9,0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Categorias.TABLE_NAME + " (NOMBRE,RECURSO_ID,FORMACIRCULO_ID,COLOR_ID,TIPO) VALUES ('ROPA',10,9,9,0)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('BANAMEX',14,3)");
+        db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('BANCOMER',14,6)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('EFECTIVO',18,9)");
         db.execSQL("INSERT INTO " + DatabaseSchema.TD_Cuentas.TABLE_NAME + " (NOMBRE,RECURSO_ID,COLOR_ID) VALUES ('FINANCIAMIENTO',17,1)");
     }

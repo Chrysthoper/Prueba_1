@@ -34,12 +34,13 @@ public class CuentasGridAdapter extends BaseAdapter {
         final Cuenta cuenta = this.cuentas.get(position);
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.adapter_categoria_grid, null, false);
+            row = inflater.inflate(R.layout.adapter_cuentas_grid, null, false);
 
             holder = new MyViewHolder();
-            holder.tvNombreCategoria = (TextView) row.findViewById(R.id.tvGridCategoriaAdapter);
-            holder.ivImagenCategoria = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
-            holder.lyColorCategoria = (LinearLayout) row.findViewById(R.id.lyGridCategoriaAdapter);
+            holder.tvGridNombreCuentaAdapter = (TextView) row.findViewById(R.id.tvGridNombreCuentaAdapter);
+            holder.tvGridPrecioCuentaAdapter = (TextView) row.findViewById(R.id.tvGridPrecioCuentaAdapter);
+            holder.ivImagenCuenta = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
+            holder.lyColorCuenta = (LinearLayout) row.findViewById(R.id.lyGridCategoriaAdapter);
 
             if(seleccion == cuenta.id)
                 row.setBackgroundColor(Color.parseColor("#FFAA2300"));
@@ -48,8 +49,9 @@ public class CuentasGridAdapter extends BaseAdapter {
         } else {
             holder = (MyViewHolder) row.getTag();
         }
-        holder.tvNombreCategoria.setText(Util.PriceFormat(cuenta.total));
-        holder.ivImagenCategoria.setImageResource(Util.imagenesFull[cuenta.resource]);
+        holder.tvGridNombreCuentaAdapter.setText(cuenta.nombre);
+        holder.tvGridPrecioCuentaAdapter.setText(Util.PriceFormat(cuenta.total));
+        holder.ivImagenCuenta.setImageResource(Util.imagenesFull[cuenta.resource]);
         return row;
     }
 
@@ -69,9 +71,9 @@ public class CuentasGridAdapter extends BaseAdapter {
     }
 
     private static class MyViewHolder {
-        public TextView tvNombreCategoria,tvIDCategoriaAdapter;
-        public ImageView ivImagenCategoria;
-        public LinearLayout lyColorCategoria;
+        public TextView tvGridPrecioCuentaAdapter,tvGridNombreCuentaAdapter;
+        public ImageView ivImagenCuenta;
+        public LinearLayout lyColorCuenta;
     }
 
 }

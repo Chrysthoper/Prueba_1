@@ -216,11 +216,13 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         String fechaIni = Util.FechaToFormat(c.getTime());
         String fechaFin = Util.FechaToFormat(cFin.getTime());
 
-        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni, fechaFin);
         pagerAdapter1.ActualizaGrid(listaTransacciones);
-        pagerAdapter2.ActualizaGrid(listaCategorias);
-        adapterFrag.notifyDataSetChanged();
+
+        //listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        //pagerAdapter2.ActualizaGrid(listaCategorias);
+
+        //adapterFrag.notifyDataSetChanged();
     }
 
     public void ActualizaVentana(){
@@ -249,6 +251,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         else
             tvBalancePrinncipal.setTextColor(Color.parseColor("#ff99cc00"));
 
+        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        pagerAdapter2.ActualizaGrid(listaCategorias);
     }
 
     //endregion
@@ -276,12 +280,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.categorias_settings)
-            startActivity(new Intent(getApplicationContext(), VentanaCategorias.class));
-        else if(id == R.id.calendario_settings)
-        {
-            Intent i = new Intent(getApplicationContext(), VentanaCalendario.class);
-            startActivityForResult(i,2);
-        }
+            startActivityForResult(new Intent(getApplicationContext(), VentanaCategorias.class), 3);
         else if(id == R.id.backup_settings)
         {
             this.exportDB();
@@ -295,13 +294,9 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         }
         else if (id == R.id.notification_settings)
         {
-            // Prepare intent which is triggered if the
-            // notification is selected
             Intent intent = new Intent(this, VentanaCategorias.class);
             PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
-            // Build notification
-            // Actions are just fake
             Notification noti = new Notification.Builder(this)
                     .setContentTitle("Mi Cochinito")
                     .setContentText("¿Ya realizaste esta transacción?").setSmallIcon(R.drawable.icon_app)
@@ -401,9 +396,6 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             else
             {
                 Transaccion trans = (Transaccion)data.getExtras().get("trans");
-                // Prepare intent which is triggered if the
-                // notification is selected
-                //Intent intent = new Intent(this, TutorialActivity.class);
                 Intent intent = new Intent(MainActivity.this, ReceptorBroadcast.class);
                 intent.putExtra("FECHA", trans.fecha_alta);
                 intent.putExtra("TIPO", trans.tipo_transaccion);
@@ -424,7 +416,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                 NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
                 notificationManager.notify(0, noti);
+
                 */
+
+
+                /*
+                NOTIFICACIONES!!!
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.MINUTE, 2);
                 //Intent myIntent = new Intent(MainActivity.this, ReceptorBroadcast.class);
@@ -432,7 +429,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
                 AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC, cal.getTimeInMillis(), pendingIntent);
-
+                */
                 ActualizaVentana();
                 ActualizaAdapter();
             }
@@ -458,26 +455,13 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                     cAux.add(Calendar.DAY_OF_MONTH, 1);
                     intent.putExtra("FECHA2", cAux.getTimeInMillis());
                 }
-                startActivity(intent);
-                /*
-                boolean rango = data.getBooleanExtra("RANGO", false);
-                Date fecha1 = new Date(data.getLongExtra("FECHA1",-1));
-                c.setTime(fecha1);
-                if(rango)
-                {
-                    Date fecha2 = new Date(data.getLongExtra("FECHA2",-1));
-                    cFin.setTime(fecha2);
-                    cFin.add(Calendar.DAY_OF_MONTH, 1);
-                }
-                else
-                {
-                    cFin.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                    cFin.add(Calendar.DAY_OF_MONTH, 1);
-                }
-                ActualizaVentana();
-                ActualizaAdapter();
-                */
+                startActivityForResult(intent,3);
             }
+        }
+        if(requestCode == 3)
+        {
+            ActualizaVentana();
+            ActualizaAdapter();
         }
     }
 

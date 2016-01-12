@@ -4,7 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.persistence.ContextVariable;
@@ -19,6 +24,13 @@ public class TutorialStep3 extends WizardStep {
 
 
     EditText etDescripcion,etNotas;
+    Spinner spIntervalosProgramacion;
+
+    String[] arraySpinner = new String[] {
+            "Diario", "Semanal", "Mensual", "Anual"
+    };
+    CheckBox chProgramarTrans;
+    LinearLayout lyProgramarTrans;
 
     //Wire the layout to the step
     public TutorialStep3() {
@@ -34,6 +46,29 @@ public class TutorialStep3 extends WizardStep {
         etDescripcion.setText(trans.descripcion);
         etNotas = (EditText) v.findViewById(R.id.etNotas);
         etNotas.setText(trans.nota);
+
+        spIntervalosProgramacion = (Spinner) v.findViewById(R.id.spIntervalosProgramacion);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_spinner_item, arraySpinner);
+        spIntervalosProgramacion.setAdapter(adapter);
+
+        lyProgramarTrans = (LinearLayout) v.findViewById(R.id.lyProgramarTrans);
+        lyProgramarTrans.setVisibility(View.INVISIBLE);
+
+        chProgramarTrans = (CheckBox) v.findViewById(R.id.chProgramarTrans);
+        chProgramarTrans.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    lyProgramarTrans.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    lyProgramarTrans.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         return v;
     }
 
