@@ -46,12 +46,15 @@ import java.util.TimerTask;
 
 import course.example.pruebas_1.Adapters.CuentasGridAdapter;
 import course.example.pruebas_1.Adapters.ReceptorBroadcast;
+import course.example.pruebas_1.Adapters.TransaccionAdapter;
+import course.example.pruebas_1.Adapters.TransaccionProgramaListAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Negocio.Cuenta;
+import course.example.pruebas_1.Negocio.TransaccionProgramada;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
@@ -66,9 +69,11 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     LinearLayout lyFechaPrincipal,lyHistorial,lyTraspaso;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrinncipal, tvEntradasPrincipal,tvSalidasPrincipal,tvBalancePrincipal;
+    ListView lvTransaccionesProgramadasPrincipal;
     DatePickerDialog DialogoFechaPrincipal;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
+    ArrayList<TransaccionProgramada> listaTransaccionesProgramadas;
     ArrayList<Categoria> listaCategorias;
     ArrayList<Cuenta> listaCuentas;
     private TransaccionesPagerAdapter1 pagerAdapter1;
@@ -82,6 +87,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     private SlidingUpPanelLayout mLayout;
     TwoWayView lvCuentasListaPrincipal;
     CuentasGridAdapter adapterCuentas;
+    TransaccionProgramaListAdapter adapterTransProgramadas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +183,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         //lvCuentasListaPrincipal.setItemMargin(10);
         adapterCuentas.notifyDataSetChanged();
 
+        listaTransaccionesProgramadas = dbHelper.Transacciones_Programadas.Obten();
+        lvTransaccionesProgramadasPrincipal = (ListView) findViewById(R.id.lvTransaccionesProgramadasPrincipal);
+        this.adapterTransProgramadas = new TransaccionProgramaListAdapter(getApplicationContext(),this.listaTransaccionesProgramadas);
+        lvTransaccionesProgramadasPrincipal.setAdapter(adapterTransProgramadas);
+        adapterTransProgramadas.notifyDataSetChanged();
+
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setPanelState(PanelState.COLLAPSED);
         mLayout.setDragView(R.id.lyControlBar);
@@ -250,6 +262,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             tvBalancePrinncipal.setTextColor(Color.parseColor("#ffff4444"));
         else
             tvBalancePrinncipal.setTextColor(Color.parseColor("#ff99cc00"));
+
+        listaTransaccionesProgramadas = dbHelper.Transacciones_Programadas.Obten();
+        lvTransaccionesProgramadasPrincipal = (ListView) findViewById(R.id.lvTransaccionesProgramadasPrincipal);
+        this.adapterTransProgramadas = new TransaccionProgramaListAdapter(getApplicationContext(),this.listaTransaccionesProgramadas);
+        lvTransaccionesProgramadasPrincipal.setAdapter(adapterTransProgramadas);
+        adapterTransProgramadas.notifyDataSetChanged();
 
         listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
         pagerAdapter2.ActualizaGrid(listaCategorias);

@@ -47,27 +47,7 @@ public class TutorialStep3 extends WizardStep {
         etNotas = (EditText) v.findViewById(R.id.etNotas);
         etNotas.setText(trans.nota);
 
-        spIntervalosProgramacion = (Spinner) v.findViewById(R.id.spIntervalosProgramacion);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_spinner_item, arraySpinner);
-        spIntervalosProgramacion.setAdapter(adapter);
-
-        lyProgramarTrans = (LinearLayout) v.findViewById(R.id.lyProgramarTrans);
-        lyProgramarTrans.setVisibility(View.INVISIBLE);
-
         chProgramarTrans = (CheckBox) v.findViewById(R.id.chProgramarTrans);
-        chProgramarTrans.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
-                    lyProgramarTrans.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    lyProgramarTrans.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
 
         return v;
     }
@@ -87,6 +67,7 @@ public class TutorialStep3 extends WizardStep {
     private void bindDataFields() {
         trans.descripcion = etDescripcion.getText().toString().trim();
         trans.nota = etNotas.getText().toString().trim();
+        trans.programar = chProgramarTrans.isChecked();
     }
 
 }

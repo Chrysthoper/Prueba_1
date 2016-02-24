@@ -14,12 +14,13 @@ import java.util.Date;
 
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
+import course.example.pruebas_1.Negocio.TransaccionProgramada;
 import course.example.pruebas_1.R;
 
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
-    private Transaccion trans = new Transaccion("",-1,-1,"","","",0,0);
+    private Transaccion trans = new Transaccion("",-1,-1,"","","",0,0,false,0);
     @ContextVariable
     private char op = 'X';
 
@@ -121,11 +122,19 @@ public class TutorialWizard extends BasicWizardLayout {
         if(error.equals(""))
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion);
+            Transaccion transaccion = new Transaccion(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion, trans.programacion_id);
             if(op == 'C')
                 transaccion = dbHelper.Transacciones.Modifica(transaccion);
             else
+            {
                 transaccion = dbHelper.Transacciones.Inserta(transaccion);
+                if(trans.programar)
+                {
+                    TransaccionProgramada transaccion_programada = new TransaccionProgramada(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id, trans.tipo_transaccion, trans.fecha_alta, "MENSUAL", true);
+                    transaccion_programada = dbHelper.Transacciones_Programadas.Inserta(transaccion_programada);
+                    trans.programadaObj = transaccion_programada;
+                }
+            }
             returnIntent.putExtra("trans", transaccion);
             getActivity().setResult(1, returnIntent);
             getActivity().finish();     //Terminate the wizard
