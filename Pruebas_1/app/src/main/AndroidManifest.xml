@@ -60,6 +60,14 @@
             android:name=".Ventanas.Cuentas.abcCuentas"
             android:label="@string/title_activity_abc_cuentas" >
         </activity>
+
+        <service
+            android:name=".Adapters.NotificationService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <receiver android:name=".Adapters.ReceptorBroadcast"/>
     </application>
 
 </manifest>

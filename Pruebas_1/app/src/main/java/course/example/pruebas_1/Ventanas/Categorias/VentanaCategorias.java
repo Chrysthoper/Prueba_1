@@ -65,19 +65,26 @@ public class VentanaCategorias extends ActionBarActivity {
         if(position > 0)
         {
             final Categoria categoria = ListaCategorias.get(position);
-            new AlertDialog.Builder(VentanaCategorias.this)
-                    .setMessage("¿Seguro que desea borrar la categoria?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            if (dbHelper.Categorias.Elimina(categoria.id)) {
-                                ActualizaVentana();
-                                Toast.makeText(VentanaCategorias.this, "Se elimino la categoria", Toast.LENGTH_SHORT).show();
+            if(categoria.id > 1)
+            {
+                new AlertDialog.Builder(VentanaCategorias.this)
+                        .setMessage("¿Seguro que desea borrar la categoria?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (dbHelper.Categorias.Elimina(categoria.id)) {
+                                    ActualizaVentana();
+                                    Toast.makeText(VentanaCategorias.this, "Se eliminó la categoria", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+            else
+            {
+                Toast.makeText(VentanaCategorias.this, "No se puede eliminar la categoria \"" + categoria.nombre + "\"", Toast.LENGTH_SHORT).show();
+            }
         }
         return true;
         }
@@ -96,8 +103,9 @@ public class VentanaCategorias extends ActionBarActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
-            if(position == 0)
-                startActivityForResult(new Intent(getApplicationContext(), abcCategorias.class),1);
+            if(position == 0) {
+                startActivityForResult(new Intent(getApplicationContext(), abcCategorias.class), 1);
+            }
         }
     };
 

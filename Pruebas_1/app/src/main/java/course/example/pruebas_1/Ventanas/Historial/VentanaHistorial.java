@@ -79,20 +79,17 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
         outState.putLong("FECHA2", c.getTimeInMillis());
     }
 
-    @Override
-    public void ActualizaVentana() {
-
-    }
-
     public void ActualizaAdapter() {
         String fechaIni = Util.FechaToFormat(c.getTime());
         String fechaFin = Util.FechaToFormat(cFin.getTime());
 
-        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni, fechaFin);
         pagerAdapter1.ActualizaGrid(listaTransacciones);
-        pagerAdapter2.ActualizaGrid(listaCategorias);
-        adapterFrag.notifyDataSetChanged();
+
+        //listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        //pagerAdapter2.ActualizaGrid(listaCategorias);
+
+        //adapterFrag.notifyDataSetChanged();
     }
 
     @Override
@@ -104,8 +101,17 @@ public class VentanaHistorial extends ActionBarActivity implements IAdaptersCall
                 Toast.makeText(VentanaHistorial.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
             else
             {
+                ActualizaVentana();
                 ActualizaAdapter();
             }
         }
+    }
+
+    public void ActualizaVentana() {
+        String fechaIni = Util.FechaToFormat(c.getTime());
+        String fechaFin = Util.FechaToFormat(cFin.getTime());
+
+        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        pagerAdapter2.ActualizaGrid(listaCategorias);
     }
 }

@@ -150,12 +150,12 @@ public class TransaccionAdapter extends BaseAdapter implements Serializable {
         {
             holder.lyTransAdapter1.setVisibility(View.VISIBLE);
             holder.tvFechaAdapter.setText(Util.FormatToShort(trans.fecha_alta.substring(0,10)));
-            holder.ivCuentaAdapter.setImageResource(Util.imagenes[trans.cuentaPrincipalObj.resource]);
+            holder.ivCuentaAdapter.setImageResource(Util.imagenesFull[trans.cuentaPrincipalObj.resource]);
 
             holder.tvCostoAdapter.setText(Util.PriceFormat(trans.costo));
             holder.tvDescripcionAdapter.setText(trans.descripcion);
             holder.tvNotaAdapter.setText(trans.nota);
-            holder.ivCategoriaAdapter.setImageResource(Util.imagenes[trans.categoriaObj.resource]);
+            holder.ivCategoriaAdapter.setImageResource(Util.imagenesFull[trans.categoriaObj.resource]);
             holder.ivCategoriaAdapter.setBackgroundResource(Util.colores[trans.categoriaObj.formaCirculo]);
 
             switch(trans.categoriaObj.tipo)

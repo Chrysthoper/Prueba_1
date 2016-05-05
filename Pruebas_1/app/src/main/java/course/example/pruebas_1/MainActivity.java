@@ -1,8 +1,12 @@
 package course.example.pruebas_1;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,12 +45,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import course.example.pruebas_1.Adapters.CuentasGridAdapter;
+import course.example.pruebas_1.Adapters.ReceptorBroadcast;
+import course.example.pruebas_1.Adapters.TransaccionAdapter;
+import course.example.pruebas_1.Adapters.TransaccionProgramaListAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesFragmentPagerAdapter;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter1;
 import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
 import course.example.pruebas_1.Negocio.Cuenta;
+import course.example.pruebas_1.Negocio.TransaccionProgramada;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
@@ -62,9 +70,11 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     LinearLayout lyFechaPrincipal,lyHistorial,lyTraspaso;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrinncipal, tvEntradasPrincipal,tvSalidasPrincipal,tvBalancePrincipal;
+    ListView lvTransaccionesProgramadasPrincipal;
     DatePickerDialog DialogoFechaPrincipal;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
+    ArrayList<TransaccionProgramada> listaTransaccionesProgramadas;
     ArrayList<Categoria> listaCategorias;
     ArrayList<Cuenta> listaCuentas;
     private TransaccionesPagerAdapter1 pagerAdapter1;
@@ -73,9 +83,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     Calendar c,cFin,cTransaccion = Calendar.getInstance();
     ViewPager pager = null;
 
+    private PendingIntent pendingIntent;
+
     private SlidingUpPanelLayout mLayout;
     TwoWayView lvCuentasListaPrincipal;
     CuentasGridAdapter adapterCuentas;
+    TransaccionProgramaListAdapter adapterTransProgramadas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +184,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         //lvCuentasListaPrincipal.setItemMargin(10);
         adapterCuentas.notifyDataSetChanged();
 
+        listaTransaccionesProgramadas = dbHelper.Transacciones_Programadas.Obten();
+        lvTransaccionesProgramadasPrincipal = (ListView) findViewById(R.id.lvTransaccionesProgramadasPrincipal);
+        this.adapterTransProgramadas = new TransaccionProgramaListAdapter(getApplicationContext(),this.listaTransaccionesProgramadas);
+        lvTransaccionesProgramadasPrincipal.setAdapter(adapterTransProgramadas);
+        adapterTransProgramadas.notifyDataSetChanged();
+
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setPanelState(PanelState.COLLAPSED);
         mLayout.setDragView(R.id.lyControlBar);
@@ -210,15 +229,16 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         String fechaIni = Util.FechaToFormat(c.getTime());
         String fechaFin = Util.FechaToFormat(cFin.getTime());
 
-        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni,fechaFin);
-        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        listaTransacciones = dbHelper.Transacciones.Obten(fechaIni, fechaFin);
         pagerAdapter1.ActualizaGrid(listaTransacciones);
-        pagerAdapter2.ActualizaGrid(listaCategorias);
-        adapterFrag.notifyDataSetChanged();
+
+        //listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        //pagerAdapter2.ActualizaGrid(listaCategorias);
+
+        //adapterFrag.notifyDataSetChanged();
     }
 
     public void ActualizaVentana()
-
     {
 
         String fechaIni = Util.FechaToFormat(c.getTime());
@@ -245,6 +265,14 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         else
             tvBalancePrinncipal.setTextColor(Color.parseColor("#ff99cc00"));
 
+        listaTransaccionesProgramadas = dbHelper.Transacciones_Programadas.Obten();
+        lvTransaccionesProgramadasPrincipal = (ListView) findViewById(R.id.lvTransaccionesProgramadasPrincipal);
+        this.adapterTransProgramadas = new TransaccionProgramaListAdapter(getApplicationContext(),this.listaTransaccionesProgramadas);
+        lvTransaccionesProgramadasPrincipal.setAdapter(adapterTransProgramadas);
+        adapterTransProgramadas.notifyDataSetChanged();
+
+        listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
+        pagerAdapter2.ActualizaGrid(listaCategorias);
     }
 
     //endregion
@@ -285,6 +313,25 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             dbHelper = new DBHelper(getApplicationContext());
             ActualizaVentana();
             ActualizaAdapter();
+        }
+        else if (id == R.id.notification_settings)
+        {
+            Intent intent = new Intent(this, VentanaCategorias.class);
+            PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+            Notification noti = new Notification.Builder(this)
+                    .setContentTitle("Mi Cochinito")
+                    .setContentText("¿Ya realizaste esta transacción?").setSmallIcon(R.drawable.icon_app)
+                    .setContentIntent(pIntent)
+                    .addAction(R.mipmap.agregar_blanco, "Crear", pIntent)
+                    .addAction(R.mipmap.compras, "Omitir", pIntent).build();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            notificationManager.notify(0, noti);
+        }
+        else if(id == R.id.acerca_settings)
+        {
+            Toast.makeText(getApplicationContext(), "Mi Cochinito v" + BuildConfig.VERSION_NAME, Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -374,6 +421,41 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                 Toast.makeText(MainActivity.this, "No se genero ninguna transaccion", Toast.LENGTH_SHORT).show();
             else
             {
+                Transaccion trans = (Transaccion)data.getExtras().get("trans");
+                Intent intent = new Intent(MainActivity.this, ReceptorBroadcast.class);
+                intent.putExtra("FECHA", trans.fecha_alta);
+                intent.putExtra("TIPO", trans.tipo_transaccion);
+                intent.putExtra("OP", 'N');
+                intent.putExtra("TRANS", trans);
+                intent.putExtra("CUENTA_ID", trans.cuenta_prin_id);
+                /*
+                PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+                // Build notification
+                // Actions are just fake
+                Notification noti = new Notification.Builder(this)
+                        .setAutoCancel(true)
+                        .setContentTitle(trans.descripcion)
+                        .setContentText("¿Ya realizaste esta transacción?")
+                        .setSmallIcon(Util.imagenesFull[trans.categoriaObj.resource])
+                        .setContentIntent(pIntent).build();
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                notificationManager.notify(0, noti);
+
+                */
+
+
+                /*
+                NOTIFICACIONES!!!
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.MINUTE, 2);
+                //Intent myIntent = new Intent(MainActivity.this, ReceptorBroadcast.class);
+                pendingIntent = PendingIntent.getBroadcast(this, 1, intent,0);
+
+                AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC, cal.getTimeInMillis(), pendingIntent);
+                */
                 ActualizaVentana();
                 ActualizaAdapter();
             }

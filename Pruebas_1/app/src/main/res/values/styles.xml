@@ -11,6 +11,7 @@
     <color name="color9">#f1c40f</color>
     <color name="color10">#D35400</color>
     <color name="color11">#6C7A89</color>
+    <color name="colorNegro">#000000</color>
     <color name="FondoGris">#BFBFBF</color>
     <color name="FondoItemGris">#EEEEEE</color>
 </resources>

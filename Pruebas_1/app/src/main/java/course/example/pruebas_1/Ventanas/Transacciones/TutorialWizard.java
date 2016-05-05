@@ -14,12 +14,13 @@ import java.util.Date;
 
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
+import course.example.pruebas_1.Negocio.TransaccionProgramada;
 import course.example.pruebas_1.R;
 
 public class TutorialWizard extends BasicWizardLayout {
 
     @ContextVariable
-    private Transaccion trans = new Transaccion("",-1,-1,"","","",0,0);
+    private Transaccion trans = new Transaccion("",-1,-1,"","","",0,0,false,0);
     @ContextVariable
     private char op = 'X';
 
@@ -61,6 +62,7 @@ public class TutorialWizard extends BasicWizardLayout {
             this.trans.fecha_alta = fecha;
             this.trans.tipo_transaccion = tipo;
             this.trans.cuenta_prin_id = cuenta_id;
+            this.trans.costo = transaccion.costo;
         } else {
             fecha = getArguments().getString("FECHA");
             tipo = getArguments().getInt("TIPO", 0);
@@ -70,6 +72,10 @@ public class TutorialWizard extends BasicWizardLayout {
             this.trans.fecha_alta = fecha;
             this.trans.tipo_transaccion = tipo;
             this.trans.cuenta_prin_id = cuenta_id;
+            if(transaccion != null)
+            {
+                this.trans.costo = transaccion.costo;
+            }
         }
 
         switch(tipo)
@@ -90,7 +96,7 @@ public class TutorialWizard extends BasicWizardLayout {
                 break;
         }
 
-        if(op == 'C')
+        if(op == 'C' || op == 'N')
         {
             this.trans = transaccion;
             this.trans.textoKeyPad = String.valueOf(trans.costo);
@@ -116,12 +122,20 @@ public class TutorialWizard extends BasicWizardLayout {
         if(error.equals(""))
         {
             DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-            Transaccion transaccion = new Transaccion(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion);
+            Transaccion transaccion = new Transaccion(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id,trans.cuenta_secu_id,trans.tipo_transaccion, trans.programacion_id);
             if(op == 'C')
-                dbHelper.Transacciones.Modifica(transaccion);
+                transaccion = dbHelper.Transacciones.Modifica(transaccion);
             else
-                dbHelper.Transacciones.Inserta(transaccion);
-            returnIntent.putExtra("trans", trans);
+            {
+                transaccion = dbHelper.Transacciones.Inserta(transaccion);
+                if(trans.programar)
+                {
+                    TransaccionProgramada transaccion_programada = new TransaccionProgramada(trans.id,Double.parseDouble(trans.textoKeyPad),trans.numeroCategoria,trans.fecha_alta,trans.nota,trans.descripcion,trans.cuenta_prin_id, trans.tipo_transaccion, trans.fecha_alta, "MENSUAL", true);
+                    transaccion_programada = dbHelper.Transacciones_Programadas.Inserta(transaccion_programada);
+                    trans.programadaObj = transaccion_programada;
+                }
+            }
+            returnIntent.putExtra("trans", transaccion);
             getActivity().setResult(1, returnIntent);
             getActivity().finish();     //Terminate the wizard
         }
@@ -132,8 +146,10 @@ public class TutorialWizard extends BasicWizardLayout {
     }
 
     public String Validate(){
-        if(trans.textoKeyPad.equals(".") || trans.textoKeyPad.equals(""))
+        if(trans.textoKeyPad.equals(".") || trans.textoKeyPad.equals("") || !tryParseDouble(trans.textoKeyPad))
+        {
             return "No se ha ingresado un total";
+        }
         else if(trans.tipo_transaccion < 2)
         {
             if(trans.numeroCategoria == -1)
@@ -149,6 +165,15 @@ public class TutorialWizard extends BasicWizardLayout {
                 return "";
         }
 
+    }
+
+    boolean tryParseDouble(String value) {
+        try {
+            Double.parseDouble(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

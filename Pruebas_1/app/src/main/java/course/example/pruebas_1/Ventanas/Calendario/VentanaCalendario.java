@@ -137,11 +137,14 @@ public class VentanaCalendario extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Calendar c = Calendar.getInstance();
+                c.set(Calendar.HOUR_OF_DAY, 0);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
                 caldroidFragment.clearSelectedDates();
                 caldroidFragment.setSelectedDate(c.getTime());
                 caldroidFragment.moveToDate(c.getTime());
                 caldroidFragment.refreshView();
-                RangoCompleto = true;
+                RangoCompleto = false;
                 fecha1.setTime(c.getTimeInMillis());
             }
         });
