@@ -25,37 +25,29 @@ public class CuentasAdapter extends BaseAdapter {
     public CuentasAdapter(Context context, ArrayList<Cuenta> Cuentas) {
         this.context = context;
         this.Cuentas = Cuentas;
+        this.Cuentas.add(0,new Cuenta(0,"Nueva Cuenta",20,10));
     }
 
     public View getView(final int position, final View convertView, ViewGroup parent) {
-
         View row = convertView;
         final MyViewHolder holder;
         final Cuenta cuenta = Cuentas.get(position);
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.adapter_categoria_list, null, false);
+            row = inflater.inflate(R.layout.adapter_categoria_grid, null, false);
             holder = new MyViewHolder();
 
-            holder.tvCostoAdapterGroup = (TextView) row.findViewById(R.id.tvCostoAdapterGroup);
-            holder.tvDescripcionAdapterGroup = (TextView) row.findViewById(R.id.tvDescripcionAdapterGroup);
-            holder.ivCategoriaAdapterGroup = (ImageView) row.findViewById(R.id.ivCategoriaAdapterGroup);
-            holder.lyTransAdapterGroup1 = row.findViewById(R.id.lyTransAdapterGroup1);
+            holder.tvGridCategoriaAdapter = (TextView) row.findViewById(R.id.tvGridCategoriaAdapter);
+            holder.ivGridCategoriaAdapter = (ImageView) row.findViewById(R.id.ivGridCategoriaAdapter);
 
             row.setTag(holder);
         } else {
             holder = (MyViewHolder) row.getTag();
         }
 
-        LayerDrawable bgDrawable = (LayerDrawable)holder.lyTransAdapterGroup1.getBackground();
-        GradientDrawable shape_item_color = (GradientDrawable) bgDrawable.findDrawableByLayerId(R.id.shape_itemgrid_color);
-        int color = context.getResources().getColor(Util.coloresHex[cuenta.color]);
-        shape_item_color.setColor(color);
-
-        holder.tvCostoAdapterGroup.setText(Util.PriceFormat(cuenta.total));
-        holder.tvDescripcionAdapterGroup.setText(cuenta.nombre);
-        holder.ivCategoriaAdapterGroup.setImageResource(Util.imagenesFull[cuenta.resource]);
+        holder.tvGridCategoriaAdapter.setText(cuenta.nombre);
+        holder.ivGridCategoriaAdapter.setImageResource(Util.imagenesFull[cuenta.resource]);
         return row;
     }
 
@@ -75,9 +67,8 @@ public class CuentasAdapter extends BaseAdapter {
     }
 
     private static class MyViewHolder {
-        public TextView tvCostoAdapterGroup,tvDescripcionAdapterGroup;
-        public ImageView ivCategoriaAdapterGroup;
-        public View lyTransAdapterGroup1;
+        public TextView tvGridCategoriaAdapter;
+        public ImageView ivGridCategoriaAdapter;
     }
 
 }

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="course.example.pruebas_1.Ventanas.Categorias.abcCategorias">
-    <item android:id="@+id/btnCrearCategoria" android:icon="@mipmap/agregar"
-        android:orderInCategory="100" app:showAsAction="always" android:title="Crea Categoria" />
+    tools:context="course.example.pruebas_1.Ventanas.Categorias.abcCuentas">
+    <item android:id="@+id/btnCrearCuentas" android:icon="@mipmap/agregar"
+        android:orderInCategory="100" app:showAsAction="always" android:title="Crea Cuenta" />
 </menu>

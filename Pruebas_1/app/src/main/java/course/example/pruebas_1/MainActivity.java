@@ -51,6 +51,7 @@ import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
 import course.example.pruebas_1.DB.DBHelper;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.Ventanas.Calendario.VentanaCalendario;
+import course.example.pruebas_1.Ventanas.Cuentas.VentanaCuentas;
 import course.example.pruebas_1.Ventanas.Historial.VentanaHistorial;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
@@ -216,7 +217,9 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         adapterFrag.notifyDataSetChanged();
     }
 
-    public void ActualizaVentana(){
+    public void ActualizaVentana()
+
+    {
 
         String fechaIni = Util.FechaToFormat(c.getTime());
         String fechaFin = Util.FechaToFormat(cFin.getTime());
@@ -270,11 +273,8 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         int id = item.getItemId();
         if(id == R.id.categorias_settings)
             startActivity(new Intent(getApplicationContext(), VentanaCategorias.class));
-        else if(id == R.id.calendario_settings)
-        {
-            Intent i = new Intent(getApplicationContext(), VentanaCalendario.class);
-            startActivityForResult(i,2);
-        }
+        else if(id == R.id.cuentas_settings)
+            startActivityForResult(new Intent(getApplicationContext(), VentanaCuentas.class), 3);
         else if(id == R.id.backup_settings)
         {
             this.exportDB();
@@ -378,7 +378,7 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                 ActualizaAdapter();
             }
         }
-        if (requestCode == 2)
+        else if (requestCode == 2)
         {
             if(resultCode == 1)
             {
@@ -400,25 +400,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
                     intent.putExtra("FECHA2", cAux.getTimeInMillis());
                 }
                 startActivity(intent);
-                /*
-                boolean rango = data.getBooleanExtra("RANGO", false);
-                Date fecha1 = new Date(data.getLongExtra("FECHA1",-1));
-                c.setTime(fecha1);
-                if(rango)
-                {
-                    Date fecha2 = new Date(data.getLongExtra("FECHA2",-1));
-                    cFin.setTime(fecha2);
-                    cFin.add(Calendar.DAY_OF_MONTH, 1);
-                }
-                else
-                {
-                    cFin.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-                    cFin.add(Calendar.DAY_OF_MONTH, 1);
-                }
-                ActualizaVentana();
-                ActualizaAdapter();
-                */
             }
+        }
+        else if (requestCode == 3)
+        {
+            ActualizaVentana();
+            ActualizaAdapter();
         }
     }
 

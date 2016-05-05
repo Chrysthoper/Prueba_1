@@ -96,13 +96,8 @@ public class VentanaCategorias extends ActionBarActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
-            if(position > 0)
-            {
-            }
-            else
-            {
+            if(position == 0)
                 startActivityForResult(new Intent(getApplicationContext(), abcCategorias.class),1);
-            }
         }
     };
 

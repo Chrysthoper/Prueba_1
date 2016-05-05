@@ -34,6 +34,7 @@ import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.Ventanas.Calendario.VentanaCalendario;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
+import course.example.pruebas_1.Ventanas.Cuentas.VentanaCuentas;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
 
@@ -192,7 +193,6 @@ public class MainActivity1 extends ActionBarActivity implements IAdaptersCallerV
             tvBalancePrincipal.setTextColor(Color.parseColor("#ffff4444"));
         else
             tvBalancePrincipal.setTextColor(Color.parseColor("#ff99cc00"));
-
     }
 
     //endregion
@@ -221,13 +221,8 @@ public class MainActivity1 extends ActionBarActivity implements IAdaptersCallerV
         int id = item.getItemId();
         if(id == R.id.categorias_settings)
             startActivity(new Intent(getApplicationContext(), VentanaCategorias.class));
-        else if(id == R.id.calendario_settings)
-        {
-            Intent i = new Intent(getApplicationContext(), VentanaCalendario.class);
-            i.putExtra("FECHA_INICIAL", "2015-10-01");
-            i.putExtra("FECHA_FINAL", "2015-11-30");
-            startActivityForResult(i,2);
-        }
+        else if(id == R.id.cuentas_settings)
+            startActivity(new Intent(getApplicationContext(), VentanaCuentas.class));
         return super.onOptionsItemSelected(item);
     }
 
