@@ -1,5 +1,8 @@
 package course.example.pruebas_1.Negocio;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -47,5 +50,43 @@ public class Transaccion implements Serializable
         this.cuenta_secu_id = cuenta_secu_id;
         this.tipo_transaccion = tipo_transaccion;
         this.programacion_id = programacion_id;
+    }
+
+    public Transaccion(JSONObject json)
+    {
+        try
+        {
+            this.id = json.getInt("id");
+            this.costo = json.getDouble("costo");
+            this.numeroCategoria = json.getInt("numeroCategoria");
+            this.fecha_alta = json.getString("fecha_alta");
+            this.nota = json.getString("nota");
+            this.descripcion = json.getString("descripcion");
+            this.cuenta_prin_id = json.getInt("cuenta_prin_id");
+            this.cuenta_secu_id = json.getInt("cuenta_secu_id");
+            this.tipo_transaccion = json.getInt("tipo_transaccion");
+            this.programacion_id = json.getInt("programacion_id");
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", this.id);
+            obj.put("costo", this.costo);
+            obj.put("numeroCategoria", this.numeroCategoria);
+            obj.put("fecha_alta", this.fecha_alta);
+            obj.put("nota", this.nota);
+            obj.put("descripcion", this.descripcion);
+            obj.put("cuenta_prin_id", this.cuenta_prin_id);
+            obj.put("cuenta_secu_id", this.cuenta_secu_id);
+            obj.put("tipo_transaccion", this.tipo_transaccion);
+            obj.put("programacion_id", this.programacion_id);
+        } catch (JSONException e) {
+            return null;
+        }
+        return obj;
     }
 }

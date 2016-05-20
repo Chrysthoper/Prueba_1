@@ -10,10 +10,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.graphics.Color;
 import android.os.Environment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,30 +39,8 @@ import android.support.v4.view.ViewPager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.lucasr.twowayview.TwoWayView;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,6 +49,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import course.example.pruebas_1.Adapters.CuentasGridAdapter;
+import course.example.pruebas_1.Adapters.CuentasListAdapter;
 import course.example.pruebas_1.Adapters.ReceptorBroadcast;
 import course.example.pruebas_1.Adapters.TransaccionAdapter;
 import course.example.pruebas_1.Adapters.TransaccionProgramaListAdapter;
@@ -75,6 +59,7 @@ import course.example.pruebas_1.Adapters.TransaccionesPagerAdapter2;
 import course.example.pruebas_1.DB.RequestTasks;
 import course.example.pruebas_1.Interfaces.IAdaptersCallerVentana;
 import course.example.pruebas_1.Negocio.Categoria;
+import course.example.pruebas_1.Negocio.Credenciales;
 import course.example.pruebas_1.Negocio.Cuenta;
 import course.example.pruebas_1.Negocio.TransaccionProgramada;
 import course.example.pruebas_1.Ventanas.Categorias.VentanaCategorias;
@@ -85,14 +70,13 @@ import course.example.pruebas_1.Ventanas.Cuentas.VentanaCuentas;
 import course.example.pruebas_1.Ventanas.Historial.VentanaHistorial;
 import course.example.pruebas_1.Ventanas.Transacciones.TutorialActivity;
 
-
 public class MainActivity extends ActionBarActivity implements IAdaptersCallerVentana {
 
     Button btnSalida,btnEntrada;
 
     LinearLayout lyFechaPrincipal,lyHistorial,lyTraspaso;
     TextView tvFechaPrincipalDia,tvFechaPrincipalMes,tvBalancePrinncipal, tvEntradasPrincipal,tvSalidasPrincipal,tvBalancePrincipal;
-    ListView lvTransaccionesProgramadasPrincipal;
+    ListView lvTransaccionesProgramadasPrincipal, list_nav_view;
     DatePickerDialog DialogoFechaPrincipal;
     DBHelper dbHelper;
     ArrayList<Transaccion> listaTransacciones;
@@ -105,17 +89,30 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     Calendar c,cFin,cTransaccion = Calendar.getInstance();
     ViewPager pager = null;
 
-    private PendingIntent pendingIntent;
-
     private SlidingUpPanelLayout mLayout;
     TwoWayView lvCuentasListaPrincipal;
     CuentasGridAdapter adapterCuentas;
+    CuentasListAdapter adapterCuentasLista;
     TransaccionProgramaListAdapter adapterTransProgramadas;
+
+    private DrawerLayout drawerLayout;
+    private NavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ventana_principal);
+        //setContentView(R.layout.ventana_principal);
+        setContentView(R.layout.activity_main_navview);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_nav_view);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+        navView = (NavigationView)findViewById(R.id.navview);
 
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -203,8 +200,13 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         lvCuentasListaPrincipal = (TwoWayView) findViewById(R.id.lvCuentasListaPrincipal);
         this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
         lvCuentasListaPrincipal.setAdapter(adapterCuentas);
-        //lvCuentasListaPrincipal.setItemMargin(10);
         adapterCuentas.notifyDataSetChanged();
+
+        listaCuentas = dbHelper.Cuentas.Obten();
+        list_nav_view = (ListView)findViewById(R.id.lst_menu_items);
+        this.adapterCuentasLista = new CuentasListAdapter(getApplicationContext(),this.listaCuentas);
+        list_nav_view.setAdapter(adapterCuentasLista);
+        adapterCuentasLista.notifyDataSetChanged();
 
         listaTransaccionesProgramadas = dbHelper.Transacciones_Programadas.Obten();
         lvTransaccionesProgramadasPrincipal = (ListView) findViewById(R.id.lvTransaccionesProgramadasPrincipal);
@@ -253,15 +255,9 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
         listaTransacciones = dbHelper.Transacciones.Obten(fechaIni, fechaFin);
         pagerAdapter1.ActualizaGrid(listaTransacciones);
-
-        //listaCategorias = dbHelper.Categorias.ObtenTotalCategorias(fechaIni, fechaFin);
-        //pagerAdapter2.ActualizaGrid(listaCategorias);
-
-        //adapterFrag.notifyDataSetChanged();
     }
 
-    public void ActualizaVentana()
-    {
+    public void ActualizaVentana(){
 
         String fechaIni = Util.FechaToFormat(c.getTime());
         String fechaFin = Util.FechaToFormat(cFin.getTime());
@@ -277,6 +273,12 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
         this.adapterCuentas = new CuentasGridAdapter(getApplicationContext(),this.listaCuentas,0);
         lvCuentasListaPrincipal.setAdapter(adapterCuentas);
         adapterCuentas.notifyDataSetChanged();
+
+        listaCuentas = dbHelper.Cuentas.Obten();
+        list_nav_view = (ListView)findViewById(R.id.lst_menu_items);
+        this.adapterCuentasLista = new CuentasListAdapter(getApplicationContext(),this.listaCuentas);
+        list_nav_view.setAdapter(adapterCuentasLista);
+        adapterCuentasLista.notifyDataSetChanged();
 
         tvBalancePrincipal.setText(Util.PriceFormat(SumEntradas - SumSalidas));
         tvEntradasPrincipal.setText(Util.PriceFormat(SumEntradas));
@@ -321,6 +323,11 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
         if(id == R.id.categorias_settings)
             startActivity(new Intent(getApplicationContext(), VentanaCategorias.class));
         else if(id == R.id.cuentas_settings)
@@ -392,15 +399,15 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
             // Set up the input
             final EditText input = new EditText(this);
             // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
             builder.setView(input);
 
             // Set up the buttons
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    RequestTasks request = new RequestTasks(getApplicationContext());
-                    request.execute(input.getText().toString());
+                    RequestTasks request = new RequestTasks(MainActivity.this);
+                    request.execute(new Credenciales(input.getText().toString(), "12345", "import"));
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -418,30 +425,34 @@ public class MainActivity extends ActionBarActivity implements IAdaptersCallerVe
 
     private void exportDB() {
         try {
-            File sd = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File data = Environment.getDataDirectory();
 
-            String currentDBPath = "//data//" + "course.example.pruebas_1" + "//databases//" + "MiCochinito.db";
-            String backupDBPath = "MiCochinitoBKUP.db";
-            File currentDB = new File(data, currentDBPath);
-            File backupDB = new File(sd, backupDBPath);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Ingresa un usuario");
 
-            if(currentDB.exists())
-            {
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-                Toast.makeText(getApplicationContext(), "Respaldo Exitoso!", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(getApplicationContext(), "No existe el archivo de respaldo", Toast.LENGTH_SHORT).show();
-            }
+            // Set up the input
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    RequestTasks request = new RequestTasks(MainActivity.this);
+                    request.execute(new Credenciales(input.getText().toString(), "12345", "export"));
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
         } catch (Exception e) {
-
-            Toast.makeText(getApplicationContext(), "El respaldo falló", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "La restauración falló", Toast.LENGTH_SHORT).show();
         }
     }
 

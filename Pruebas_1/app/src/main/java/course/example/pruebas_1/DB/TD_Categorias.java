@@ -105,6 +105,8 @@ public class TD_Categorias
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
+        if(cat.id != 0)
+            values.put(DatabaseSchema.TD_Categorias.COLUMN_NAME_ID, cat.id);
         values.put(DatabaseSchema.TD_Categorias.COLUMN_NAME_2, cat.nombre);
         values.put(DatabaseSchema.TD_Categorias.COLUMN_NAME_3, cat.resource);
         values.put(DatabaseSchema.TD_Categorias.COLUMN_NAME_4, cat.formaCirculo);

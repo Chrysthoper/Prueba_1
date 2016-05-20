@@ -60,6 +60,8 @@ public class TD_Cuentas
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
+        if(cuenta.id != 0)
+            values.put(DatabaseSchema.TD_Cuentas.COLUMN_NAME_ID, cuenta.id);
         values.put(DatabaseSchema.TD_Cuentas.COLUMN_NAME_2, cuenta.nombre);
         values.put(DatabaseSchema.TD_Cuentas.COLUMN_NAME_3, cuenta.resource);
         values.put(DatabaseSchema.TD_Cuentas.COLUMN_NAME_4, cuenta.color);

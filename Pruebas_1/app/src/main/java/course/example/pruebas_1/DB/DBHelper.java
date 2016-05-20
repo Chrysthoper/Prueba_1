@@ -11,8 +11,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 import course.example.pruebas_1.DB.DatabaseSchema;
+import course.example.pruebas_1.Negocio.Categoria;
+import course.example.pruebas_1.Negocio.Cuenta;
+import course.example.pruebas_1.Negocio.ExportObj;
+import course.example.pruebas_1.Negocio.Transaccion;
 import course.example.pruebas_1.R;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -22,8 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public TD_Transacciones_Programadas Transacciones_Programadas;
     public TD_Cuentas Cuentas;
 
-    // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "MiCochinito.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -132,6 +136,53 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
+
+    public String onImport(ExportObj export)
+    {
+        try
+        {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(SQL_DELETE_TRANSACCIONES);
+            db.execSQL(SQL_DELETE_TRANSACCIONES_PROGRAMADAS);
+
+            List<Cuenta> ListaCuentas = this.Cuentas.Obten();
+            List<Categoria> ListaCategorias = this.Categorias.Obten();
+
+            db.execSQL(SQL_DELETE_CATEGORIAS);
+            db.execSQL(SQL_DELETE_CUENTAS);
+
+            db.execSQL(SQL_CREATE_CATEGORIAS);
+            db.execSQL(SQL_CREATE_TRANSACCIONES);
+            db.execSQL(SQL_CREATE_TRANSACCIONES_PROGRAMADAS);
+            db.execSQL(SQL_CREATE_CUENTAS);
+
+            for(Categoria cat: export.ListaCategorias)
+            {
+                this.Categorias.Inserta(cat);
+            }
+            for(Cuenta c: export.ListaCuentas)
+            {
+                this.Cuentas.Inserta(c);
+            }
+            for(Transaccion trans: export.ListaTransacciones)
+            {
+                for(Cuenta cuenta:ListaCuentas)
+                {
+                    if(cuenta.id == trans.cuenta_prin_id)
+                    {
+
+                    }
+                }
+                this.Transacciones.Inserta(trans);
+            }
+            return "La Restauración de la base de datos fue exitosa!!!";
+        }
+        catch(Exception e)
+        {
+            return "Ocurrió un error en la restauración";
+        }
+    }
+
 }
 
 
